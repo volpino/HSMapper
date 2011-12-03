@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>FindMySpot</title>
+    <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript">
+      var map;
+
+      function init() {
+        map = new OpenLayers.Map({
+          div: "map",
+          allOverlays: true
+        });
+        var osm = new OpenLayers.Layer.OSM();
+
+        map.addLayers([osm]);
+        map.addControl(new OpenLayers.Control.LayerSwitcher());
+        map.zoomToMaxExtent();
+      }
+
+      $(document).ready(function() {
+        init();
+      });
+    </script>
+    <link rel="stylesheet" href="/static/css/base.css" type="text/css" />
+  </head>
+  <body>
+    <h1 id="title">All Overlays with Google and OSM</h1>
+    <div id="tags">
+      overlay, baselayer, google, osm, openstreetmap
+    </div>
+    <p id="shortdesc">
+      Using the Google and OSM layers as overlays.
+    </p>
+    <div id="map" class="smallmap"></div>
+    <div id="docs">
+      <p>
+        Using the allOverlays property on the map, the first layer added
+        must initially be visible.  This example demonstrates the use of
+        a Google layer and an OSM layer treated as overlays.
+      </p>
+    </div>
+  </body>
+</html>
