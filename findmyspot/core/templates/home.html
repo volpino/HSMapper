@@ -24,10 +24,8 @@
           //displayProjection: new OpenLayers.Projection("EPSG:4326")
         });
 
-        var heatmap_bounds = new OpenLayers.Bounds(
-            -8064110.19553, 2194015.02512,
-            -8045582.93872, 2209969.05182
-        );
+        var heatmap_bounds = new OpenLayers.Bounds(-8083703.41947, 2179564.8117,
+                                                   -8043582.32418, 2211201.70086);
         heatmap_layer = new OpenLayers.Layer.WMS(
                     "Hospitals Heatmap", "http://{{ SERVER_IP }}:50000/geoserver/findmyspot/wms",
                     {
@@ -36,7 +34,7 @@
                         format: "image/png",
                         tiled: true,
                         tilesOrigin : heatmap_bounds.left + ',' + heatmap_bounds.bottom,
-                        transparent: true
+                        //transparent: true
                     },
                     {
                         buffer: 0,
