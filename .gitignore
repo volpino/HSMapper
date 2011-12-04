@@ -6,3 +6,10 @@
 
 # vim
 *.swp
+
+# django
+
+settings_local.py
+
+*#
+*~
