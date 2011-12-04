@@ -60,8 +60,7 @@ def add_hospital(request):
                 return {'success': False, 'error': 'Lat or long are empty'}
 
             del data['lat'], data['lon']
-
-            data['the_geom'] = Point(lat, lon, srid=900913)
+            data['the_geom'] = Point(lon, lat, srid=900913)
 
             obj = HaitiHospitals.objects.create(**data)
             return {'success': True, 'id': obj.pk}
