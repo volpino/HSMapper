@@ -1,11 +1,9 @@
-from django.forms import ModelForm
-from core.models import *
+from django import forms
+from django.forms import Form
 
-class HaitiHospitalsForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(HaitiHospitalsForm, self).__init__(*args, **kwargs)
-        for key, field in self.fields.iteritems():
-            self.fields[key].required = False
-    class Meta:
-        model = HaitiHospitals
-        exclude = ["id"]
+import jsonfield
+
+
+class HaitiHospitalsForm(Form):
+    name = forms.CharField(max_length=48, required=False)
+    the_geom = jsonfield.JSONField(blank=True)
