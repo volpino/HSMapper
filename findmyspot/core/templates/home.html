@@ -22,8 +22,29 @@
         });
 
         var wms_layer = new OpenLayers.Layer.WMS("OpenLayers WMS",
-                                                 "http://192.168.0.107:50000/geoserver/wms/",
-                                                 {layers: 'findmyspot:distance'});
+                            "http://{{ SERVER_IP }}:50000/geoserver/wms/",
+                            {layers: 'findmyspot:distance'});
+
+        var heatmap_bounds = new OpenLayers.Bounds(
+            -8064110.19553, 2194015.02512,
+            -8045582.93872, 2209969.05182
+        );
+        heatmap_layer = new OpenLayers.Layer.WMS(
+                    "findmyspot:distance - Tiled", "http://192.168.39.54:50000/geoserver/findmyspot/wms",
+                    {
+                        LAYERS: 'findmyspot:distance',
+                        STYLES: '',
+                        format: "image/png",
+                        tiled: true,
+                        tilesOrigin : heatmap_bounds.left + ',' + heatmap_bounds.bottom,
+                        transparent: true
+                    },
+                    {
+                        buffer: 0,
+                        displayOutsideMaxExtent: true,
+                        isBaseLayer: false
+                    });
+
         var osm = new OpenLayers.Layer.OSM("OSM",
             "http://tile.openstreetmap.org/${z}/${x}/${y}.png");
         /*var layer = new OpenLayers.Layer.WMS(
@@ -56,7 +77,7 @@
                  map.zoomToExtent(hospital_layer.getDataExtent(), false);
                }
         });
-        map.addLayers([osm, wms_layer, hospital_layer]);
+        map.addLayers([osm, heatmap_layer, hospital_layer]);
         selectControl = new OpenLayers.Control.SelectFeature(
                         [hospital_layer],{clickout: true, toggle: false,
                              multiple: false, hover: false });
@@ -71,7 +92,7 @@
           }
         });
         map.addControl(new OpenLayers.Control.LayerSwitcher());
-
+        map.addControl(new OpenLayers.Control.MousePosition());
         map.events.register("click", map, function(e) {
           map.removeLayer(hospital_layer);
           var p = map.getLonLatFromPixel(e.xy);
