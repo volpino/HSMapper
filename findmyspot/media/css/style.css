@@ -81,6 +81,11 @@ a:hover {
 #tabs {
 }
 
+.multiselect {
+  width: 320px;
+  height: 200px;
+}
+
 #tabs-1, #tabs-2, #tabs-3 {
   height: 400px;
   width: 330px;

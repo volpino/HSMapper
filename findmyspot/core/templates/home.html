@@ -6,6 +6,7 @@
     <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="/static/js/jquery-ui-1.8.16.custom.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.tmpl.1.1.1.js"></script>
     <script type="text/javascript" src="/static/js/ui.multiselect.js"></script>
     <link type="text/css" href="/static/css/ui.multiselect.css" rel="stylesheet" />
     <script type="text/javascript">
@@ -14,20 +15,61 @@
       function init() {
         map = new OpenLayers.Map({
           div: "map",
-          allOverlays: true
+          allOverlays: true,
+          projection: new OpenLayers.Projection("EPSG:900913"),
+          displayProjection: new OpenLayers.Projection("EPSG:4326")
         });
+
         var osm = new OpenLayers.Layer.OSM();
         var wms_layer = new OpenLayers.Layer.WMS("OpenLayers WMS",
                                                  "http://192.168.0.107/cgi-bin/mapserv/",
-                                                 {map: '/home/pollo/esempio.map'});
-        map.addLayers([osm, wms_layer]);
+                                                 {map: '/home/pollo/esempio.map',
+                                                  layers: "all", mode: "map"});
+        var layer = new OpenLayers.Layer.WMS(
+           "Global Imagery",
+            "http://vmap0.tiles.osgeo.org/wms/vmap0",
+            {layers: "basic", sphericalMercator: true}
+        );
+
+        /*layer = new OpenLayers.Layer.TMS(
+                    "political marble",
+                    [ "http://de.straba.us/blue_marble_political/" ],
+                    { 'layername': ".",
+                      'type': "jpg", minZoomLevel:1, numZoomLevels:8 });*/
+
+        var hospital_layer = new OpenLayers.Layer.Vector("Hospitals", {
+                        strategies: [new OpenLayers.Strategy.Fixed()],
+                        protocol: new OpenLayers.Protocol.HTTP({
+                          url: "/api/get_hospitals",
+                          format: new OpenLayers.Format.GeoJSON()
+                        })
+        });
+
+        map.addLayers([osm, wms_layer, hospital_layer]);
         map.addControl(new OpenLayers.Control.LayerSwitcher());
         map.zoomToMaxExtent();
+
+        layers = map.layers;
+        for (var i=0; i<layers.length; i++) {
+          $(".multiselect").append($("<option></option>").
+              attr("value", layers[i].name).
+              attr("selected", true).
+              text(layers[i].name));
+        }
+        $(".multiselect").multiselect({
+          selected:
+            function(event, ui) {
+              map.getLayersByName($(ui.option).val())[0].setVisibility(true);
+            },
+          deselected:
+            function(event, ui) {
+              map.getLayersByName($(ui.option).val())[0].setVisibility(false);
+            }
+        });
       }
 
       $(document).ready(function() {
         $("#tabs").tabs();
-        $(".multiselect").multiselect();
         init();
       });
     </script>
@@ -53,13 +95,6 @@
           </ul>
           <div id="tabs-1">
             <select id="layers" class="multiselect" multiple="multiple" name="layers[]">
-              <option value="AFG">Afghanistan</option>
-              <option value="ALB">Albania</option>
-              <option value="DZA">Algeria</option>
-              <option value="AND">Andorra</option>
-              <option value="ARG">Argentina</option>
-              <option value="ARM">Armenia</option>
-              <option value="ABW">Aruba</option>
             </select>
           </div>
           <div id="tabs-2">
