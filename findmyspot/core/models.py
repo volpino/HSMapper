@@ -6,14 +6,17 @@ class HaitiPoints(models.Model):
     timestamp = models.CharField(max_length=20)
     name = models.CharField(max_length=48)
     type = models.CharField(max_length=16)
-    the_geom = models.PointField() # This field type is a guess.
+    the_geom = models.PointField()
     class Meta:
         db_table = u'haiti_points'
 
 class HaitiHospitals(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=48)
-    the_geom = models.PointField() # This field type is a guess.
+    the_geom = models.PointField()
+    description = models.TextField()
+    hours = models.CharField(max_length=100)
+
     class Meta:
         db_table = u'haiti_hospitals'
 
@@ -26,6 +29,6 @@ class HaitiRoads(models.Model):
     bridge = models.SmallIntegerField()
     maxspeed = models.SmallIntegerField()
     weight = models.SmallIntegerField()
-    the_geom = models.TextField() # This field type is a guess.
+    the_geom = models.TextField()
     class Meta:
         db_table = u'haiti_roads'

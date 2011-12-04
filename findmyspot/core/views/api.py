@@ -8,7 +8,8 @@ from ..forms import HaitiHospitalsForm
 
 def get_hospitals(request):
     qs = HaitiHospitals.objects.all()
-    djf = Django.Django(geodjango="the_geom", properties=['id', 'name'])
+    djf = Django.Django(geodjango="the_geom",
+                        properties=['id', 'name', 'description', 'hours'])
     geoj = GeoJSON.GeoJSON()
     geojson_output = geoj.encode(djf.decode(qs))
     response = HttpResponse(mimetype="application/json")
