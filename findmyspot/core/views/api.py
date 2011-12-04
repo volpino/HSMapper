@@ -1,5 +1,9 @@
 from django.http import HttpResponse
 from vectorformats.Formats import Django, GeoJSON
+
+from annoying.decorators import ajax_request
+
+
 from ..models import HaitiHospitals
 from ..forms import HaitiHospitalsForm
 
@@ -19,27 +23,26 @@ def get_hospitals(request):
     return response
 
 
+@ajax_request
 def edit_hospital(request, id_):
-    result = "{success: false}"
     if request.method == 'POST':
         form = HaitiHospitalsForm(request.POST)
         if form.is_valid():
-            params = form.cleaned_data
-            current_obj = HaitiHospitals.objects.get(id=id_)
-            print current_obj
-            if current_obj:
-                for key in params:
-                    if key != "id":
-                        print key, params[key]
-                        setattr(current_obj, key, params[key])
-                    current_obj.save()
-                result = "{success: true}"
-    response = HttpResponse(mimetype="application/json")
-    response.write(result)
-    return response
+            data = form.cleaned_data
+            try:
+                current_obj = HaitiHospitals.objects.get(id=id_)
+            except HaitiHospitals.DoesNotExist:
+                return {'success': False}
 
+            if current_obj:
+                obj = HaitiHospitals(id=id_, **data)
+                obj.save()
+                return {'success': True}
+    return {'success': False}
+
+
+@ajax_request
 def add_hospital(request):
-    result = "{success: false}"
     if request.method == 'POST':
         params = request.POST
         current_obj = HaitiHospitals()
@@ -48,13 +51,12 @@ def add_hospital(request):
                 if key != "id":
                     setattr(current_obj, key, params[key])
             current_obj.save()
-            result = "{success: true}"
-    response = HttpResponse(mimetype="application/json")
-    response.write(result)
-    return response
+            return {'success': True}
+    return {'success': False}
 
+
+@ajax_request
 def delete_hospital(request):
-    result = "{success: false}"
     if request.method == 'POST':
         params = request.POST
         try:
@@ -63,7 +65,5 @@ def delete_hospital(request):
             params_id = -1
         current_obj = HaitiHospitals.objects.get(id=params_id)
         current_obj.delete()
-        result = "{success: true}"
-    response = HttpResponse(mimetype="application/json")
-    response.write(result)
-    return response
+        return {'success': True}
+    return {'success': False}
