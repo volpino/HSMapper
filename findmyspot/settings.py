@@ -20,7 +20,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-SERVER_IP = "192.168.0.107"
+SERVER_IP = "192.168.39.54"
 
 DATABASES = {
     'default': {
