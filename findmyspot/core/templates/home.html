@@ -14,6 +14,7 @@
       var map;
       var insert_mode = false;
       var delete_mode = false;
+      var hospital_layer;
       var selectedFeature;
       function init() {
         map = new OpenLayers.Map({
@@ -64,8 +65,8 @@
                                     fillOpacity: 0.7,
                                     strokeWidth: "0.5"
                                 });
-        var hospital_layer = new OpenLayers.Layer.Vector("Hospitals",
-                                                         {styleMap: defaultStyle});
+        hospital_layer = new OpenLayers.Layer.Vector("Hospitals",
+                                                     {styleMap: defaultStyle});
 
         $.ajax({url: "/api/get_hospitals",
                success: function(req) {
@@ -101,6 +102,12 @@
               f.attributes[key] = "null";
             }
             hospital_layer.addFeatures([f]);
+            $.ajax({
+              url: "/api/add_hospital/",
+              type: "post",
+              data: {lat: p["lat"], lon: p["lon"]},
+              success: function(req) {}
+            });
           }
         });
 
@@ -134,29 +141,35 @@
         console.log($(e.target).parent());
         console.log(data);
         console.log(selectedFeature);
-
+        var type = $(e.target).parent().parent().attr("type");
+        d = {}
+        d[type] = data.value;
+        $("#baloon_name").text(data.value);
+        selectedFeature.attributes[type] = data.value;
         $.ajax({
           url: "/api/edit_hospital/"+selectedFeature.attributes.id+"/",
           type: "post",
-          data: $(e.target).parent().parent().attr("type")+"="+data.value,
+          data: d,
           success: function(req) {
-            $("#baloon_name").text(data.value);
           }
-        })
+        });
       }
 
       function onFeatureSelect(feature){
         selectedFeature = feature;
         if (delete_mode) {
           $.ajax({
-            url: "/api/delete_hospital",
+            url: "/api/delete_hospital/"+selectedFeature.attributes.id+"/",
             type: "post",
-            data: "id="+selectedFeature.attributes.id,
-            success: function(data) {}
+            data: "",
+            success: function(data) {
+              hospital_layer.removeFeatures([selectedFeature]);
+            }
           })
         }
         else {
           var a = feature.attributes;
+          selectedFeature = feature;
           var desc = $("<div/>");
           desc.html("<p id='baloon_name'>"+a["name"]+"</p>");
           popup = new OpenLayers.Popup.FramedCloud("chicken",
@@ -188,22 +201,22 @@
 
       function toggle_insert() {
         if (insert_mode) {
-          $("#insert_button").text("Insert mode off");
+          $("#insert_button").text("Insert mode is off");
           insert_mode = false;
         }
         else {
-          $("#insert_button").text("Insert mode on");
+          $("#insert_button").text("Insert mode is on");
           insert_mode = true;
         }
       }
 
       function toggle_delete() {
         if (delete_mode) {
-          $("#delete_button").text("Delete mode off");
+          $("#delete_button").text("Delete mode is off");
           delete_mode = false;
         }
         else {
-          $("#delete_button").text("Delete mode on");
+          $("#delete_button").text("Delete mode is on");
           delete_mode = true;
         }
       }
@@ -211,6 +224,7 @@
       $(document).ready(function() {
         $("#tabs").tabs();
         $("#insert_button").click(toggle_insert);
+        $("#delete_button").click(toggle_delete);
         init();
       });
     </script>
