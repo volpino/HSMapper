@@ -11,7 +11,7 @@ from ..forms import HaitiHospitalsForm
 
 
 def get_hospitals(request):
-    qs = HaitiHospitals.objects.all()
+    qs = HaitiHospitals.objects.exclude(the_geom=None)
     djf = Django.Django(geodjango="the_geom",
                         properties=['id', 'name', 'description', 'hours'])
     geoj = GeoJSON.GeoJSON()
