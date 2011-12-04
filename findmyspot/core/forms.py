@@ -9,5 +9,5 @@ class HaitiHospitalsForm(Form):
     description = forms.CharField(required=False)
 
     lat = forms.FloatField(required=False)
-    long = forms.FloatField(required=False)
+    lon = forms.FloatField(required=False)
 #    the_geom = jsonfield.JSONField(blank=True)
