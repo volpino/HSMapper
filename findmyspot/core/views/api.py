@@ -64,8 +64,7 @@ def add_hospital(request):
 
             data['the_geom'] = Point(lat, lon, srid=900913)
 
-            obj = HaitiHospitals(**data)
-            obj.save()
+            obj = HaitiHospitals.objects.create(**data)
             return {'success': True, 'id': obj.pk}
     return {'success': False}
 
