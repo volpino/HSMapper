@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     url(r'^api/get_hospitals', api.get_hospitals),
     url(r'^api/add_hospital', api.add_hospital),
     url(r'^api/delete_hospital', api.edit_hospital),
-    url(r'^api/edit_hospital', api.edit_hospital),
+    url(r'^api/edit_hospital/(?P<id_>\d+)/$', api.edit_hospital),
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

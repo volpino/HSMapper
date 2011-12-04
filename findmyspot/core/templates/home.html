@@ -12,7 +12,7 @@
     <link type="text/css" href="/static/css/ui.multiselect.css" rel="stylesheet" />
     <script type="text/javascript">
       var map;
-
+      //$.ajaxSetup({headers: {"X-CSRFToken": "{% csrf_token %}" } });
       function init() {
         map = new OpenLayers.Map({
           div: "map",
@@ -129,15 +129,15 @@
       }
 
       function save_feature_edit(e, data) {
-        console.log(e);
+        console.log($(e.target).parent());
         console.log(data);
         console.log(selectedFeature);
-        $.ajax({
-          url: "/api/edit_hospital",
-          type: "post",
-          data: "id="+selectedFeature.attributes.id+"&"+$(e).parent().attr("type")+"="+data.value,
-          success: function(data) {
 
+        $.ajax({
+          url: "/api/edit_hospital/"+selectedFeature.attributes.id+"/",
+          type: "post",
+          data: $(e.target).parent().parent().attr("type")+"="+data.value,
+          success: function(data) {
           }
         })
       }
