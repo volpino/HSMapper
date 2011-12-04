@@ -203,10 +203,12 @@
       function toggle_insert() {
         if (insert_mode) {
           $("#insert_button").removeClass("success");
+          $("#map").removeClass("crosshair");
           insert_mode = false;
         }
         else {
           $("#insert_button").addClass("success");
+          $("#map").addClass("crosshair");
           insert_mode = true;
         }
       }
@@ -214,10 +216,12 @@
       function toggle_delete() {
         if (delete_mode) {
           $("#delete_button").removeClass("success");
+          $("#map").removeClass("crosshair");
           delete_mode = false;
         }
         else {
           $("#delete_button").addClass("success");
+          $("#map").addClass("crosshair");
           delete_mode = true;
         }
       }
