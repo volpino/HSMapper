@@ -1,0 +1,15 @@
+# python
+*.py[co]
+
+# pycharm
+/.idea
+
+# vim
+*.swp
+
+# django
+
+settings_local.py
+
+*#
+*~
