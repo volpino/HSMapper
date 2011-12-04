@@ -234,10 +234,10 @@
     <div id="footer">
       <p>Copyright (c) 2011 Sitename.com. All rights reserved. Design by <a href="http://www.freecsstemplates.org/">Free CSS Templates</a>.</p>
     </div>
-    {% csrf_token %}
-    <script>
-        var csrf = $('input[name="csrfmiddlewaretoken"').val();
-        $.ajaxSetup({headers: {'CSRFToken': csrf} });
-    </script>
+{#    {% csrf_token %}#}
+{#    <script>#}
+{#        var csrf = $('input[name="csrfmiddlewaretoken"').val();#}
+{#        $.ajaxSetup({headers: {'CSRFToken': csrf} });#}
+{#    </script>#}
   </body>
 </html>
