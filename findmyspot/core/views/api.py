@@ -30,6 +30,8 @@ def edit_hospital(request, id_):
         form = HaitiHospitalsForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
+            del data['lat'], data['long']
+
             try:
                 current_obj = HaitiHospitals.objects.get(id=id_)
             except HaitiHospitals.DoesNotExist:
@@ -57,6 +59,7 @@ def add_hospital(request):
                 return {'success': False, 'error': 'Lat or long are empty'}
             lat = data['lat']
             long = data['long']
+            del data['lat'], data['long']
 
             data['the_geom'] = Point(lat, long)
 
