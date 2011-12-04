@@ -72,7 +72,8 @@ def delete_hospital(request, id_):
     if request.method == 'POST':
         params_id = int(id_)
         try:
-            HaitiHospitals.objects.get(id=params_id).delete()
+            hospital = HaitiHospitals.objects.get(id=params_id)
+            hospital.delete()
         except:
             return {'success': False}
         return {'success': True}
