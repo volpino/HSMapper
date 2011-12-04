@@ -13,6 +13,8 @@
     <script type="text/javascript">
       var map;
       var insert_mode = false;
+      var delete_mode = false;
+      var selectedFeature;
       function init() {
         map = new OpenLayers.Map({
           div: "map",
@@ -91,7 +93,6 @@
         map.addControl(new OpenLayers.Control.MousePosition());
         map.events.register("click", map, function(e) {
           if (insert_mode) {
-            //map.removeLayer(hospital_layer);
             var p = map.getLonLatFromPixel(e.xy);
             var point = new OpenLayers.Geometry.Point(p["lon"], p["lat"]);
             var f = new OpenLayers.Feature.Vector(point);
@@ -100,7 +101,6 @@
               f.attributes[key] = "null";
             }
             hospital_layer.addFeatures([f]);
-            //map.addLayer(hospital_layer);
           }
         });
 
@@ -146,7 +146,12 @@
       function onFeatureSelect(feature){
         selectedFeature = feature;
         if (delete_mode) {
-
+          $.ajax({
+            url: "/api/delete_hospital",
+            type: "post",
+            data: "id="+selectedFeature.attributes.id,
+            success: function(data) {}
+          })
         }
         else {
           var a = feature.attributes;

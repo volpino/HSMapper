@@ -24,7 +24,7 @@ SERVER_IP = "192.168.39.54"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'findmyspot',                      # Or path to database file if using sqlite3.
         'USER': 'findmyspot',                      # Not used with sqlite3.
         'PASSWORD': 'diolafagiana',                  # Not used with sqlite3.
@@ -135,6 +135,7 @@ INSTALLED_APPS = (
     'core',
 
     'devserver',
+    'django_extensions',
 )
 
 # A sample logging configuration. The only tangible logging

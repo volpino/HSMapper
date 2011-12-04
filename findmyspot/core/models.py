@@ -11,7 +11,6 @@ class HaitiPoints(models.Model):
         db_table = u'haiti_points'
 
 class HaitiHospitals(models.Model):
-    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=48)
     the_geom = models.PointField()
     description = models.TextField()
@@ -21,7 +20,6 @@ class HaitiHospitals(models.Model):
         db_table = u'haiti_hospitals'
 
 class HaitiRoads(models.Model):
-    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=48)
     type = models.CharField(max_length=48)
     ref = models.CharField(max_length=16)

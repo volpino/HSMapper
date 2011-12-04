@@ -35,10 +35,11 @@ def edit_hospital(request, id_):
                 return {'success': False}
 
             current_data = dict([(name, value) for name, value in
-                current_obj.__dict__.items() if not name.startswith('_')]
+                current_obj.__dict__.items() if not name.startswith('_')])
             current_data.update(data)
             if current_obj:
-                obj = HaitiHospitals(**data)
+                print current_data
+                obj = HaitiHospitals(**current_data)
                 obj.save(force_update=True)
                 return {'success': True}
     return {'success': False}
