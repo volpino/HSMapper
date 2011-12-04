@@ -139,7 +139,9 @@
           url: "/api/edit_hospital/"+selectedFeature.attributes.id+"/",
           type: "post",
           data: $(e.target).parent().parent().attr("type")+"="+data.value,
-          success: function(data) {}
+          success: function(req) {
+            $("#baloon_name").text(data.value);
+          }
         })
       }
 
@@ -155,9 +157,8 @@
         }
         else {
           var a = feature.attributes;
-          console.log(a["name"]);
           var desc = $("<div/>");
-          desc.html("<p>"+a["name"]+"</p>");
+          desc.html("<p id='baloon_name'>"+a["name"]+"</p>");
           popup = new OpenLayers.Popup.FramedCloud("chicken",
                       feature.geometry.getBounds().getCenterLonLat(),
                       new OpenLayers.Size(1500,1000),
