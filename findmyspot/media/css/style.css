@@ -116,7 +116,7 @@ a:hover {
 }
 
 #edit_info input {
-  width: 90px;
+  width: 190px;
 }
 
 #footer {
@@ -143,6 +143,10 @@ a:hover {
 
 .buttons {
     margin-top: 30px;
+}
+
+div#map.crosshair {
+    cursor: crosshair;
 }
 
 .btn.danger,
