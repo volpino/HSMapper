@@ -62,6 +62,9 @@ def add_hospital(request):
 def delete_hospital(request, id_):
     if request.method == 'POST':
         params_id = int(id_)
-        HaitiHospitals.objects.get(id=params_id).delete()
+        try:
+            HaitiHospitals.objects.get(id=params_id).delete()
+        except:
+            return {'success': False}
         return {'success': True}
     return {'success': False}
