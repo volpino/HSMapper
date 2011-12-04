@@ -62,7 +62,7 @@ def add_hospital(request):
 
             del data['lat'], data['lon']
 
-            data['the_geom'] = Point(lat, lon)
+            data['the_geom'] = Point(lat, lon, srid=900913)
 
             obj = HaitiHospitals(**data)
             obj.save()
