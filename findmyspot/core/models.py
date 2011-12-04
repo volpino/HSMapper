@@ -13,9 +13,11 @@ class HaitiPoints(models.Model):
 class HaitiHospitals(models.Model):
     name = models.CharField(max_length=48)
     the_geom = models.PointField(srid=900913)
-    description = models.TextField()
-    hours = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    hours = models.CharField(max_length=100, blank=True)
+
     objects = models.GeoManager()
+
     class Meta:
         db_table = u'haiti_hospitals'
 

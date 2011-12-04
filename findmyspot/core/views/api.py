@@ -1,3 +1,4 @@
+from django.contrib.gis.geos.point import Point
 from django.http import HttpResponse
 from vectorformats.Formats import Django, GeoJSON
 
@@ -29,7 +30,7 @@ def edit_hospital(request, id_):
         form = HaitiHospitalsForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            print data
+            del data['lat'], data['lon']
             try:
                 current_obj = HaitiHospitals.objects.get(id=id_)
             except HaitiHospitals.DoesNotExist:
@@ -53,6 +54,15 @@ def add_hospital(request):
         if form.is_valid():
             data = form.cleaned_data
 
+            lat = data['lat']
+            lon = data['lon']
+            if not (lat and lon):
+                return {'success': False, 'error': 'Lat or long are empty'}
+
+            del data['lat'], data['lon']
+
+            data['the_geom'] = Point(lat, lon)
+
             obj = HaitiHospitals(**data)
             obj.save()
             return {'success': True, 'id': obj.pk}
@@ -63,6 +73,9 @@ def add_hospital(request):
 def delete_hospital(request, id_):
     if request.method == 'POST':
         params_id = int(id_)
-        HaitiHospitals.objects.get(id=params_id).delete()
+        try:
+            HaitiHospitals.objects.get(id=params_id).delete()
+        except:
+            return {'success': False}
         return {'success': True}
     return {'success': False}
