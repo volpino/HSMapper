@@ -28,15 +28,15 @@ def edit_hospital(request, id_):
     if request.method == 'POST':
         form = HaitiHospitalsForm(request.POST)
         if form.is_valid():
-            params = form.cleaned_data
-            current_obj = HaitiHospitals.objects.get(id=id_)
-            print current_obj
+            data = form.cleaned_data
+            try:
+                current_obj = HaitiHospitals.objects.get(id=id_)
+            except HaitiHospitals.DoesNotExist:
+                return {'success': False}
+
             if current_obj:
-                for key in params:
-                    if key != "id":
-                        print key, params[key]
-                        setattr(current_obj, key, params[key])
-                    current_obj.save()
+                obj = HaitiHospitals(id=id_, **data)
+                obj.save()
                 return {'success': True}
     return {'success': False}
 
