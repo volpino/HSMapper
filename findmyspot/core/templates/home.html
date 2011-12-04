@@ -21,16 +21,12 @@
           //displayProjection: new OpenLayers.Projection("EPSG:4326")
         });
 
-        var wms_layer = new OpenLayers.Layer.WMS("OpenLayers WMS",
-                            "http://{{ SERVER_IP }}:50000/geoserver/wms/",
-                            {layers: 'findmyspot:distance'});
-
         var heatmap_bounds = new OpenLayers.Bounds(
             -8064110.19553, 2194015.02512,
             -8045582.93872, 2209969.05182
         );
         heatmap_layer = new OpenLayers.Layer.WMS(
-                    "findmyspot:distance - Tiled", "http://192.168.39.54:50000/geoserver/findmyspot/wms",
+                    "Hospitals Heatmap", "http://192.168.39.54:50000/geoserver/findmyspot/wms",
                     {
                         LAYERS: 'findmyspot:distance',
                         STYLES: '',
@@ -157,8 +153,14 @@
                     onPopupClose);
         feature.popup = popup;
         map.addPopup(popup);
-        $("#edit_info").html("<span>Name:</span><span type='name'><span class='editable'>"+
-                             a.name+"</span></span>");
+        var edit = "";
+        for (key in a) {
+          if (key != "id") {
+            edit += "<p><span>"+key+": </span><span type='"+key+
+                    "'><span class='editable'>"+a[key]+"</span></span></p>";
+          }
+        }
+        $("#edit_info").html(edit);
         $('.editable').inlineEdit({save: save_feature_edit});
       }
 
