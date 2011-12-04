@@ -30,7 +30,7 @@
         var heatmap_bounds = new OpenLayers.Bounds(-8083703.41947, 2179564.8117,
                                                    -8043582.32418, 2211201.70086);
         heatmap_layer = new OpenLayers.Layer.WMS(
-                    "Hospitals Heatmap", "http://{{ SERVER_IP }}:50000/geoserver/findmyspot/wms",
+                    "Hospitals Heatmap", "http://192.168.39.54:50000/geoserver/findmyspot/wms",
                     {
                         LAYERS: 'findmyspot:big_distance',
                         STYLES: '',
