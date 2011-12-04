@@ -91,7 +91,7 @@
         map.addControl(new OpenLayers.Control.MousePosition());
         map.events.register("click", map, function(e) {
           if (insert_mode) {
-            map.removeLayer(hospital_layer);
+            //map.removeLayer(hospital_layer);
             var p = map.getLonLatFromPixel(e.xy);
             var point = new OpenLayers.Geometry.Point(p["lon"], p["lat"]);
             var f = new OpenLayers.Feature.Vector(point);
@@ -100,7 +100,7 @@
               f.attributes[key] = "null";
             }
             hospital_layer.addFeatures([f]);
-            map.addLayer(hospital_layer);
+            //map.addLayer(hospital_layer);
           }
         });
 
@@ -139,35 +139,39 @@
           url: "/api/edit_hospital/"+selectedFeature.attributes.id+"/",
           type: "post",
           data: $(e.target).parent().parent().attr("type")+"="+data.value,
-          success: function(data) {
-          }
+          success: function(data) {}
         })
       }
 
       function onFeatureSelect(feature){
         selectedFeature = feature;
-        var a = feature.attributes;
-        console.log(a["name"]);
-        var desc = $("<div/>");
-        desc.html("<p>"+a["name"]+"</p>");
-        popup = new OpenLayers.Popup.FramedCloud("chicken",
-                    feature.geometry.getBounds().getCenterLonLat(),
-                    new OpenLayers.Size(1000,500),
-                    desc.html(),
-                    null,
-                    true,
-                    onPopupClose);
-        feature.popup = popup;
-        map.addPopup(popup);
-        var edit = "";
-        for (key in a) {
-          if (key != "id") {
-            edit += "<p><span>"+key+": </span><span type='"+key+
-                    "'><span class='editable'>"+a[key]+"</span></span></p>";
-          }
+        if (delete_mode) {
+
         }
-        $("#edit_info").html(edit);
-        $('.editable').inlineEdit({save: save_feature_edit});
+        else {
+          var a = feature.attributes;
+          console.log(a["name"]);
+          var desc = $("<div/>");
+          desc.html("<p>"+a["name"]+"</p>");
+          popup = new OpenLayers.Popup.FramedCloud("chicken",
+                      feature.geometry.getBounds().getCenterLonLat(),
+                      new OpenLayers.Size(1500,1000),
+                      desc.html(),
+                      null,
+                      true,
+                      onPopupClose);
+          feature.popup = popup;
+          map.addPopup(popup);
+          var edit = "";
+          for (key in a) {
+            if (key != "id") {
+              edit += "<p><span>"+key+": </span><span type='"+key+
+                      "'><span class='editable'>"+a[key]+"</span></span></p>";
+            }
+          }
+          $("#edit_info").html(edit);
+          $('.editable').inlineEdit({save: save_feature_edit});
+        }
       }
 
       function onFeatureUnselect(feature) {
@@ -184,6 +188,17 @@
         else {
           $("#insert_button").text("Insert mode on");
           insert_mode = true;
+        }
+      }
+
+      function toggle_delete() {
+        if (delete_mode) {
+          $("#delete_button").text("Delete mode off");
+          delete_mode = false;
+        }
+        else {
+          $("#delete_button").text("Delete mode on");
+          delete_mode = true;
         }
       }
 
@@ -217,6 +232,7 @@
             <select id="layers" class="multiselect" multiple="multiple" name="layers[]">
             </select>
             <button id="insert_button">Insert mode</button>
+            <button id="delete_button">Delete mode</button>
             <div>
               <div id="edit_info"></div>
             </div>
