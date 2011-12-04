@@ -34,9 +34,12 @@ def edit_hospital(request, id_):
             except HaitiHospitals.DoesNotExist:
                 return {'success': False}
 
+            current_data = dict([(name, value) for name, value in
+                current_obj.__dict__.items() if not name.startswith('_')]
+            current_data.update(data)
             if current_obj:
-                obj = HaitiHospitals(id=id_, **data)
-                obj.save()
+                obj = HaitiHospitals(**data)
+                obj.save(force_update=True)
                 return {'success': True}
     return {'success': False}
 
@@ -44,26 +47,20 @@ def edit_hospital(request, id_):
 @ajax_request
 def add_hospital(request):
     if request.method == 'POST':
-        params = request.POST
-        current_obj = HaitiHospitals()
-        if current_obj:
-            for key in params:
-                if key != "id":
-                    setattr(current_obj, key, params[key])
-            current_obj.save()
-            return {'success': True}
+        form = HaitiHospitalsForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+
+            obj = HaitiHospitals(**data)
+            obj.save()
+            return {'success': True, 'id': obj.pk}
     return {'success': False}
 
 
 @ajax_request
-def delete_hospital(request):
+def delete_hospital(request, id_):
     if request.method == 'POST':
-        params = request.POST
-        try:
-            params_id = int(params["id"])
-        except ValueError:
-            params_id = -1
-        current_obj = HaitiHospitals.objects.get(id=params_id)
-        current_obj.delete()
+        params_id = int(id_)
+        HaitiHospitals.objects.get(id=params_id).delete()
         return {'success': True}
     return {'success': False}
