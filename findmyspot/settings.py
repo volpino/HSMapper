@@ -3,7 +3,10 @@
 import os
 import django
 
-from settings_local import *
+try:
+    from settings_local import *
+except ImportError:
+    pass
 
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
@@ -154,3 +157,14 @@ LOGGING = {
         },
     }
 }
+
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.contrib.messages.context_processors.messages",
+    "django.core.context_processors.csrf",
+)
