@@ -153,6 +153,37 @@ div#map.crosshair {
     padding-left: 10px;
 }
 
+ul.ui-widget-header {
+    background: none;
+    border: none;
+}
+
+ul.ui-tabs-nav li.ui-state-default a {
+    color: #0069D6;
+}
+
+ul.ui-tabs-nav li.ui-state-default {
+    background: white;
+    border: 0 0 1px 0;
+}
+
+ul.ui-tabs-nav li a {
+    color: #0069D6;
+}
+
+ul.ui-tabs-nav li a:hover {
+    color: #0069D6;
+}
+
+ul.ui-tabs-nav li.ui-state-active a {
+    color: #ddd;
+}
+
+ul.ui-tabs-nav li.ui-state-active.ui-state-default {
+    border: 1px solid #ddd;
+}
+
+
 .btn.danger,
 .alert-message.danger,
 .btn.danger:hover,
