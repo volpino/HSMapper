@@ -29,6 +29,7 @@ def edit_hospital(request, id_):
         form = HaitiHospitalsForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
+            print data
             try:
                 current_obj = HaitiHospitals.objects.get(id=id_)
             except HaitiHospitals.DoesNotExist:
