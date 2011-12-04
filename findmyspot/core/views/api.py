@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from vectorformats.Formats import Django, GeoJSON
 from core.models import HaitiHospitals
+from core.forms import HaitiHospitalsForm
 
 def get_hospitals(request):
     qs = HaitiHospitals.objects.all()
@@ -11,21 +12,23 @@ def get_hospitals(request):
     response.write(geojson_output)
     return response
 
-def edit_hospital(request):
+def edit_hospital(request, id_):
     result = "{success: false}"
     if request.method == 'POST':
-        params = request.POST
-        try:
-            params_id = int(params["id"])
-        except ValueError:
-            params_id = -1
-        current_obj = HaitiHospitals.objects.get(id=params_id)
-        if current_obj:
-            for key in params:
-                if key != "id":
-                    setattr(current_obj, key, params[key])
-            current_obj.save()
-            result = "{success: true}"
+        form = HaitiHospitalsForm(request.POST)
+        print form.data
+        print form.errors
+        if form.is_valid():
+            params = form.cleaned_data
+            current_obj = HaitiHospitals.objects.get(id=id_)
+            print current_obj
+            if current_obj:
+                for key in params:
+                    if key != "id":
+                        print key, params[key]
+                        setattr(current_obj, key, params[key])
+                    current_obj.save()
+                result = "{success: true}"
     response = HttpResponse(mimetype="application/json")
     response.write(result)
     return response
