@@ -29,9 +29,9 @@
             -8045582.93872, 2209969.05182
         );
         heatmap_layer = new OpenLayers.Layer.WMS(
-                    "Hospitals Heatmap", "http://192.168.39.54:50000/geoserver/findmyspot/wms",
+                    "Hospitals Heatmap", "http://{{ SERVER_IP }}:50000/geoserver/findmyspot/wms",
                     {
-                        LAYERS: 'findmyspot:distance',
+                        LAYERS: 'findmyspot:big_distance',
                         STYLES: '',
                         format: "image/png",
                         tiled: true,
