@@ -1,3 +1,4 @@
+from django.contrib.gis.geos.point import Point
 from django.http import HttpResponse
 from vectorformats.Formats import Django, GeoJSON
 
@@ -51,6 +52,13 @@ def add_hospital(request):
         form = HaitiHospitalsForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
+
+            if not (data.get('lat', '') and data.get('long', '')):
+                return {'success': False, 'error': 'Lat or long are empty'}
+            lat = data['lat']
+            long = data['long']
+
+            data['the_geom'] = Point(lat, long)
 
             obj = HaitiHospitals(**data)
             obj.save()
