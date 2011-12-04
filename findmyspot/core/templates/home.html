@@ -8,6 +8,7 @@
     <script src="/static/js/jquery-ui-1.8.16.custom.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery.tmpl.1.1.1.js"></script>
     <script type="text/javascript" src="/static/js/ui.multiselect.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.inlineedit.js"></script>
     <link type="text/css" href="/static/css/ui.multiselect.css" rel="stylesheet" />
     <script type="text/javascript">
       var map;
@@ -17,44 +18,77 @@
           div: "map",
           allOverlays: true,
           projection: new OpenLayers.Projection("EPSG:900913"),
-          displayProjection: new OpenLayers.Projection("EPSG:4326")
+          //displayProjection: new OpenLayers.Projection("EPSG:4326")
         });
 
-        var osm = new OpenLayers.Layer.OSM();
         var wms_layer = new OpenLayers.Layer.WMS("OpenLayers WMS",
-                                                 "http://192.168.0.107/cgi-bin/mapserv/",
-                                                 {map: '/home/pollo/esempio.map',
-                                                  layers: "all", mode: "map"});
-        var layer = new OpenLayers.Layer.WMS(
+                                                 "http://192.168.0.107:50000/geoserver/wms/",
+                                                 {layers: 'findmyspot:distance'});
+        var osm = new OpenLayers.Layer.OSM("OSM",
+            "http://tile.openstreetmap.org/${z}/${x}/${y}.png");
+        /*var layer = new OpenLayers.Layer.WMS(
            "Global Imagery",
             "http://vmap0.tiles.osgeo.org/wms/vmap0",
             {layers: "basic", sphericalMercator: true}
-        );
+        );*/
 
         /*layer = new OpenLayers.Layer.TMS(
                     "political marble",
                     [ "http://de.straba.us/blue_marble_political/" ],
                     { 'layername': ".",
                       'type': "jpg", minZoomLevel:1, numZoomLevels:8 });*/
+        var defaultStyle = new OpenLayers.Style({
+                                    graphicName: "circle",
+                                    strokeColor: "#ff0000",
+                                    fillColor: "#ff0000",
+                                    pointRadius: "5",
+                                    fillOpacity: 0.7,
+                                    strokeWidth: "0.5"
+                                });
+        var hospital_layer = new OpenLayers.Layer.Vector("Hospitals",
+                                                         {styleMap: defaultStyle});
 
-        var hospital_layer = new OpenLayers.Layer.Vector("Hospitals", {
-                        strategies: [new OpenLayers.Strategy.Fixed()],
-                        protocol: new OpenLayers.Protocol.HTTP({
-                          url: "/api/get_hospitals",
-                          format: new OpenLayers.Format.GeoJSON()
-                        })
+        $.ajax({url: "/api/get_hospitals",
+               success: function(req) {
+                 var f = new OpenLayers.Format.GeoJSON();
+                 var features = f.read(req);
+                 hospital_layer.addFeatures(features);
+                 map.zoomToExtent(hospital_layer.getDataExtent(), false);
+               }
         });
-
         map.addLayers([osm, wms_layer, hospital_layer]);
+        selectControl = new OpenLayers.Control.SelectFeature(
+                        [hospital_layer],{clickout: true, toggle: false,
+                             multiple: false, hover: false });
+        map.addControl(selectControl);
+        selectControl.activate();
+        hospital_layer.events.on({
+          "featureselected": function(e) {
+            onFeatureSelect(e.feature);
+          },
+          "featureunselected": function(e) {
+            onFeatureUnselect(e.feature);
+          }
+        });
         map.addControl(new OpenLayers.Control.LayerSwitcher());
-        map.zoomToMaxExtent();
+
+        map.events.register("click", map, function(e) {
+          map.removeLayer(hospital_layer);
+          var p = map.getLonLatFromPixel(e.xy);
+          var point = new OpenLayers.Geometry.Point(p["lon"], p["lat"]);
+          var f = new OpenLayers.Feature.Vector(point, {}, defaultStyle);
+          hospital_layer.addFeatures([f]);
+          map.addLayer(hospital_layer);
+        });
 
         layers = map.layers;
         for (var i=0; i<layers.length; i++) {
-          $(".multiselect").append($("<option></option>").
-              attr("value", layers[i].name).
-              attr("selected", true).
-              text(layers[i].name));
+          if (layers[i].name.indexOf("OpenLayers.") == -1) {
+            $(".multiselect").append($("<option></option>").
+                attr("value", layers[i].name).
+                attr("selected", true).
+                text(layers[i].name));
+          }
         }
         $(".multiselect").multiselect({
           selected:
@@ -66,6 +100,51 @@
               map.getLayersByName($(ui.option).val())[0].setVisibility(false);
             }
         });
+      }
+
+      function onPopupClose(evt) {
+        selectControl.unselect(selectedFeature);
+        $("#edit_info").empty();
+      }
+
+      function save_feature_edit(e, data) {
+        console.log(e);
+        console.log(data);
+        console.log(selectedFeature);
+        $.ajax({
+          url: "/api/edit_hospital",
+          type: "post",
+          data: "id="+selectedFeature.attributes.id+"&"+$(e).parent().attr("type")+"="+data.value,
+          success: function(data) {
+
+          }
+        })
+      }
+
+      function onFeatureSelect(feature){
+        selectedFeature = feature;
+        var a = feature.attributes;
+        console.log(a["name"]);
+        var desc = $("<div/>");
+        desc.html("<p>"+a["name"]+"</p>");
+        popup = new OpenLayers.Popup.FramedCloud("chicken",
+                    feature.geometry.getBounds().getCenterLonLat(),
+                    new OpenLayers.Size(1000,500),
+                    desc.html(),
+                    null,
+                    true,
+                    onPopupClose);
+        feature.popup = popup;
+        map.addPopup(popup);
+        $("#edit_info").html("<span>Name:</span><span type='name'><span class='editable'>"+
+                             a.name+"</span></span>");
+        $('.editable').inlineEdit({save: save_feature_edit});
+      }
+
+      function onFeatureUnselect(feature) {
+        map.removePopup(feature.popup);
+        feature.popup.destroy();
+        feature.popup = null;
       }
 
       $(document).ready(function() {
@@ -81,7 +160,7 @@
     <div id="wrapper">
       <div id="header" class="container">
         <div id="logo">
-          <h1><a href="#">FindMySpot</a></h1>
+          <h1><a href="#">HaheatMap</a></h1>
           <p>blah blah blah</p>
         </div>
       </div>
@@ -96,6 +175,9 @@
           <div id="tabs-1">
             <select id="layers" class="multiselect" multiple="multiple" name="layers[]">
             </select>
+            <div>
+              <div id="edit_info"></div>
+            </div>
           </div>
           <div id="tabs-2">
             <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>

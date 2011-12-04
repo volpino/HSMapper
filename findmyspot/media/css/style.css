@@ -96,6 +96,14 @@ a:hover {
   float: right;
 }
 
+#edit_info {
+  padding: 20px;
+}
+
+#edit_info input {
+  width: 90px;
+}
+
 #footer {
   clear: both;
   text-align: center;
