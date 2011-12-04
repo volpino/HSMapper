@@ -149,6 +149,10 @@ div#map.crosshair {
     cursor: crosshair;
 }
 
+.ui-multiselect .ui-element {
+    padding-left: 10px;
+}
+
 .btn.danger,
 .alert-message.danger,
 .btn.danger:hover,
