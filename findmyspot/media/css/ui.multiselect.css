@@ -15,7 +15,7 @@
 .ui-multiselect ul.available { position: relative; padding: 0; overflow: auto; overflow-x: hidden; background: #fff; margin: 0; list-style: none; border: 0; width: 100%; }
 .ui-multiselect ul.available li { padding-left: 10px; }
 
-.ui-multiselect .ui-state-default { border: none; margin-bottom: 1px; position: relative; padding-left: 20px;}
+.ui-multiselect .ui-state-default { border: none; margin-bottom: 1px; position: relative;}
 .ui-multiselect .ui-state-hover { border: none; }
 .ui-multiselect .ui-widget-header {border: none; font-size: 11px; margin-bottom: 1px;}
 
