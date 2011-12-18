@@ -73,7 +73,7 @@ a:hover {
   /*letter-spacing: -2px;*/
   /*font-size: 3.2em;*/
   /*color: #00008B;*/
-  margin: 10px 0 6px;
+  margin: 1% 0 0.5%;
 }
 
 #page {
@@ -157,7 +157,7 @@ ul.ui-widget-header {
     background: none;
     border: none;
 }
-
+/*
 ul.ui-tabs-nav li.ui-state-default a {
     color: #0069D6;
 }
@@ -176,13 +176,13 @@ ul.ui-tabs-nav li a:hover {
 }
 
 ul.ui-tabs-nav li.ui-state-active a {
-    color: #ddd;
+    color: #424242;
 }
 
 ul.ui-tabs-nav li.ui-state-active.ui-state-default {
     border: 1px solid #ddd;
 }
-
+*/
 
 .btn.danger,
 .alert-message.danger,

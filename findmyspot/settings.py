@@ -6,10 +6,13 @@ import django
 try:
     from settings_local import *
 except ImportError:
-    pass
+    print "settings_local not found!"
 
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+
+PROJECTION_SRID = 23032
+DISPLAY_SRID = 900913
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -19,19 +22,6 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
-
-SERVER_IP = "192.168.39.54"
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'findmyspot',                      # Or path to database file if using sqlite3.
-        'USER': 'findmyspot',                      # Not used with sqlite3.
-        'PASSWORD': 'diolafagiana',                  # Not used with sqlite3.
-        'HOST': SERVER_IP,                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-    }
-}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

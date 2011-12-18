@@ -7,7 +7,10 @@
     <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
     <link rel="stylesheet" href="/static/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css" />
 
+    <script type="text/javascript" src="/static/js/proj4js/lib/proj4js-compressed.js"></script>
+    <script type="text/javascript" src="/static/js/proj4js/lib/defs/EPSG23032.js"></script>
     <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script src="/static/js/jquery-ui-1.8.16.custom.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery.tmpl.1.1.1.js"></script>
@@ -23,14 +26,13 @@
         map = new OpenLayers.Map({
           div: "map",
           allOverlays: true,
-          projection: new OpenLayers.Projection("EPSG:900913")
-          //displayProjection: new OpenLayers.Projection("EPSG:4326")
+          projection: new OpenLayers.Projection("EPSG:900913"),
         });
 
         var heatmap_bounds = new OpenLayers.Bounds(-8083703.41947, 2179564.8117,
                                                    -8043582.32418, 2211201.70086);
         heatmap_layer = new OpenLayers.Layer.WMS(
-                    "Hospitals Heatmap", "http://192.168.39.54:50000/geoserver/findmyspot/wms",
+                    "Hospitals Heatmap", "http://{{ server_ip }}:{{ geoserver_port }}/geoserver/findmyspot/wms",
                     {
                         LAYERS: 'findmyspot:big_distance',
                         STYLES: '',
@@ -46,41 +48,38 @@
                     });
 
         var osm = new OpenLayers.Layer.OSM("OSM",
-            "http://tile.openstreetmap.org/${z}/${x}/${y}.png");
-        /*var layer = new OpenLayers.Layer.WMS(
-           "Global Imagery",
-            "http://vmap0.tiles.osgeo.org/wms/vmap0",
-            {layers: "basic", sphericalMercator: true}
-        );*/
-
-        /*layer = new OpenLayers.Layer.TMS(
-                    "political marble",
-                    [ "http://de.straba.us/blue_marble_political/" ],
-                    { 'layername': ".",
-                      'type': "jpg", minZoomLevel:1, numZoomLevels:8 });*/
-        var defaultStyle = new OpenLayers.Style({
+            "http://tile.openstreetmap.org/${z}/${x}/${y}.png",
+            {sphericalMercator: true});
+        var default_style = new OpenLayers.Style({
                                     graphicName: "circle",
                                     strokeColor: "#ff0000",
                                     fillColor: "#ff0000",
                                     pointRadius: "5",
                                     fillOpacity: 0.7,
                                     strokeWidth: "0.5"
-                                });
-        hospital_layer = new OpenLayers.Layer.Vector("Hospitals",
-                                                     {styleMap: defaultStyle});
-
-        $.ajax({url: "/api/get_hospitals",
-               success: function(req) {
-                 var f = new OpenLayers.Format.GeoJSON();
-                 var features = f.read(req);
-                 hospital_layer.addFeatures(features);
-                 map.zoomToExtent(hospital_layer.getDataExtent(), false);
-               }
         });
+
+        hospital_layer = new OpenLayers.Layer.Vector(
+            "Hospitals",
+            {styleMap: default_style,
+             projection: new OpenLayers.Projection("EPSG:{{ srid }}"),
+             strategies: [new OpenLayers.Strategy.Fixed()],
+             protocol: new OpenLayers.Protocol.HTTP({
+                url: "/api/get_hospitals/",
+                format: new OpenLayers.Format.GeoJSON()
+             })
+            }
+        );
+        hospital_layer.events.register("featuresadded", hospital_layer,
+          function() {
+            map.zoomToExtent(hospital_layer.getDataExtent());
+          }
+        );
+
         map.addLayers([osm, heatmap_layer, hospital_layer]);
         selectControl = new OpenLayers.Control.SelectFeature(
                         [hospital_layer],{clickout: true, toggle: false,
-                             multiple: false, hover: false });
+                                          multiple: false, hover: false });
         map.addControl(selectControl);
         selectControl.activate();
         hospital_layer.events.on({
@@ -107,7 +106,15 @@
               url: "/api/add_hospital/",
               type: "post",
               data: {lat: p["lat"], lon: p["lon"]},
-              success: function(req) {}
+              success: function(req) {
+                if (req.success === true) {
+                  alert("Point inserted");
+                  f.attributes["id"] = req.id;
+                }
+                else {
+                  alert("Error :(");
+                }
+              }
             });
           }
         });
@@ -116,12 +123,13 @@
         for (var i=0; i<layers.length; i++) {
           if (layers[i].name.indexOf("OpenLayers.") == -1) {
             $(".multiselect").append($("<option></option>").
-                attr("value", layers[i].name).
-                attr("selected", true).
-                text(layers[i].name));
+                              attr("value", layers[i].name).
+                              attr("selected", true).
+                              text(layers[i].name));
           }
         }
         $(".multiselect").multiselect({
+          sortable: false,
           selected:
             function(event, ui) {
               map.getLayersByName($(ui.option).val())[0].setVisibility(true);
@@ -143,7 +151,7 @@
         console.log(data);
         console.log(selectedFeature);
         var type = $(e.target).parent().parent().attr("type");
-        d = {}
+        var d = {}
         d[type] = data.value;
         $("#baloon_name").text(data.value);
         selectedFeature.attributes[type] = data.value;
@@ -152,6 +160,12 @@
           type: "post",
           data: d,
           success: function(req) {
+            if (req.success === true) {
+              alert("Updated!");
+            }
+            else {
+              alert("Error :(");
+            }
           }
         });
       }
@@ -159,14 +173,23 @@
       function onFeatureSelect(feature){
         selectedFeature = feature;
         if (delete_mode) {
-          $.ajax({
-            url: "/api/delete_hospital/"+selectedFeature.attributes.id+"/",
-            type: "post",
-            data: "",
-            success: function(data) {
-              hospital_layer.removeFeatures([selectedFeature]);
-            }
-          })
+          var agree = confirm("Are you sure you want to delete?");
+          if (agree) {
+            hospital_layer.removeFeatures([selectedFeature]);
+            $.ajax({
+              url: "/api/delete_hospital/"+selectedFeature.attributes.id+"/",
+              type: "post",
+              data: "",
+              success: function(req) {
+                if (req.success === true) {
+                  alert("Deleted");
+                }
+                else {
+                  alert("Error :(");
+                }
+              }
+            });
+          }
         }
         else {
           var a = feature.attributes;
@@ -201,6 +224,9 @@
       }
 
       function toggle_insert() {
+        if (delete_mode) {
+          toggle_delete();
+        }
         if (insert_mode) {
           $("#insert_button").removeClass("success");
           $("#map").removeClass("crosshair");
@@ -214,6 +240,9 @@
       }
 
       function toggle_delete() {
+        if (insert_mode) {
+          toggle_insert();
+        }
         if (delete_mode) {
           $("#delete_button").removeClass("success");
           $("#map").removeClass("crosshair");

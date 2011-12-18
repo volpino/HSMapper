@@ -5,14 +5,15 @@ from vectorformats.Formats import Django, GeoJSON
 from annoying.decorators import ajax_request
 
 
-from ..models import HaitiHospitals
-from ..forms import HaitiHospitalsForm
+from ..models import Hospital
+from ..forms import HospitalForm
+import settings
 
 #DATA = u"""{"crs": null, "type": "FeatureCollection", "features": [{"geometry": {"type": "Point", "coordinates": [-8059351.285663681, 2099199.355282287]}, "type": "Feature", "id": 26359, "properties": {"id": 26359, "name": "MDM"}}]}"""
 
 
 def get_hospitals(request):
-    qs = HaitiHospitals.objects.exclude(the_geom=None)
+    qs = Hospital.objects.exclude(the_geom=None)
     djf = Django.Django(geodjango="the_geom",
                         properties=['id', 'name', 'description', 'hours'])
     geoj = GeoJSON.GeoJSON()
@@ -27,21 +28,21 @@ def get_hospitals(request):
 @ajax_request
 def edit_hospital(request, id_):
     if request.method == 'POST':
-        form = HaitiHospitalsForm(request.POST)
+        form = HospitalForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             del data['lat'], data['lon']
             try:
-                current_obj = HaitiHospitals.objects.get(id=id_)
-            except HaitiHospitals.DoesNotExist:
-                return {'success': False}
+                current_obj = Hospital.objects.get(id=id_)
+            except Hospital.DoesNotExist:
+              return {'success': False, 'error': 'Not found'}
 
             current_data = dict([(name, value) for name, value in
                 current_obj.__dict__.items() if not name.startswith('_')])
             current_data.update(data)
             if current_obj:
                 print current_data
-                obj = HaitiHospitals(**current_data)
+                obj = Hospital(**current_data)
                 obj.save(force_update=True)
                 return {'success': True}
     return {'success': False}
@@ -50,7 +51,7 @@ def edit_hospital(request, id_):
 @ajax_request
 def add_hospital(request):
     if request.method == 'POST':
-        form = HaitiHospitalsForm(request.POST)
+        form = HospitalForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
 
@@ -60,9 +61,9 @@ def add_hospital(request):
                 return {'success': False, 'error': 'Lat or long are empty'}
 
             del data['lat'], data['lon']
-            data['the_geom'] = Point(lon, lat, srid=900913)
+            data['the_geom'] = Point(lon, lat, srid=settings.DISPLAY_SRID)
 
-            obj = HaitiHospitals.objects.create(**data)
+            obj = Hospital.objects.create(**data)
             return {'success': True, 'id': obj.pk}
     return {'success': False}
 
@@ -72,7 +73,7 @@ def delete_hospital(request, id_):
     if request.method == 'POST':
         params_id = int(id_)
         try:
-            hospital = HaitiHospitals.objects.get(id=params_id)
+            hospital = Hospital.objects.get(id=params_id)
             hospital.delete()
         except:
             return {'success': False}

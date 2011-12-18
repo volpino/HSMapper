@@ -4,7 +4,7 @@ from django.forms import Form
 #import jsonfield
 
 
-class HaitiHospitalsForm(Form):
+class HospitalForm(Form):
     name = forms.CharField(max_length=48, required=False)
     description = forms.CharField(required=False)
 
