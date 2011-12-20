@@ -4,13 +4,13 @@
  * Authors:
  *  Michael Aufreiter (quasipartikel.at)
  *  Yanick Rochon (yanick.rochon[at]gmail[dot]com)
- * 
+ *
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- * 
+ *
  * http://yanickrochon.uuuq.com/multiselect/
  *
- * 
+ *
  * Depends:
  *	 ui.core.js
  *	 ui.draggable.js
@@ -24,8 +24,8 @@
  *
  * Notes:
  *  The strings in this plugin use a templating engine to enable localization
- *  and allow flexibility in the messages. Read the documentation for more details. 
- * 
+ *  and allow flexibility in the messages. Read the documentation for more details.
+ *
  * Todo:
  *  restore selected items on remote searchable multiselect upon page reload (same behavior as local mode)
  *  (is it worth it??) add a public function to apply the nodeComparator to all items (when using nodeComparator setter)
@@ -101,17 +101,17 @@ $.widget("ui.multiselect", {
 		this.container = $('<div class="ui-multiselect ui-helper-clearfix ui-widget"></div>').insertAfter(this.element);
 		this.selectedContainer = $('<div class="ui-widget-content list-container selected"></div>').appendTo(this.container);
 		this.availableContainer = $('<div class="ui-widget-content list-container available"></div>').appendTo(this.container);
-		this.selectedActions = $('<div class="actions ui-widget-header ui-helper-clearfix"><span class="count">'+$.tmpl($.ui.multiselect.locale.itemsCount,{count:0})+'</span><a href="#" class="remove-all">'+$.tmpl($.ui.multiselect.locale.removeAll)+'</a></div>').appendTo(this.selectedContainer);
-		this.availableActions = $('<div class="actions ui-widget-header ui-helper-clearfix"><span class="busy">'+$.tmpl($.ui.multiselect.locale.busy)+'</span><input type="text" class="search ui-widget-content ui-corner-all"/><a href="#" class="add-all">'+$.tmpl($.ui.multiselect.locale.addAll)+'</a></div>').appendTo(this.availableContainer);
+		this.selectedActions = $('<div class="_actions ui-widget-header ui-helper-clearfix"><span class="count">'+$.tmpl($.ui.multiselect.locale.itemsCount,{count:0})+'</span><a href="#" class="remove-all">'+$.tmpl($.ui.multiselect.locale.removeAll)+'</a></div>').appendTo(this.selectedContainer);
+		this.availableActions = $('<div class="_actions ui-widget-header ui-helper-clearfix"><span class="busy">'+$.tmpl($.ui.multiselect.locale.busy)+'</span><input type="text" class="search ui-widget-content ui-corner-all"/><a href="#" class="add-all">'+$.tmpl($.ui.multiselect.locale.addAll)+'</a></div>').appendTo(this.availableContainer);
 		this.selectedList = $('<ul class="list selected"><li class="ui-helper-hidden-accessible"></li></ul>').bind('selectstart', function(){return false;}).appendTo(this.selectedContainer);
 		this.availableList = $('<ul class="list available"><li class="ui-helper-hidden-accessible"></li></ul>').bind('selectstart', function(){return false;}).appendTo(this.availableContainer);
-		
+
 		var that = this;
 
 		// initialize data cache
 		this.availableList.data('multiselect.cache', {});
 		this.selectedList.data('multiselect.cache', {});
-		
+
 		if ( !this.options.animated ) {
 			this.options.show = 'show';
 			this.options.hide = 'hide';
@@ -130,12 +130,12 @@ $.widget("ui.multiselect", {
 		};
 		this._prepareLists('selected', 'available', dragOptions);
 		this._prepareLists('available', 'selected', dragOptions);
-		
+
 		// set up livesearch
 		this._registerSearchEvents(this.availableContainer.find('input.search'), true);
 		// make sure that we're not busy yet
 		this._setBusy(false);
-		
+
 		// batch actions
 		this.container.find(".remove-all").bind('click.multiselect', function() { that.selectNone(); return false; });
 		this.container.find(".add-all").bind('click.multiselect', function() { that.selectAll(); return false; });
@@ -244,7 +244,7 @@ $.widget("ui.multiselect", {
 				this._populateLists($(elements));
 			}
 
-			this._filter(this.availableList.children('li.ui-element')); 
+			this._filter(this.availableList.children('li.ui-element'));
 
 			this._setBusy(false);
 			return elements.length;
@@ -274,7 +274,7 @@ $.widget("ui.multiselect", {
 				// readonly options
 				this._messages(
 					$.ui.multiselect.constants.MESSAGE_WARNING,
-					$.ui.multiselect.locale.errorReadonly, 
+					$.ui.multiselect.locale.errorReadonly,
 					{option: key}
 				);
 			default:
@@ -306,7 +306,7 @@ $.widget("ui.multiselect", {
 	_refreshDividerLocation: function() {
 		this.selectedContainer.width(Math.floor(this.element.width()*this.options.dividerLocation));
 		this.availableContainer.width(Math.floor(this.element.width()*(1-this.options.dividerLocation)));
-	},	
+	},
 	_prepareLists: function(side, otherSide, opts) {
 		var that = this;
 		var itemSelected = ('selected' == side);
@@ -318,7 +318,7 @@ $.widget("ui.multiselect", {
 			.data('multiselect.sortable', opts[side].sortable )
 			.data('multiselect.droppable', opts[side].droppable )
 			.data('multiselect.draggable', !opts[side].sortable && (opts[otherSide].sortable || opts[otherSide].droppable) );
-		
+
 		if (opts[side].sortable) {
 			list.sortable({
 				appendTo: this.container,
@@ -330,7 +330,7 @@ $.widget("ui.multiselect", {
 				receive: function(event, ui) {
 					// DEBUG
 					//that._messages(0, "Receive : " + ui.item.data('multiselect.optionLink') + ":" + ui.item.parent()[0].className + " = " + itemSelected);
-	
+
 					// we received an element from a sortable to another sortable...
 					if (opts[otherSide].sortable) {
 						var optionLink = ui.item.data('multiselect.optionLink');
@@ -346,7 +346,7 @@ $.widget("ui.multiselect", {
 						that._setSelected(ui.item, itemSelected, true);
 					} else {
 						// the other is droppable only, so merely select the element...
-						setTimeout(function() { 
+						setTimeout(function() {
 							that._setSelected(ui.item, itemSelected);
 						}, 10);
 					}
@@ -388,9 +388,9 @@ $.widget("ui.multiselect", {
 
 					// received an item from a sortable to a droppable
 					} else if (!opts[side].sortable) {
-						setTimeout(function() { 
-							ui.draggable.hide(); 
-							that._setSelected(ui.draggable, itemSelected); 
+						setTimeout(function() {
+							ui.draggable.hide();
+							that._setSelected(ui.draggable, itemSelected);
 						}, 10);
 					}
 
@@ -400,7 +400,7 @@ $.widget("ui.multiselect", {
 	},
 	_populateLists: function(options) {
 		this._setBusy(true);
-	
+
 		var that = this;
 		// do this async so the browser actually display the waiting message
 		setTimeout(function() {
@@ -415,7 +415,7 @@ $.widget("ui.multiselect", {
 
 				that._insertToList(item, list);
 		    }));
-		
+
 			// update count
 			that._setBusy(false);
 			that._updateCount();
@@ -447,7 +447,7 @@ $.widget("ui.multiselect", {
 				} else {
 					that._messages(
 						$.ui.multiselect.constants.MESSAGE_EXCEPTION,
-						$.ui.multiselect.locale.errorInsertNode, 
+						$.ui.multiselect.locale.errorInsertNode,
 						{key:node.data('multiselect.optionLink').val(), value:node.text()}
 					);
 					that._setBusy(false);
@@ -480,7 +480,7 @@ $.widget("ui.multiselect", {
 			if (optionLink) {
 				var prevItem = item.prev('li:not(.ui-helper-hidden-accessible,.ui-sortable-placeholder):visible');
 				var prevOptionLink = prevItem.size() ? prevItem.data('multiselect.optionLink') : null;
-		
+
 				if (prevOptionLink) {
 					optionLink.insertAfter(prevOptionLink);
 				} else {
@@ -504,7 +504,7 @@ $.widget("ui.multiselect", {
 			return false;
 		}
 	},
-	// clones an item with 
+	// clones an item with
 	// didn't find a smarter away around this (michael)
 	// now using cache to speed up the process (yr)
 	_cloneWithData: function(clonee, cacheName, insertItem) {
@@ -601,7 +601,7 @@ $.widget("ui.multiselect", {
 		}
 		// update idx
 		item.data('multiselect.idx', i);
-	
+
 		return succ;
 	},
 	// @param DOMElement item         is the item to set
@@ -649,7 +649,7 @@ $.widget("ui.multiselect", {
 
 		// fire selection event
 		this._trigger(selected ? 'selected' : 'deselected', null, this._ui('selection', optionLink));
-		
+
 		return otherItem;
 	},
 	_setBusy: function(state) {
@@ -683,13 +683,13 @@ $.widget("ui.multiselect", {
 			item.children('span').addClass('ui-helper-hidden').removeClass('ui-icon');
 			item.find('a.action span').addClass('ui-icon-minus').removeClass('ui-icon-plus');
 			this._registerRemoveEvents(item.find('a.action'));
-			
+
 		} else {
 			item.children('span').addClass('ui-helper-hidden').removeClass('ui-icon');
 			item.find('a.action span').addClass('ui-icon-plus').removeClass('ui-icon-minus');
 			this._registerAddEvents(item.find('a.action'));
 		}
-		
+
 		this._registerHoverEvents(item);
 
 		return item;
@@ -698,7 +698,7 @@ $.widget("ui.multiselect", {
 	_filter: function(elements) {
 		var input = this.availableActions.children('input.search');
 		var term = $.trim( input.val().toLowerCase() );
-		
+
 		if ( !term ) {
 			elements.removeClass('filtered');
 		} else {
@@ -776,7 +776,7 @@ $.widget("ui.multiselect", {
 	_registerSearchEvents: function(input, searchNow) {
 		var that = this;
 		var previousValue = input.val(), timer;
-	
+
 		var _searchNow = function(forceUpdate) {
 			if (that.busy) return;
 
@@ -790,22 +790,22 @@ $.widget("ui.multiselect", {
 						$.ajax({
 							url: that.options.remoteUrl,
 							data: $.extend(params, {q:escape(value)}),
-							success: function(data) { 
+							success: function(data) {
 								that.addOptions(data);
-								that._setBusy(false); 
+								that._setBusy(false);
 							},
 							error: function(request,status,e) {
 								that._messages(
-									$.ui.multiselect.constants.MESSAGE_ERROR, 
-									$.ui.multiselect.locale.errorRequest, 
+									$.ui.multiselect.constants.MESSAGE_ERROR,
+									$.ui.multiselect.locale.errorRequest,
 									{status:status}
 								);
-								that._setBusy(false); 
+								that._setBusy(false);
 							}
 						});
 					} catch (e) {
 						that._messages($.ui.multiselect.constants.MESSAGE_EXCEPTION, e.message);   // error message template ??
-						that._setBusy(false); 
+						that._setBusy(false);
 					}
 				} else {
 					that._filter(that.availableList.children('li.ui-element'));

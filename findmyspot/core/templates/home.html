@@ -1,11 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>FindMySpot</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <link type="text/css" href="/static/css/ui.multiselect.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
     <link rel="stylesheet" href="/static/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
 
     <script type="text/javascript" src="/static/js/proj4js/lib/proj4js-compressed.js"></script>
     <script type="text/javascript" src="/static/js/proj4js/lib/defs/EPSG23032.js"></script>
@@ -17,12 +17,14 @@
     <script type="text/javascript" src="/static/js/ui.multiselect.js"></script>
     <script type="text/javascript" src="/static/js/jquery.inlineedit.js"></script>
     <script type="text/javascript" src="/static/js/nominatim.autocomplete.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap-alerts.js"></script>
     <script type="text/javascript">
+      var globals = {};
       var map;
-      var insert_mode = false;
-      var delete_mode = false;
-      var hospital_layer;
-      var selectedFeature;
+      globals.insert_mode = false;
+      globals.delete_mode = false;
+      globals.hospital_layer;
+      globals.selectedFeature;
       function init() {
         map = new OpenLayers.Map({
           div: "map",
@@ -65,7 +67,7 @@
                                     strokeWidth: "0.5"
         });
 
-        hospital_layer = new OpenLayers.Layer.Vector(
+        globals.hospital_layer = new OpenLayers.Layer.Vector(
             "Hospitals",
             {styleMap: default_style,
              projection: new OpenLayers.Projection("EPSG:{{ srid }}"),
@@ -76,19 +78,19 @@
              })
             }
         );
-        hospital_layer.events.register("featuresadded", hospital_layer,
+        globals.hospital_layer.events.register("featuresadded", globals.hospital_layer,
           function() {
-            map.zoomToExtent(hospital_layer.getDataExtent());
+            map.zoomToExtent(globals.hospital_layer.getDataExtent());
           }
         );
 
-        map.addLayers([osm, heatmap_layer, hospital_layer]);
+        map.addLayers([osm, heatmap_layer, globals.hospital_layer]);
         selectControl = new OpenLayers.Control.SelectFeature(
-                        [hospital_layer],{clickout: true, toggle: false,
+                        [globals.hospital_layer],{clickout: true, toggle: false,
                                           multiple: false, hover: false });
         map.addControl(selectControl);
         selectControl.activate();
-        hospital_layer.events.on({
+        globals.hospital_layer.events.on({
           "featureselected": function(e) {
             onFeatureSelect(e.feature);
           },
@@ -99,26 +101,26 @@
         map.addControl(new OpenLayers.Control.MousePosition());
 
         map.events.register("click", map, function(e) {
-          if (insert_mode) {
+          if (globals.insert_mode) {
             var p = map.getLonLatFromPixel(e.xy);
             var point = new OpenLayers.Geometry.Point(p["lon"], p["lat"]);
             var f = new OpenLayers.Feature.Vector(point);
-            f.attributes = hospital_layer.features[0].attributes;
+            f.attributes = globals.hospital_layer.features[0].attributes;
             for (key in f.attributes) {
               f.attributes[key] = "null";
             }
-            hospital_layer.addFeatures([f]);
+            globals.hospital_layer.addFeatures([f]);
             $.ajax({
               url: "/api/add_hospital/",
               type: "post",
               data: {lat: p["lat"], lon: p["lon"]},
               success: function(req) {
                 if (req.success === true) {
-                  alert("Point inserted");
+                  alert_msg("Point inserted", "success");
                   f.attributes["id"] = req.id;
                 }
                 else {
-                  alert("Error :(");
+                  alertmsg("Error :(");
                 }
               }
             });
@@ -155,7 +157,7 @@
       }
 
       function onPopupClose(evt) {
-        selectControl.unselect(selectedFeature);
+        selectControl.unselect(globals.selectedFeature);
         $("#edit_info").empty();
       }
 
@@ -164,38 +166,38 @@
         var d = {}
         d[type] = data.value;
         $("#baloon_name").text(data.value);
-        selectedFeature.attributes[type] = data.value;
+        globals.selectedFeature.attributes[type] = data.value;
         $.ajax({
-          url: "/api/edit_hospital/"+selectedFeature.attributes.id+"/",
+          url: "/api/edit_hospital/"+globals.selectedFeature.attributes.id+"/",
           type: "post",
           data: d,
           success: function(req) {
             if (req.success === true) {
-              alert("Updated!");
+              alert_msg("Updated!", "success");
             }
             else {
-              alert("Error :(");
+              alert_msg("Error :(", "error");
             }
           }
         });
       }
 
       function onFeatureSelect(feature){
-        selectedFeature = feature;
-        if (delete_mode) {
+        globals.selectedFeature = feature;
+        if (globals.delete_mode) {
           var agree = confirm("Are you sure you want to delete?");
           if (agree) {
-            hospital_layer.removeFeatures([selectedFeature]);
+            globals.hospital_layer.removeFeatures([globals.selectedFeature]);
             $.ajax({
-              url: "/api/delete_hospital/"+selectedFeature.attributes.id+"/",
+              url: "/api/delete_hospital/"+globals.selectedFeature.attributes.id+"/",
               type: "post",
               data: "",
               success: function(req) {
                 if (req.success === true) {
-                  alert("Deleted");
+                  alert_msg("Deleted", "success");
                 }
                 else {
-                  alert("Error :(");
+                  alert_msg("Error :(", "error");
                 }
               }
             });
@@ -203,7 +205,7 @@
         }
         else {
           var a = feature.attributes;
-          selectedFeature = feature;
+          globals.selectedFeature = feature;
           var desc = $("<div/>");
           desc.html("<p id='baloon_name'>"+a["name"]+"</p>");
           popup = new OpenLayers.Popup.FramedCloud("chicken",
@@ -234,35 +236,53 @@
       }
 
       function toggle_insert() {
-        if (delete_mode) {
+        if (globals.delete_mode) {
           toggle_delete();
         }
-        if (insert_mode) {
+        if (globals.insert_mode) {
           $("#insert_button").removeClass("success");
           $("#map").removeClass("crosshair");
-          insert_mode = false;
+          globals.insert_mode = false;
         }
         else {
           $("#insert_button").addClass("success");
           $("#map").addClass("crosshair");
-          insert_mode = true;
+          globals.insert_mode = true;
         }
       }
 
       function toggle_delete() {
-        if (insert_mode) {
+        if (globals.insert_mode) {
           toggle_insert();
         }
-        if (delete_mode) {
+        if (globals.delete_mode) {
           $("#delete_button").removeClass("success");
           $("#map").removeClass("crosshair");
-          delete_mode = false;
+          globals.delete_mode = false;
         }
         else {
           $("#delete_button").addClass("success");
           $("#map").addClass("crosshair");
-          delete_mode = true;
+          globals.delete_mode = true;
         }
+      }
+
+    function alert_msg(msg, level) {
+        level = level || "error";
+        $("#alert_box").fadeOut(300, function() {
+          if (globals.close_timeout) {
+            clearTimeout(globals.close_timeout);
+          }
+          $("#alert_box").fadeIn(300);
+          $(".alert-message").removeClass("warning");
+          $(".alert-message").removeClass("info");
+          $(".alert-message").removeClass("error");
+          $(".alert-message").removeClass("success");
+          $(".alert-message").addClass(level);
+          $(".alert-message").addClass("in");
+          $("#alert_msg").html(msg);
+          globals.close_timeout = setTimeout("$('.close').click()", 5000);
+        });
       }
 
       $(document).ready(function() {
@@ -270,19 +290,26 @@
         $("#insert_button").click(toggle_insert);
         $("#delete_button").click(toggle_delete);
         init();
-        $('#tabs').height('100%');
-        $('.list-container').width('49%');
+        $("#tabs").height("100%");
+        $(".list-container").width("49%");
+        $(".alert-message").alert();
       });
     </script>
   </head>
   <body>
     <div id="wrapper">
-      <div id="header" class="container">
+      <div id="header">
         <div id="logo">
           <h1>HaHeatMap <span>Health Facilities Distribution Analysis</span></h1>
         </div>
+        <div id="alert_box" style="display:none;">
+          <div class="alert-message warning in fade">
+            <a class="close" href="#">×</a>
+            <p id="alert_msg"><strong>Error:</strong> something went wrong :/</p>
+          </div>
+        </div>
       </div>
-      <div id="page" class="container">
+      <div id="page">
         <div id="sidebar">
           <div id="tabs">
           <ul>
