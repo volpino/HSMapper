@@ -16,6 +16,7 @@
     <script type="text/javascript" src="/static/js/jquery.tmpl.1.1.1.js"></script>
     <script type="text/javascript" src="/static/js/ui.multiselect.js"></script>
     <script type="text/javascript" src="/static/js/jquery.inlineedit.js"></script>
+    <script type="text/javascript" src="/static/js/nominatim.autocomplete.js"></script>
     <script type="text/javascript">
       var map;
       var insert_mode = false;
@@ -27,25 +28,30 @@
           div: "map",
           allOverlays: true,
           projection: new OpenLayers.Projection("EPSG:900913"),
+          controls: [new OpenLayers.Control.Navigation(),
+                     new OpenLayers.Control.LayerSwitcher(),
+                     new OpenLayers.Control.PanZoomBar(),
+                     new OpenLayers.Control.KeyboardDefaults()]
         });
 
         var heatmap_bounds = new OpenLayers.Bounds(-8083703.41947, 2179564.8117,
                                                    -8043582.32418, 2211201.70086);
         heatmap_layer = new OpenLayers.Layer.WMS(
-                    "Hospitals Heatmap", "http://{{ server_ip }}:{{ geoserver_port }}/geoserver/findmyspot/wms",
-                    {
-                        LAYERS: 'findmyspot:big_distance',
-                        STYLES: '',
-                        format: "image/png",
-                        tiled: true,
-                        tilesOrigin : heatmap_bounds.left + ',' + heatmap_bounds.bottom,
-                        transparent: true
-                    },
-                    {
-                        buffer: 0,
-                        displayOutsideMaxExtent: true,
-                        isBaseLayer: false
-                    });
+          "Hospitals Heatmap",
+          "http://{{ server_ip }}:{{ geoserver_port }}/geoserver/findmyspot/wms",
+          {
+              LAYERS: 'findmyspot:big_distance',
+              STYLES: '',
+              format: "image/png",
+              tiled: true,
+              tilesOrigin : heatmap_bounds.left + ',' + heatmap_bounds.bottom,
+              transparent: true
+          },
+          {
+              buffer: 0,
+              displayOutsideMaxExtent: true,
+              isBaseLayer: false
+          });
 
         var osm = new OpenLayers.Layer.OSM("OSM",
             "http://tile.openstreetmap.org/${z}/${x}/${y}.png",
@@ -90,8 +96,8 @@
             onFeatureUnselect(e.feature);
           }
         });
-        map.addControl(new OpenLayers.Control.LayerSwitcher());
         map.addControl(new OpenLayers.Control.MousePosition());
+
         map.events.register("click", map, function(e) {
           if (insert_mode) {
             var p = map.getLonLatFromPixel(e.xy);
@@ -139,6 +145,13 @@
               map.getLayersByName($(ui.option).val())[0].setVisibility(false);
             }
         });
+        $.nominatim("#autocomplete", {select: function(item) {
+          var bb = item.boundingbox;
+          bb = new OpenLayers.Bounds(bb[2], bb[0], bb[3], bb[1]);
+          bb = bb.transform(new OpenLayers.Projection('EPSG:4326'), new OpenLayers.Projection('EPSG:900913'));
+          console.log(bb);
+          map.zoomToExtent(bb);
+        }});
       }
 
       function onPopupClose(evt) {
@@ -147,9 +160,6 @@
       }
 
       function save_feature_edit(e, data) {
-        console.log($(e.target).parent());
-        console.log(data);
-        console.log(selectedFeature);
         var type = $(e.target).parent().parent().attr("type");
         var d = {}
         d[type] = data.value;
@@ -286,6 +296,9 @@
             <div class="buttons">
               <button class="btn" id="insert_button">Insert mode</button>
               <button class="btn" id="delete_button">Delete mode</button>
+            </div>
+            <div id="nominatim">
+              <input type="text" name="autocomplete" id="autocomplete" />
             </div>
             <div>
               <div id="edit_info"></div>
