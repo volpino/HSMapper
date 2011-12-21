@@ -93,7 +93,10 @@ $.widget("ui.multiselect", {
 		// callbacks
 		dataParser: defaultDataParser,
 		nodeComparator: defaultNodeComparator,
-		nodeInserted: null
+		nodeInserted: null,
+		sortableStart: null,
+		sortableUpdate: null,
+		sortableStop: null
 	},
 	_create: function() {
 		this.element.hide();
@@ -351,10 +354,24 @@ $.widget("ui.multiselect", {
 						}, 10);
 					}
 				},
+				start: function(event, ui) {
+					if (that.options.sortableStart) {
+						that.options.sortableStart(event, ui, $(this));
+					}
+				},
+				update: function(event, ui) {
+					that._moveOptionNode(ui.item);
+					if (that.options.sortableUpdate) {
+						that.options.sortableUpdate(event, ui, $(this));
+					}
+				},
 				stop: function(event, ui) {
 					// DEBUG
 					//that._messages(0, "Stop : " + (ui.item.parent()[0] == otherList[0]));
 					that._moveOptionNode(ui.item);
+					if (that.options.sortableStop) {
+						that.options.sortableStop(event, ui, $(this));
+					}
 				}
 			});
 		}
@@ -469,7 +486,7 @@ $.widget("ui.multiselect", {
 	},
 	_getOptionNode: function(option) {
 		option = $(option);
-		var node = $('<li class="ui-state-default ui-element"><span class="ui-icon"/>'+option.text()+'<a href="#" class="ui-state-default action"><span class="ui-corner-all ui-icon"/></a></li>').hide();
+		var node = $('<li class="ui-state-default ui-element" id="'+option.attr("id")+'"><span class="ui-icon"/>'+option.text()+'<a href="#" class="ui-state-default action"><span class="ui-corner-all ui-icon"/></a></li>').hide();
 		node.data('multiselect.optionLink', option);
 		return node;
 	},

@@ -57,7 +57,7 @@
 
         var osm = new OpenLayers.Layer.OSM("OSM",
             "http://tile.openstreetmap.org/${z}/${x}/${y}.png",
-            {sphericalMercator: true});
+            {sphericalMercator: true, isBaseLayer:true});
         var default_style = new OpenLayers.Style({
                                     graphicName: "circle",
                                     strokeColor: "#ff0000",
@@ -132,12 +132,29 @@
           if (layers[i].name.indexOf("OpenLayers.") == -1) {
             $(".multiselect").append($("<option></option>").
                               attr("value", layers[i].name).
+                              attr("id", layers[i].id).
                               attr("selected", true).
                               text(layers[i].name));
           }
         }
         $(".multiselect").multiselect({
-          sortable: false,
+          sortable: 'left',
+          sortableUpdate:
+            function(event, ui, sortable) {
+              var layer_list = sortable.sortable("toArray");
+              var layer_id = ui.item.attr("id");
+              var layer = map.getLayersBy("id", layer_id)[0];
+              console.log(layer.isBaseLayer);
+              if (!(layer.isBaseLayer || layer_id.search("OSM") != -1)) {
+                var layer_pos = layer_list.length - 1 - layer_list.indexOf(layer_id);
+                if (layer_pos != 0) {
+                  console.log("moving " + layer_id + " to " + layer_pos);
+                  map.setLayerIndex(layer, layer_pos);
+                  return;
+                }
+              }
+              sortable.sortable('cancel');
+            },
           selected:
             function(event, ui) {
               map.getLayersByName($(ui.option).val())[0].setVisibility(true);
@@ -151,7 +168,6 @@
           var bb = item.boundingbox;
           bb = new OpenLayers.Bounds(bb[2], bb[0], bb[3], bb[1]);
           bb = bb.transform(new OpenLayers.Projection('EPSG:4326'), new OpenLayers.Projection('EPSG:900913'));
-          console.log(bb);
           map.zoomToExtent(bb);
         }});
       }
