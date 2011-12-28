@@ -32,8 +32,7 @@
           projection: new OpenLayers.Projection("EPSG:900913"),
           controls: [new OpenLayers.Control.Navigation(),
                      new OpenLayers.Control.LayerSwitcher(),
-                     new OpenLayers.Control.PanZoomBar(),
-                     new OpenLayers.Control.KeyboardDefaults()]
+                     new OpenLayers.Control.PanZoomBar()]
         });
 
         var heatmap_bounds = new OpenLayers.Bounds(-8083703.41947, 2179564.8117,
@@ -144,7 +143,6 @@
               var layer_list = sortable.sortable("toArray");
               var layer_id = ui.item.attr("id");
               var layer = map.getLayersBy("id", layer_id)[0];
-              console.log(layer.isBaseLayer);
               if (!(layer.isBaseLayer || layer_id.search("OSM") != -1)) {
                 var layer_pos = layer_list.length - 1 - layer_list.indexOf(layer_id);
                 if (layer_pos != 0) {
@@ -336,12 +334,13 @@
           <div id="tabs-1">
             <select id="layers" class="multiselect" multiple="multiple" name="layers[]">
             </select>
+            <div id="nominatim">
+              <label for="autocomplete">Search:</label>
+              <input type="text" name="autocomplete" id="autocomplete" />
+            </div>
             <div class="buttons">
               <button class="btn" id="insert_button">Insert mode</button>
               <button class="btn" id="delete_button">Delete mode</button>
-            </div>
-            <div id="nominatim">
-              <input type="text" name="autocomplete" id="autocomplete" />
             </div>
             <div>
               <div id="edit_info"></div>
@@ -351,7 +350,13 @@
             <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
           </div>
           <div id="tabs-3">
-            <p>Mauris eleifend est et turpis. Duis id erat. Suspendisse potenti. Aliquam vulputate, pede vel vehicula accumsan, mi neque rutrum erat, eu congue orci lorem eget lorem. Vestibulum non ante. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce sodales. Quisque eu urna vel enim commodo pellentesque. Praesent eu risus hendrerit ligula tempus pretium. Curabitur lorem enim, pretium nec, feugiat nec, luctus a, lacus.</p>
+            <p>Developed by:</p>
+            <ul>
+              <li>Andrea Nodari - andrea.nodari91 at gmail dot com</li>
+              <li>Davide Kirchner - davide.kirchner at yahoo dot it</li>
+              <li>Matteo Poletti - pollo1_91 at yahoo dot it</li>
+              <li><a href="http://autistici.org/fox">Federico Scrinzi - fox91 at anche dot no</a></li>
+            </ul>
           </div>
           </div>
         </div>

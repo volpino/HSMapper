@@ -121,6 +121,14 @@ a:hover {
   overflow: auto;
 }
 
+#tabs-2, #tabs-3 {
+  padding: 3%;
+}
+
+#tabs-3 li {
+  color: #222;
+}
+
 #edit_info {
   padding: 20px;
 }
@@ -152,8 +160,20 @@ a:hover {
     font-size: 9px;
 }
 
+#nominatim {
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
+
+#nominatim label {
+    width: inherit;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
 .buttons {
-    margin-top: 30px;
+    padding-top: 3%;
+    padding-left: 2%;
 }
 
 div#map.crosshair {
