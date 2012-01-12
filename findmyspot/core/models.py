@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.contrib.gis.db import models
 from settings import PROJECTION_SRID
 
@@ -5,11 +7,14 @@ from settings import PROJECTION_SRID
 class Pathology(models.Model):
     name = models.CharField(max_length=255)
 
+
 class MedicalService(models.Model):
     name = models.CharField(max_length=255)
 
+
 class FacilityType(models.Model):
     name = models.CharField(max_length=255)
+
 
 class Facility(models.Model):
     name = models.CharField(max_length=255)
@@ -29,6 +34,7 @@ class Facility(models.Model):
         #db_table = u'italia_points'
         pass
 
+
 WEEKDAY_CHOICES = ((1, u"Lunedì"),
                    (2, u"Martedì"),
                    (3, u"Mercoledì"),
@@ -37,11 +43,13 @@ WEEKDAY_CHOICES = ((1, u"Lunedì"),
                    (6, u"Sabato"),
                    (7, u"Domenica"))
 
+
 class OpeningTime(models.Model):
     facility = models.ForeignKey(Facility)
     opening = models.TimeField()
     closing = models.TimeField()
     weekday = models.IntegerField(choices=WEEKDAY_CHOICES)
+
 
 class SpecialDays(models.Model):
     facility = models.ForeignKey(Facility)
@@ -49,4 +57,3 @@ class SpecialDays(models.Model):
     closed = models.BooleanField()
     opening = models.TimeField(null=True, blank=True)
     closing = models.TimeField(null=True, blank=True)
-
