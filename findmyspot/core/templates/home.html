@@ -335,6 +335,14 @@
               loadurl: "/api/edit_hospital_data/type/",
               type: "select"
             });
+            $('.editable_manager').editable(save_feature_edit, {
+              submit: "Save",
+              cancel: "Cancel",
+              style: "inherit",
+              loadurl: "/api/edit_hospital_data/manager/",
+              type: "select"
+            });
+
             manytomany_editable(".editable_pathology", "pathology", "pathologies");
             manytomany_editable(".editable_service", "service", "services");
           });
