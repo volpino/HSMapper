@@ -15,7 +15,10 @@
     <script src="/static/js/jquery-ui-1.8.16.custom.min.js"></script>
     <script type="text/javascript" src="/static/js/jquery.tmpl.1.1.1.js"></script>
     <script type="text/javascript" src="/static/js/ui.multiselect.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.inlineedit.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.jeditable.mini.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.jeditable.manytomany.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.jeditable.autogrow.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.autogrow.js"></script>
     <script type="text/javascript" src="/static/js/nominatim.autocomplete.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-alerts.js"></script>
     <script type="text/javascript">
@@ -104,9 +107,11 @@
             var p = map.getLonLatFromPixel(e.xy);
             var point = new OpenLayers.Geometry.Point(p["lon"], p["lat"]);
             var f = new OpenLayers.Feature.Vector(point);
-            f.attributes = globals.hospital_layer.features[0].attributes;
-            for (key in f.attributes) {
-              f.attributes[key] = "null";
+            if (globals.hospital_layer.features.length > 0) {
+                f.attributes = globals.hospital_layer.features[0].attributes;
+                for (key in f.attributes) {
+                  f.attributes[key] = "";
+                }
             }
             globals.hospital_layer.addFeatures([f]);
             $.ajax({
@@ -175,12 +180,15 @@
         $("#edit_info").empty();
       }
 
-      function save_feature_edit(e, data) {
-        var type = $(e.target).parent().parent().attr("type");
+      function save_feature_edit(value, settings) {
+        var display_msg = $(this).find("option[value='"+value+"']").text() || value;
+        var type = $(this).parent().attr("type");
         var d = {}
-        d[type] = data.value;
-        $("#baloon_name").text(data.value);
-        globals.selectedFeature.attributes[type] = data.value;
+        d[type] = value;
+        if (type === "name") {
+          $("#baloon_name").text(value);
+        }
+        globals.selectedFeature.attributes[type] = value;
         $.ajax({
           url: "/api/edit_hospital/"+globals.selectedFeature.attributes.id+"/",
           type: "post",
@@ -192,6 +200,80 @@
             else {
               alert_msg("Error :(", "error");
             }
+          }
+        });
+        return display_msg;
+      }
+
+      function save_manytomany_edit(sing, plur) {
+        return function(value, settings) {
+          var needs_new_field = false;
+          var data = [];
+          if (value === "") {
+            $(this).parent().remove();
+          }
+          else {
+            data.push(value);
+          }
+          $(".editable_"+sing).each(function() {
+            if ($(this).text() === "Click to add") {
+              $(this).parent().remove();
+            }
+            else {
+              if (!$(this).html().match("<form")) {
+                data.push($(this).text());
+              }
+            }
+          });
+          $.ajax({
+            url: "/api/edit_hospital/"+globals.selectedFeature.attributes.id+"/",
+            type: "post",
+            data: plur+"[]="+data.join("&"+plur+"[]="),
+            success: function(req) {
+              if (req.success === true) {
+                alert_msg("Updated!", "success");
+              }
+              else {
+                alert_msg("Error :(", "error");
+              }
+            }
+          });
+
+          var new_input = $("<span/>").append(
+            $("<span/>").addClass("editable_"+sing)
+          );
+          $("#"+plur+"_info").append(new_input);
+          manytomany_editable(".editable_"+sing);
+
+          return value;
+        }
+      }
+
+      function manytomany_editable(expr, sing, plur) {
+        $(expr).editable(save_manytomany_edit(sing, plur), {
+          submit: "Save",
+          cancel: "Cancel",
+          style: "inherit",
+          type: "manytomany",
+          onblur: "submit",
+          placeholder: "Click to add",
+          autocomplete: {
+            source: function(request, response) {
+              $.ajax({
+                url: "/api/edit_hospital_data/"+sing+"/",
+                data: {
+                  q: request.term
+                },
+                success: function(data) {
+                  response($.map(data.results, function(item) {
+                    return {
+                      label: item.name,
+                      value: item.name
+                    }
+                  }));
+                }
+              });
+            },
           }
         });
       }
@@ -218,10 +300,10 @@
           }
         }
         else {
-          var a = feature.attributes;
+          var attrib = feature.attributes;
           globals.selectedFeature = feature;
           var desc = $("<div/>");
-          desc.html("<p id='baloon_name'>"+a["name"]+"</p>");
+          desc.html("<p id='baloon_name'>"+attrib["name"]+"</p>");
           popup = new OpenLayers.Popup.FramedCloud("chicken",
                       feature.geometry.getBounds().getCenterLonLat(),
                       new OpenLayers.Size(1500,1000),
@@ -231,22 +313,38 @@
                       onPopupClose);
           feature.popup = popup;
           map.addPopup(popup);
-          var edit = "";
-          for (key in a) {
-            if (key != "id") {
-              edit += "<p><span>"+key+": </span><span type='"+key+
-                      "'><span class='editable'>"+a[key]+"</span></span></p>";
-            }
-          }
-          $("#edit_info").html(edit);
-          $('.editable').inlineEdit({save: save_feature_edit});
+          $.get("/api/info_hospital/"+globals.selectedFeature.attributes.id+"/", function(data) {
+            $("#edit_info").html(data);
+            $('.editable').editable(save_feature_edit, {
+              submit: "Save",
+              cancel: "Cancel",
+              style: "inherit"
+            });
+            $('.editable_text').editable(save_feature_edit, {
+              submit: "Save",
+              cancel: "Cancel",
+              style: "inherit",
+              type: "autogrow",
+              rows: 5,
+              cols: 40,
+            });
+            $('.editable_type').editable(save_feature_edit, {
+              submit: "Save",
+              cancel: "Cancel",
+              style: "inherit",
+              loadurl: "/api/edit_hospital_data/type/",
+              type: "select"
+            });
+            manytomany_editable(".editable_pathology", "pathology", "pathologies");
+            manytomany_editable(".editable_service", "service", "services");
+          });
         }
       }
 
       function onFeatureUnselect(feature) {
         map.removePopup(feature.popup);
         feature.popup.destroy();
-        feature.popup = null;
+        feature.popup = undefined;
       }
 
       function toggle_insert() {

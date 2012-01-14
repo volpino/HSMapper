@@ -115,10 +115,10 @@ a:hover {
 }
 
 #tabs-1, #tabs-2, #tabs-3 {
-  /*height: 400px;*/
-  /*width: 330px;*/
   padding: 0;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 90%;
 }
 
 #tabs-2, #tabs-3 {
@@ -130,11 +130,11 @@ a:hover {
 }
 
 #edit_info {
-  padding: 20px;
+  padding: 2%;
 }
 
 #edit_info input {
-  width: 190px;
+  width: 150px;
 }
 
 #footer {
@@ -187,4 +187,23 @@ div#map.crosshair {
 ul.ui-widget-header {
     background: none;
     border: none;
+}
+
+.editable, .editable_text, .editable_pathology, .editable_service {
+    display: inline;
+}
+
+.editable:hover, .editable_text:hover, .editable_pathology:hover,
+.editable_service:hover {
+    display: inline;
+    background-color: #ffC;
+}
+
+.editable_pathology, .editable_service {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.hidden {
+    display: none;
 }

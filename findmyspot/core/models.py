@@ -5,19 +5,19 @@ from settings import PROJECTION_SRID
 
 
 class Pathology(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
 
 
 class MedicalService(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
 
 
 class FacilityType(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
 
 
 class Facility(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, null=True, blank=True)
     the_geom = models.PointField(srid=PROJECTION_SRID)
     description = models.TextField(null=True, blank=True)
     manager = models.CharField(max_length=255, null=True, blank=True)
@@ -29,10 +29,6 @@ class Facility(models.Model):
     services = models.ManyToManyField(MedicalService, null=True, blank=True)
 
     objects = models.GeoManager()
-
-    class Meta:
-        #db_table = u'italia_points'
-        pass
 
 
 WEEKDAY_CHOICES = ((1, u"Lunedì"),

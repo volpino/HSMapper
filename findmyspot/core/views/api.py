@@ -1,57 +1,114 @@
 from django.contrib.gis.geos.point import Point
 from django.http import HttpResponse
+from django.shortcuts import render_to_response
 from vectorformats.Formats import Django, GeoJSON
 
 from annoying.decorators import ajax_request
 
-
-from ..models import Hospital
-from ..forms import HospitalForm
+from ..models import Facility, FacilityType, Pathology, MedicalService
+from ..forms import FacilityForm
 import settings
-
-#DATA = u"""{"crs": null, "type": "FeatureCollection", "features": [{"geometry": {"type": "Point", "coordinates": [-8059351.285663681, 2099199.355282287]}, "type": "Feature", "id": 26359, "properties": {"id": 26359, "name": "MDM"}}]}"""
 
 
 def get_hospitals(request):
-    qs = Hospital.objects.exclude(the_geom=None)
+    qs = Facility.objects.exclude(the_geom=None)
     djf = Django.Django(geodjango="the_geom",
-                        properties=['id', 'name', 'description', 'hours'])
+                        properties=['id', 'name', 'description', 'manager',
+                                    'address', 'phone', 'email',
+                                    'facility_type_id'])
     geoj = GeoJSON.GeoJSON()
     geojson_output = geoj.encode(djf.decode(qs))
     response = HttpResponse(mimetype="application/json")
     response.write(geojson_output)
 
-#    response.write(DATA)
     return response
 
 
 @ajax_request
 def edit_hospital(request, id_):
     if request.method == 'POST':
-        form = HospitalForm(request.POST)
+        form = FacilityForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            del data['lat'], data['lon']
             try:
-                current_obj = Hospital.objects.get(id=id_)
-            except Hospital.DoesNotExist:
+                current_obj = Facility.objects.get(id=id_)
+            except Facility.DoesNotExist:
               return {'success': False, 'error': 'Not found'}
 
-            current_data = dict([(name, value) for name, value in
-                current_obj.__dict__.items() if not name.startswith('_')])
-            current_data.update(data)
-            if current_obj:
-                print current_data
-                obj = Hospital(**current_data)
-                obj.save(force_update=True)
-                return {'success': True}
+            current_data = dict([(k.name, getattr(current_obj, k.name))
+                                 for k in current_obj._meta.fields])
+
+            for key, value in data.items():
+                if value:
+                    current_data[key] = value
+
+            obj = Facility(**current_data)
+
+            if request.POST.has_key("pathologies[]"):
+                p_data = request.POST.getlist("pathologies[]")
+                obj.pathologies.clear()
+                for p in p_data:
+                    try:
+                        obj_p = Pathology.objects.get(name=p)
+                        obj.pathologies.add(obj_p)
+                    except Pathology.DoesNotExist:
+                        obj.pathologies.create(name=p)
+
+            if request.POST.has_key("services[]"):
+                p_data = request.POST.getlist("services[]")
+                obj.services.clear()
+                for p in p_data:
+                    try:
+                        obj_p = MedicalService.objects.get(name=p)
+                        obj.services.add(obj_p)
+                    except MedicalService.DoesNotExist:
+                        obj.services.create(name=p)
+
+            obj.save(force_update=True)
+            return {'success': True}
     return {'success': False}
+
+
+@ajax_request
+def edit_hospital_data(request, key):
+    if key == "type":
+        return dict([(k.id, k.name)
+                     for k in FacilityType.objects.all()])
+    elif key == "pathology":
+        if request.GET.has_key(u'q'):
+            results = []
+            q = request.GET[u'q']
+            if len(q) > 2:
+                model_results = Pathology.objects.filter(name__icontains=q)
+                for x in model_results:
+                    results.append({"id": x.id, "name": x.name})
+            return {"results": results}
+    elif key == "service":
+        if request.GET.has_key(u'q'):
+            results = []
+            q = request.GET[u'q']
+            if len(q) > 2:
+                model_results = MedicalService.objects.filter(name__icontains=q)
+                for x in model_results:
+                    results.append({"id": x.id, "name": x.name})
+            return {"results": results}
+    return {}
+
+
+def info_hospital(request, id_):
+    hospital = None
+    params_id = int(id_)
+    try:
+        hospital = Facility.objects.get(id=params_id)
+    except Facility.DoesNotExist:
+        pass
+    return render_to_response('hospital_info.html', {'hospital': hospital})
 
 
 @ajax_request
 def add_hospital(request):
     if request.method == 'POST':
-        form = HospitalForm(request.POST)
+        form = FacilityForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
 
@@ -63,7 +120,7 @@ def add_hospital(request):
             del data['lat'], data['lon']
             data['the_geom'] = Point(lon, lat, srid=settings.DISPLAY_SRID)
 
-            obj = Hospital.objects.create(**data)
+            obj = Facility.objects.create(**data)
             return {'success': True, 'id': obj.pk}
     return {'success': False}
 
@@ -73,9 +130,9 @@ def delete_hospital(request, id_):
     if request.method == 'POST':
         params_id = int(id_)
         try:
-            hospital = Hospital.objects.get(id=params_id)
+            hospital = Facility.objects.get(id=params_id)
             hospital.delete()
-        except:
+        except Facility.DoesNotExist:
             return {'success': False}
         return {'success': True}
     return {'success': False}
