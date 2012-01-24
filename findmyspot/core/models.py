@@ -1,20 +1,26 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.gis.db import models
+from django.contrib.auth.models import User as Auth_user
 from settings import PROJECTION_SRID
 
 
 class Pathology(models.Model):
     name = models.CharField(max_length=255, unique=True)
+    class Meta:
+        db_table = u'pathology'
 
 
 class MedicalService(models.Model):
     name = models.CharField(max_length=255, unique=True)
+    class Meta:
+        db_table = u'medicalservice'
 
 
 class FacilityType(models.Model):
     name = models.CharField(max_length=255, unique=True)
-
+    class Meta:
+        db_table = u'facilitytype'
 
 class Facility(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
@@ -27,8 +33,13 @@ class Facility(models.Model):
     facility_type = models.ForeignKey(FacilityType, null=True, blank=True)
     pathologies = models.ManyToManyField(Pathology, null=True, blank=True)
     services = models.ManyToManyField(MedicalService, null=True, blank=True)
+    last_updated = models.DateField(auto_now=True)
+    updated_by = models.ForeignKey(Auth_user)
+    expiration = models.DateField(null=True, blank=True)
 
     objects = models.GeoManager()
+    class Meta:
+        db_table = u'facility'
 
 
 WEEKDAY_CHOICES = ((1, u"Lunedì"),
@@ -45,6 +56,8 @@ class OpeningTime(models.Model):
     opening = models.TimeField()
     closing = models.TimeField()
     weekday = models.IntegerField(choices=WEEKDAY_CHOICES)
+    class Meta:
+        db_table = u'openingtime'
 
 
 class SpecialDays(models.Model):
@@ -53,3 +66,5 @@ class SpecialDays(models.Model):
     closed = models.BooleanField()
     opening = models.TimeField(null=True, blank=True)
     closing = models.TimeField(null=True, blank=True)
+    class Meta:
+        db_table = u'specialdays'
