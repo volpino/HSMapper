@@ -1,5 +1,3 @@
-# Django settings for findmyspot project.
-
 import os
 import django
 
