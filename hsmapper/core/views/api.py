@@ -47,9 +47,11 @@ def edit_hospital(request, id_):
             if request.POST.has_key("pathologies[]"):
                 p_data = request.POST.getlist("pathologies[]")
                 obj.pathologies.clear()
+                obj.save(force_update=True)
                 for p in p_data:
                     try:
                         obj_p = Pathology.objects.get(name=p)
+                        print "######", obj.pk, obj_p.pk
                         obj.pathologies.add(obj_p)
                     except Pathology.DoesNotExist:
                         obj.pathologies.create(name=p)

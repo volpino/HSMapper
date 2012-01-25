@@ -6,6 +6,9 @@ from core.models import Facility, FacilityType
 
 
 class FacilityForm(Form):
+    """Form for editing facilities properties
+    """
+    # ModelForm is not used because required must be False everywhere
     name = forms.CharField(max_length=255,
                            required=False)
     description = forms.CharField(widget=forms.TextInput(),
@@ -17,6 +20,7 @@ class FacilityForm(Form):
     email = forms.CharField(required=False)
     facility_type = forms.ModelChoiceField(queryset=FacilityType.objects.all(),
                                            required=False)
+    expiration = forms.DateField(required=False)
 
     lat = forms.FloatField(widget=forms.HiddenInput(), required=False)
     lon = forms.FloatField(widget=forms.HiddenInput(), required=False)

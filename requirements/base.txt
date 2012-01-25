@@ -6,3 +6,5 @@ django-annoying==0.7.6
 django-devserver
 django-extensions
 South
+django-registration
+django-reversion
