@@ -1,5 +1,7 @@
 # python
 *.py[co]
+*build/
+*migrations/
 
 # pycharm
 /.idea
