@@ -11,7 +11,6 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', home),
-    # url(r'^findmyspot/', include('findmyspot.foo.urls')),
     url(r'^api/get_hospitals/$', api.get_hospitals),
     url(r'^api/add_hospital/$', api.add_hospital),
     url(r'^api/delete_hospital/(?P<id_>\d+)/$', api.delete_hospital),
