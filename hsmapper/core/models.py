@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib.gis.db import models
-from django.contrib.auth.models import User as Auth_user
+from django.contrib.auth.models import User
 from settings import PROJECTION_SRID
 
 
@@ -34,7 +34,7 @@ class Facility(models.Model):
     pathologies = models.ManyToManyField(Pathology, null=True, blank=True)
     services = models.ManyToManyField(MedicalService, null=True, blank=True)
     last_updated = models.DateField(auto_now=True)
-    updated_by = models.ForeignKey(Auth_user)
+    updated_by = models.ForeignKey(User)
     expiration = models.DateField(null=True, blank=True)
 
     objects = models.GeoManager()

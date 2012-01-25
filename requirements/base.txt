@@ -5,3 +5,4 @@ simplejson==2.2.1
 django-annoying==0.7.6
 django-devserver
 django-extensions
+South
