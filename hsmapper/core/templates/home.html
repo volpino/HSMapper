@@ -19,6 +19,8 @@
     <script type="text/javascript" src="/static/js/jquery.jeditable.manytomany.js"></script>
     <script type="text/javascript" src="/static/js/jquery.jeditable.autogrow.js"></script>
     <script type="text/javascript" src="/static/js/jquery.autogrow.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.jeditable.masked.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.maskedinput.js"></script>
     <script type="text/javascript" src="/static/js/nominatim.autocomplete.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap-alerts.js"></script>
     <script type="text/javascript">
@@ -334,6 +336,13 @@
               style: "inherit",
               loadurl: "/api/edit_hospital_data/type/",
               type: "select"
+            });
+            $('.editable_date').editable(save_feature_edit, {
+              submit: "Save",
+              cancel: "Cancel",
+              style: "inherit",
+              type: "masked",
+              mask: "99/99/9999",
             });
             $('.editable_manager').editable(save_feature_edit, {
               submit: "Save",
