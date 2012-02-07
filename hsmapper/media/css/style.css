@@ -1,0 +1,209 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #wrapper {
+    height: 100%;
+    overflow-y: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  /*background: #E3E3E3;*/
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  color: #8A8985;
+  overflow: hidden;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+  color: #404040;
+}
+
+h1 {
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: bold;
+}
+
+h1 span {
+    font-size: 18px;
+    color: #bfbfbf;
+}
+
+h2 {
+  font-size: 2.8em;
+}
+
+h3 {
+  font-size: 1.6em;
+}
+
+p, ul, ol {
+  margin-top: 0;
+  line-height: 180%;
+}
+
+ul, ol {
+}
+
+a {
+  text-decoration: none;
+  color: #00008B;
+}
+
+a:hover {
+}
+
+#wrapper {
+  margin: 0 auto;
+  padding: 0;
+  width: 95%;
+}
+
+#header {
+  margin: 1% 0 1%;
+}
+
+#logo {
+  float: left;
+}
+
+
+#header h1 {
+  /*letter-spacing: -2px;*/
+  /*font-size: 3.2em;*/
+}
+
+#alert_box {
+  min-width: 15%;
+  right: 2%;
+  bottom: 0;
+  position: fixed;
+  opacity: 0.95;
+  z-index: 99999;
+}
+
+#page {
+  margin: 0 auto;
+  padding: 20px;
+  height: 83%;
+  background: #FFF;
+  border: 1px solid #EEE;
+  clear: both;
+}
+
+#sidebar {
+  float: left;
+  width: 34%;
+  height: 100%;
+  font-size: 0.7em;
+  padding-right: 1%;
+}
+
+#tabs {
+}
+
+.multiselect {
+  width: 98%;
+  height: 200px;
+}
+
+#tabs-1, #tabs-2, #tabs-3 {
+  padding: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 90%;
+}
+
+#tabs-2, #tabs-3 {
+  padding: 3%;
+}
+
+#tabs-3 li {
+  color: #222;
+}
+
+#edit_info {
+  padding: 2%;
+}
+
+#edit_info input {
+  width: 150px;
+}
+
+#footer {
+  clear: both;
+  text-align: center;
+}
+
+#map {
+  float: right;
+  height: 100%;
+  width: 65%;
+}
+
+.ui-widget.ui-multiselect {
+    overflow: hidden;
+}
+
+.ui-multiselect {
+    border: 1px solid #aaa !important;
+}
+
+.ui-multiselect .ui-widget-header {
+    font-size: 9px;
+}
+
+#nominatim {
+    padding-top: 3%;
+    padding-bottom: 3%;
+}
+
+#nominatim label {
+    width: inherit;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.buttons {
+    padding-top: 3%;
+    padding-left: 2%;
+}
+
+div#map.crosshair {
+    cursor: crosshair;
+}
+
+.ui-multiselect .ui-element {
+    padding-left: 10px;
+}
+
+ul.ui-widget-header {
+    background: none;
+    border: none;
+}
+
+.editable, .editable_text, .editable_pathology, .editable_service {
+    display: inline;
+}
+
+.editable:hover, .editable_text:hover, .editable_pathology:hover,
+.editable_service:hover {
+    display: inline;
+    background-color: #ffC;
+}
+
+.editable_pathology, .editable_service {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.hidden {
+    display: none;
+}

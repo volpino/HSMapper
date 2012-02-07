@@ -1,0 +1,10 @@
+psycopg2==2.4.1
+vectorformats==0.1
+Django==1.3.1
+simplejson==2.2.1
+django-annoying==0.7.6
+django-devserver
+django-extensions
+South
+django-registration
+django-reversion
