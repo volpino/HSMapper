@@ -1,6 +1,6 @@
 from django.contrib import admin
 import reversion
-from .models import Pathology, MedicalService, FacilityType, Facility, \
+from core.models import Pathology, MedicalService, FacilityType, Facility, \
                     OpeningTime, SpecialDay
 
 class ReversionAdmin(reversion.VersionAdmin):
