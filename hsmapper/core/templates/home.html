@@ -2,27 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>HSMapper</title>
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-    <link type="text/css" href="/static/css/ui.multiselect.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/static/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css" />
-    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}/css/bootstrap.min.css">
+    <link type="text/css" href="{{ STATIC_URL }}/css/ui.multiselect.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}/css/style.css" type="text/css" />
 
-    <script type="text/javascript" src="/static/js/proj4js/lib/proj4js-compressed.js"></script>
-    <script type="text/javascript" src="/static/js/proj4js/lib/defs/EPSG23032.js"></script>
-    <script type="text/javascript" src="/static/openlayers/OpenLayers.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}/js/proj4js/lib/proj4js-compressed.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}/js/proj4js/lib/defs/EPSG23032.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}/openlayers/OpenLayers.js"></script>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="/static/js/jquery-ui-1.8.16.custom.min.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.tmpl.1.1.1.js"></script>
-    <script type="text/javascript" src="/static/js/ui.multiselect.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.jeditable.mini.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.jeditable.manytomany.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.jeditable.autogrow.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.autogrow.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.jeditable.masked.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.maskedinput.js"></script>
-    <script type="text/javascript" src="/static/js/nominatim.autocomplete.js"></script>
-    <script type="text/javascript" src="/static/js/bootstrap-alerts.js"></script>
+    <script src="{{ STATIC_URL }}/js/jquery-ui-1.8.16.custom.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.tmpl.1.1.1.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}/js/ui.multiselect.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.jeditable.mini.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.jeditable.manytomany.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.jeditable.autogrow.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.autogrow.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.jeditable.masked.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.maskedinput.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}/js/nominatim.autocomplete.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}/js/bootstrap-alerts.js"></script>
     <script type="text/javascript">
       var globals = {};
       var map;
