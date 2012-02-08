@@ -1,31 +1,17 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.conf import settings
 
-from core.views.views import home
-from core.views import api
-
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    url(r'^$', home),
-    url(r'^api/get_hospitals/$', api.get_hospitals, name="api-get-hospitals"),
-    url(r'^api/add_hospital/$', api.add_hospital, name="api-add-hospital"),
-    url(r'^api/delete_hospital/(?P<id_>\d+)/$', api.delete_hospital,
-        name="api-delete-hospital"),
-    url(r'^api/edit_hospital/(?P<id_>\d+)/$', api.edit_hospital,
-        name="api-edit-hospital"),
-    url(r'^api/info_hospital/(?P<id_>\d+)/$', api.info_hospital,
-        name="api-info-hospital"),
-    url(r'^api/edit_hospital_data/(?P<key>\w+)/$', api.edit_hospital_data,
-        name="api-edit-hospital-data"),
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+    url(r'', include('hsmapper.core.urls')),
 )
 
 

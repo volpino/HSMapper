@@ -22,7 +22,7 @@ class FacilityForm(Form):
     email = forms.CharField(required=False)
     facility_type = forms.ModelChoiceField(queryset=FacilityType.objects.all(),
                                            required=False)
-    expiration = forms.DateField(required=False, input_formats=['%m/%d/%Y'])
+    expiration = forms.DateField(required=False, input_formats=['%d/%m/%Y'])
 
     lat = forms.FloatField(widget=forms.HiddenInput(), required=False)
     lon = forms.FloatField(widget=forms.HiddenInput(), required=False)

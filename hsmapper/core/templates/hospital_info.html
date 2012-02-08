@@ -77,14 +77,14 @@
 <p>
   <span>Expiration:</span>
   <span type="expiration">
-    <span class="editable_date">{{ hospital.expiration }}</span>
+    <span class="editable_date">{{ hospital.expiration|date:"d/m/Y" }}</span>
   </span>
 </p>
 
 <p>
   <span>Last update:</span>
   <span>
-    <span>{{ hospital.last_updated }}</span>
+    <span>{{ hospital.last_updated|date:"d/m/Y" }}</span>
   </span>
 </p>
 

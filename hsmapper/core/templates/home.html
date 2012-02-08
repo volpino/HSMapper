@@ -77,7 +77,7 @@
              projection: new OpenLayers.Projection("EPSG:{{ srid }}"),
              strategies: [new OpenLayers.Strategy.Fixed()],
              protocol: new OpenLayers.Protocol.HTTP({
-                url: "/api/get_hospitals/",
+                url: "{% url api-get-hospitals %}",
                 format: new OpenLayers.Format.GeoJSON()
              })
             }
@@ -120,7 +120,7 @@
             }
             globals.hospital_layer.addFeatures([f]);
             $.ajax({
-              url: "/api/add_hospital/",
+              url: "{% url api-add-hospital %}",
               type: "post",
               data: {lat: p["lat"], lon: p["lon"]},
               success: function(req) {
@@ -195,7 +195,7 @@
         }
         globals.selectedFeature.attributes[type] = value;
         $.ajax({
-          url: "/api/edit_hospital/"+globals.selectedFeature.attributes.id+"/",
+          url: "{% url api-edit-hospital 1 %}".replace("1", globals.selectedFeature.attributes.id),
           type: "post",
           data: d,
           success: function(req) {
@@ -231,7 +231,7 @@
             }
           });
           $.ajax({
-            url: "/api/edit_hospital/"+globals.selectedFeature.attributes.id+"/",
+            url: "{% url api-edit-hospital 1 %}".replace("1", globals.selectedFeature.attributes.id),
             type: "post",
             data: plur+"[]="+data.join("&"+plur+"[]="),
             success: function(req) {
@@ -265,7 +265,7 @@
           autocomplete: {
             source: function(request, response) {
               $.ajax({
-                url: "/api/edit_hospital_data/"+sing+"/",
+                url: "{% url api-edit-hospital-data "1" %}".replace("1", sing),
                 data: {
                   q: request.term
                 },
@@ -290,7 +290,7 @@
           if (agree) {
             globals.hospital_layer.removeFeatures([globals.selectedFeature]);
             $.ajax({
-              url: "/api/delete_hospital/"+globals.selectedFeature.attributes.id+"/",
+              url: "{% url api-delete-hospital 1 %}".replace("1", globals.selectedFeature.attributes.id),
               type: "post",
               data: "",
               success: function(req) {
@@ -318,7 +318,7 @@
                       onPopupClose);
           feature.popup = popup;
           map.addPopup(popup);
-          $.get("/api/info_hospital/"+globals.selectedFeature.attributes.id+"/", function(data) {
+          $.get("{% url api-info-hospital 1 %}".replace("1", globals.selectedFeature.attributes.id), function(data) {
             $("#edit_info").html(data);
             $('.editable').editable(save_feature_edit, {
               submit: "Save",
@@ -337,7 +337,7 @@
               submit: "Save",
               cancel: "Cancel",
               style: "inherit",
-              loadurl: "/api/edit_hospital_data/type/",
+              loadurl: "{% url api-edit-hospital-data 'type' %}",
               type: "select"
             });
             $('.editable_date').editable(save_feature_edit, {
@@ -351,7 +351,7 @@
               submit: "Save",
               cancel: "Cancel",
               style: "inherit",
-              loadurl: "/api/edit_hospital_data/manager/",
+              loadurl: "{% url api-edit-hospital-data 'manager' %}",
               type: "select"
             });
 
