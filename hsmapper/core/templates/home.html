@@ -84,7 +84,10 @@
         );
         globals.hospital_layer.events.register("featuresadded", globals.hospital_layer,
           function() {
-            map.zoomToExtent(globals.hospital_layer.getDataExtent());
+            var extent = globals.hospital_layer.getDataExtent();
+            if (extent) {
+              map.zoomToExtent(extent);
+            }
           }
         );
 

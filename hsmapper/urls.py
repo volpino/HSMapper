@@ -11,12 +11,16 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', home),
-    url(r'^api/get_hospitals/$', api.get_hospitals),
-    url(r'^api/add_hospital/$', api.add_hospital),
-    url(r'^api/delete_hospital/(?P<id_>\d+)/$', api.delete_hospital),
-    url(r'^api/edit_hospital/(?P<id_>\d+)/$', api.edit_hospital),
-    url(r'^api/info_hospital/(?P<id_>\d+)/$', api.info_hospital),
-    url(r'^api/edit_hospital_data/(?P<key>\w+)/$', api.edit_hospital_data),
+    url(r'^api/get_hospitals/$', api.get_hospitals, name="api-get-hospitals"),
+    url(r'^api/add_hospital/$', api.add_hospital, name="api-add-hospital"),
+    url(r'^api/delete_hospital/(?P<id_>\d+)/$', api.delete_hospital,
+        name="api-delete-hospital"),
+    url(r'^api/edit_hospital/(?P<id_>\d+)/$', api.edit_hospital,
+        name="api-edit-hospital"),
+    url(r'^api/info_hospital/(?P<id_>\d+)/$', api.info_hospital,
+        name="api-info-hospital"),
+    url(r'^api/edit_hospital_data/(?P<key>\w+)/$', api.edit_hospital_data,
+        name="api-edit-hospital-data"),
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

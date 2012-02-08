@@ -1,3 +1,5 @@
+""" Forms for hsmapper core app """
+
 from django import forms
 from django.forms import Form
 from core.models import Facility, FacilityType
@@ -20,7 +22,7 @@ class FacilityForm(Form):
     email = forms.CharField(required=False)
     facility_type = forms.ModelChoiceField(queryset=FacilityType.objects.all(),
                                            required=False)
-    expiration = forms.DateField(required=False)
+    expiration = forms.DateField(required=False, input_formats=['%m/%d/%Y'])
 
     lat = forms.FloatField(widget=forms.HiddenInput(), required=False)
     lon = forms.FloatField(widget=forms.HiddenInput(), required=False)

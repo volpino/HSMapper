@@ -7,7 +7,7 @@ from annoying.decorators import ajax_request
 
 from ..models import Facility, FacilityType, Pathology, MedicalService
 from ..forms import FacilityForm
-import settings
+from hsmapper import settings
 
 
 def get_hospitals(request):
@@ -51,7 +51,6 @@ def edit_hospital(request, id_):
                 for p in p_data:
                     try:
                         obj_p = Pathology.objects.get(name=p)
-                        print "######", obj.pk, obj_p.pk
                         obj.pathologies.add(obj_p)
                     except Pathology.DoesNotExist:
                         obj.pathologies.create(name=p)
@@ -59,6 +58,7 @@ def edit_hospital(request, id_):
             if request.POST.has_key("services[]"):
                 p_data = request.POST.getlist("services[]")
                 obj.services.clear()
+                obj.save(force_update=True)
                 for p in p_data:
                     try:
                         obj_p = MedicalService.objects.get(name=p)
