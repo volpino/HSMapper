@@ -17,5 +17,5 @@ settings_local.py
 
 *.bak
 
-static/*
-media/*
+static/
+media/
