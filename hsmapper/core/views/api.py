@@ -5,9 +5,9 @@ from vectorformats.Formats import Django, GeoJSON
 
 from annoying.decorators import ajax_request
 
-from ..models import Facility, FacilityType, Pathology, MedicalService
-from ..forms import FacilityForm
 from hsmapper import settings
+from core.models import Facility, FacilityType, Pathology, MedicalService
+from core.forms import FacilityForm
 
 
 def get_hospitals(request):
