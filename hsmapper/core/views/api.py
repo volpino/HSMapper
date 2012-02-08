@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from vectorformats.Formats import Django, GeoJSON
 
-from annoying.decorators import ajax_request
+from ajaxutils.decorators import ajax
 
 from hsmapper import settings
 from core.models import Facility, FacilityType, Pathology, MedicalService
@@ -24,7 +24,7 @@ def get_hospitals(request):
     return response
 
 
-@ajax_request
+@ajax(login_required=True, require_POST=True)
 def edit_hospital(request, id_):
     if request.method == 'POST':
         form = FacilityForm(request.POST)
@@ -71,7 +71,7 @@ def edit_hospital(request, id_):
     return {'success': False}
 
 
-@ajax_request
+@ajax(login_required=True)
 def edit_hospital_data(request, key):
     if key == "type":
         return dict([(k.id, k.name)
@@ -110,7 +110,7 @@ def info_hospital(request, id_):
     return render_to_response('hospital_info.html', {'hospital': hospital})
 
 
-@ajax_request
+@ajax(login_required=True, require_POST=True)
 def add_hospital(request):
     if request.method == 'POST':
         form = FacilityForm(request.POST)
@@ -130,7 +130,7 @@ def add_hospital(request):
     return {'success': False}
 
 
-@ajax_request
+@ajax(login_required=True, require_POST=True)
 def delete_hospital(request, id_):
     if request.method == 'POST':
         params_id = int(id_)

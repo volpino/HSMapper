@@ -2,9 +2,10 @@ psycopg2==2.4.1
 vectorformats==0.1
 Django==1.3.1
 simplejson==2.2.1
-django-annoying==0.7.6
-django-devserver
-django-extensions
-South
-django-registration
-django-reversion
+django-devserver==0.3.1
+django-extensions==0.7.1
+South==0.7.3
+django-registration==0.7
+django-reversion==1.5.1
+
+-e git://github.com/ahref/django-ajaxutils.git@83fdacf0fb9bf4e6b035c5b00375aa4d371e444b#egg=django-ajaxutils_dev
