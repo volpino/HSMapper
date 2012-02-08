@@ -72,12 +72,15 @@ a:hover {
 
 #logo {
   float: left;
+  width: 100%;
 }
 
 
 #header h1 {
   /*letter-spacing: -2px;*/
   /*font-size: 3.2em;*/
+  width: 60%;
+  float: left;
 }
 
 #alert_box {
@@ -206,4 +209,16 @@ ul.ui-widget-header {
 
 .hidden {
     display: none;
+}
+
+.login_menu {
+    float: right;
+}
+
+.login_menu ul {
+    list-style-type: none;
+}
+
+.login_menu li {
+    display: inline;
 }

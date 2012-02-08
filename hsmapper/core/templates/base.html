@@ -1,0 +1,51 @@
+{% load url from future %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>HSMapper</title>
+    <link rel="stylesheet" href="{{ STATIC_URL }}/css/bootstrap.min.css">
+    <link type="text/css" href="{{ STATIC_URL }}/css/ui.multiselect.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}/css/style.css" type="text/css" />
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="{{ STATIC_URL }}/js/jquery-ui-1.8.16.custom.min.js"></script>
+
+    {% block head %}
+    {% endblock %}
+  </head>
+  <body>
+    <div id="wrapper">
+      <div id="header">
+        <div id="logo">
+          <h1>HSMapper <span>Health Facilities Distribution Analysis</span></h1>
+          <div class="login_menu">
+            <ul>
+              {% if user.is_authenticated %}
+              <li>Logged in as {{ user }}</li>
+              <li><a href="{% url 'logout' %}">Logout</a></li>
+              {% else %}
+              <li><a href="{% url 'login' %}">Login</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+        <div id="alert_box" style="display:none;">
+          <div class="alert-message warning in fade">
+            <a class="close" href="#">×</a>
+            <p id="alert_msg"><strong>Error:</strong> something went wrong :/</p>
+          </div>
+        </div>
+      </div>
+      <div id="page">
+      {% block content %}
+      {% endblock %}
+      </div>
+    </div>
+{#    {% csrf_token %}#}
+{#    <script>#}
+{#        var csrf = $('input[name="csrfmiddlewaretoken"').val();#}
+{#        $.ajaxSetup({headers: {'CSRFToken': csrf} });#}
+{#    </script>#}
+</body>
+</html>

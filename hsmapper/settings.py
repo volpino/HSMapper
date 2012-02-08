@@ -121,8 +121,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
 
-    'registration',
-
     'django.contrib.gis',
     'south',
     'reversion',
@@ -165,3 +163,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     "django.core.context_processors.csrf",
 )
+
+ACCOUNT_ACTIVATION_DAYS = 2

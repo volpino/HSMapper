@@ -1,203 +1,232 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <title>HSMapper</title>
-    <link rel="stylesheet" href="{{ STATIC_URL }}/css/bootstrap.min.css">
-    <link type="text/css" href="{{ STATIC_URL }}/css/ui.multiselect.css" rel="stylesheet" />
-    <link rel="stylesheet" href="{{ STATIC_URL }}/css/smoothness/jquery-ui-1.8.16.custom.css" type="text/css" />
-    <link rel="stylesheet" href="{{ STATIC_URL }}/css/style.css" type="text/css" />
+{% extends "base.html" %}
+{% load url from future %}
 
-    <script type="text/javascript" src="{{ STATIC_URL }}/js/proj4js/lib/proj4js-compressed.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}/js/proj4js/lib/defs/EPSG23032.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}/openlayers/OpenLayers.js"></script>
+{% block head %}
+  <script type="text/javascript" src="{{ STATIC_URL }}/js/proj4js/lib/proj4js-compressed.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}/js/proj4js/lib/defs/EPSG23032.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}/openlayers/OpenLayers.js"></script>
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="{{ STATIC_URL }}/js/jquery-ui-1.8.16.custom.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.tmpl.1.1.1.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}/js/ui.multiselect.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.jeditable.mini.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.jeditable.manytomany.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.jeditable.autogrow.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.autogrow.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.jeditable.masked.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.maskedinput.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}/js/nominatim.autocomplete.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}/js/bootstrap-alerts.js"></script>
-    <script type="text/javascript">
-      var globals = {};
-      var map;
-      globals.insert_mode = false;
-      globals.delete_mode = false;
-      globals.hospital_layer;
-      globals.selectedFeature;
-      function init() {
-        map = new OpenLayers.Map({
-          div: "map",
-          allOverlays: true,
-          projection: new OpenLayers.Projection("EPSG:900913"),
-          controls: [new OpenLayers.Control.Navigation(),
-                     new OpenLayers.Control.LayerSwitcher(),
-                     new OpenLayers.Control.PanZoomBar()]
+  <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.tmpl.1.1.1.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}/js/ui.multiselect.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.jeditable.mini.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.jeditable.manytomany.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.jeditable.autogrow.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.autogrow.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.jeditable.masked.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.maskedinput.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}/js/nominatim.autocomplete.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}/js/bootstrap-alerts.js"></script>
+  <script type="text/javascript">
+    var globals = {};
+    var map;
+    globals.insert_mode = false;
+    globals.delete_mode = false;
+    globals.hospital_layer;
+    globals.selectedFeature;
+    function init() {
+      map = new OpenLayers.Map({
+        div: "map",
+        allOverlays: true,
+        projection: new OpenLayers.Projection("EPSG:900913"),
+        controls: [new OpenLayers.Control.Navigation(),
+                   new OpenLayers.Control.LayerSwitcher(),
+                   new OpenLayers.Control.PanZoomBar()]
+      });
+
+      var heatmap_bounds = new OpenLayers.Bounds(-8083703.41947, 2179564.8117,
+                                                 -8043582.32418, 2211201.70086);
+      heatmap_layer = new OpenLayers.Layer.WMS(
+        "Hospitals Heatmap",
+        "http://{{ server_ip }}:{{ geoserver_port }}/geoserver/findmyspot/wms",
+        {
+            LAYERS: 'findmyspot:big_distance',
+            STYLES: '',
+            format: "image/png",
+            tiled: true,
+            tilesOrigin : heatmap_bounds.left + ',' + heatmap_bounds.bottom,
+            transparent: true
+        },
+        {
+            buffer: 0,
+            displayOutsideMaxExtent: true,
+            isBaseLayer: false
         });
 
-        var heatmap_bounds = new OpenLayers.Bounds(-8083703.41947, 2179564.8117,
-                                                   -8043582.32418, 2211201.70086);
-        heatmap_layer = new OpenLayers.Layer.WMS(
-          "Hospitals Heatmap",
-          "http://{{ server_ip }}:{{ geoserver_port }}/geoserver/findmyspot/wms",
-          {
-              LAYERS: 'findmyspot:big_distance',
-              STYLES: '',
-              format: "image/png",
-              tiled: true,
-              tilesOrigin : heatmap_bounds.left + ',' + heatmap_bounds.bottom,
-              transparent: true
-          },
-          {
-              buffer: 0,
-              displayOutsideMaxExtent: true,
-              isBaseLayer: false
+      var osm = new OpenLayers.Layer.OSM("OSM",
+          "http://tile.openstreetmap.org/${z}/${x}/${y}.png",
+          {sphericalMercator: true, isBaseLayer:true});
+      var default_style = new OpenLayers.Style({
+                                  graphicName: "circle",
+                                  strokeColor: "#ff0000",
+                                  fillColor: "#ff0000",
+                                  pointRadius: "5",
+                                  fillOpacity: 0.7,
+                                  strokeWidth: "0.5"
+      });
+
+      globals.hospital_layer = new OpenLayers.Layer.Vector(
+          "Hospitals",
+          {styleMap: default_style,
+           projection: new OpenLayers.Projection("EPSG:{{ srid }}"),
+           strategies: [new OpenLayers.Strategy.Fixed()],
+           protocol: new OpenLayers.Protocol.HTTP({
+              url: "{% url 'api-get-hospitals' %}",
+              format: new OpenLayers.Format.GeoJSON()
+           })
+          }
+      );
+      globals.hospital_layer.events.register("featuresadded", globals.hospital_layer,
+        function() {
+          var extent = globals.hospital_layer.getDataExtent();
+          if (extent) {
+            map.zoomToExtent(extent);
+          }
+        }
+      );
+
+      map.addLayers([osm, heatmap_layer, globals.hospital_layer]);
+      selectControl = new OpenLayers.Control.SelectFeature(
+                      [globals.hospital_layer],{clickout: true, toggle: false,
+                                        multiple: false, hover: false });
+      map.addControl(selectControl);
+      selectControl.activate();
+      globals.hospital_layer.events.on({
+        "featureselected": function(e) {
+          onFeatureSelect(e.feature);
+        },
+        "featureunselected": function(e) {
+          onFeatureUnselect(e.feature);
+        }
+      });
+      map.addControl(new OpenLayers.Control.MousePosition());
+
+      map.events.register("click", map, function(e) {
+        if (globals.insert_mode) {
+          var p = map.getLonLatFromPixel(e.xy);
+          var point = new OpenLayers.Geometry.Point(p["lon"], p["lat"]);
+          var f = new OpenLayers.Feature.Vector(point);
+          if (globals.hospital_layer.features.length > 0) {
+              f.attributes = globals.hospital_layer.features[0].attributes;
+              for (key in f.attributes) {
+                f.attributes[key] = "";
+              }
+          }
+          globals.hospital_layer.addFeatures([f]);
+          $.ajax({
+            url: "{% url 'api-add-hospital' %}",
+            type: "post",
+            data: {lat: p["lat"], lon: p["lon"]},
+            success: function(req) {
+              if (req.success === true) {
+                alert_msg("Point inserted", "success");
+                f.attributes["id"] = req.id;
+              }
+              else {
+                alertmsg("Error :(");
+              }
+            }
           });
+        }
+      });
 
-        var osm = new OpenLayers.Layer.OSM("OSM",
-            "http://tile.openstreetmap.org/${z}/${x}/${y}.png",
-            {sphericalMercator: true, isBaseLayer:true});
-        var default_style = new OpenLayers.Style({
-                                    graphicName: "circle",
-                                    strokeColor: "#ff0000",
-                                    fillColor: "#ff0000",
-                                    pointRadius: "5",
-                                    fillOpacity: 0.7,
-                                    strokeWidth: "0.5"
-        });
-
-        globals.hospital_layer = new OpenLayers.Layer.Vector(
-            "Hospitals",
-            {styleMap: default_style,
-             projection: new OpenLayers.Projection("EPSG:{{ srid }}"),
-             strategies: [new OpenLayers.Strategy.Fixed()],
-             protocol: new OpenLayers.Protocol.HTTP({
-                url: "{% url api-get-hospitals %}",
-                format: new OpenLayers.Format.GeoJSON()
-             })
+      layers = map.layers;
+      for (var i=0; i<layers.length; i++) {
+        if (layers[i].name.indexOf("OpenLayers.") == -1) {
+          $(".multiselect").append($("<option></option>").
+                            attr("value", layers[i].name).
+                            attr("id", layers[i].id).
+                            attr("selected", true).
+                            text(layers[i].name));
+        }
+      }
+      $(".multiselect").multiselect({
+        sortable: 'left',
+        sortableUpdate:
+          function(event, ui, sortable) {
+            var layer_list = sortable.sortable("toArray");
+            var layer_id = ui.item.attr("id");
+            var layer = map.getLayersBy("id", layer_id)[0];
+            if (!(layer.isBaseLayer || layer_id.search("OSM") != -1)) {
+              var layer_pos = layer_list.length - 1 - layer_list.indexOf(layer_id);
+              if (layer_pos != 0) {
+                console.log("moving " + layer_id + " to " + layer_pos);
+                map.setLayerIndex(layer, layer_pos);
+                return;
+              }
             }
-        );
-        globals.hospital_layer.events.register("featuresadded", globals.hospital_layer,
-          function() {
-            var extent = globals.hospital_layer.getDataExtent();
-            if (extent) {
-              map.zoomToExtent(extent);
-            }
-          }
-        );
-
-        map.addLayers([osm, heatmap_layer, globals.hospital_layer]);
-        selectControl = new OpenLayers.Control.SelectFeature(
-                        [globals.hospital_layer],{clickout: true, toggle: false,
-                                          multiple: false, hover: false });
-        map.addControl(selectControl);
-        selectControl.activate();
-        globals.hospital_layer.events.on({
-          "featureselected": function(e) {
-            onFeatureSelect(e.feature);
+            sortable.sortable('cancel');
           },
-          "featureunselected": function(e) {
-            onFeatureUnselect(e.feature);
+        selected:
+          function(event, ui) {
+            map.getLayersByName($(ui.option).val())[0].setVisibility(true);
+          },
+        deselected:
+          function(event, ui) {
+            map.getLayersByName($(ui.option).val())[0].setVisibility(false);
           }
-        });
-        map.addControl(new OpenLayers.Control.MousePosition());
+      });
+      $.nominatim("#autocomplete", {select: function(item) {
+        var bb = item.boundingbox;
+        bb = new OpenLayers.Bounds(bb[2], bb[0], bb[3], bb[1]);
+        bb = bb.transform(new OpenLayers.Projection('EPSG:4326'), new OpenLayers.Projection('EPSG:900913'));
+        map.zoomToExtent(bb);
+      }});
+    }
 
-        map.events.register("click", map, function(e) {
-          if (globals.insert_mode) {
-            var p = map.getLonLatFromPixel(e.xy);
-            var point = new OpenLayers.Geometry.Point(p["lon"], p["lat"]);
-            var f = new OpenLayers.Feature.Vector(point);
-            if (globals.hospital_layer.features.length > 0) {
-                f.attributes = globals.hospital_layer.features[0].attributes;
-                for (key in f.attributes) {
-                  f.attributes[key] = "";
-                }
-            }
-            globals.hospital_layer.addFeatures([f]);
-            $.ajax({
-              url: "{% url api-add-hospital %}",
-              type: "post",
-              data: {lat: p["lat"], lon: p["lon"]},
-              success: function(req) {
-                if (req.success === true) {
-                  alert_msg("Point inserted", "success");
-                  f.attributes["id"] = req.id;
-                }
-                else {
-                  alertmsg("Error :(");
-                }
-              }
-            });
+    function onPopupClose(evt) {
+      selectControl.unselect(globals.selectedFeature);
+      $("#edit_info").empty();
+    }
+
+    function save_feature_edit(value, settings) {
+      var display_msg = $(this).find("option[value='"+value+"']").text() || value;
+      var type = $(this).parent().attr("type");
+      var d = {}
+      d[type] = value;
+      if (type === "name") {
+        $("#baloon_name").text(value);
+      }
+      globals.selectedFeature.attributes[type] = value;
+      $.ajax({
+        url: "{% url 'api-edit-hospital' 1 %}".replace("1", globals.selectedFeature.attributes.id),
+        type: "post",
+        data: d,
+        success: function(req) {
+          if (req.success === true) {
+            alert_msg("Updated!", "success");
           }
-        });
-
-        layers = map.layers;
-        for (var i=0; i<layers.length; i++) {
-          if (layers[i].name.indexOf("OpenLayers.") == -1) {
-            $(".multiselect").append($("<option></option>").
-                              attr("value", layers[i].name).
-                              attr("id", layers[i].id).
-                              attr("selected", true).
-                              text(layers[i].name));
+          else {
+            alert_msg("Error :(", "error");
           }
         }
-        $(".multiselect").multiselect({
-          sortable: 'left',
-          sortableUpdate:
-            function(event, ui, sortable) {
-              var layer_list = sortable.sortable("toArray");
-              var layer_id = ui.item.attr("id");
-              var layer = map.getLayersBy("id", layer_id)[0];
-              if (!(layer.isBaseLayer || layer_id.search("OSM") != -1)) {
-                var layer_pos = layer_list.length - 1 - layer_list.indexOf(layer_id);
-                if (layer_pos != 0) {
-                  console.log("moving " + layer_id + " to " + layer_pos);
-                  map.setLayerIndex(layer, layer_pos);
-                  return;
-                }
-              }
-              sortable.sortable('cancel');
-            },
-          selected:
-            function(event, ui) {
-              map.getLayersByName($(ui.option).val())[0].setVisibility(true);
-            },
-          deselected:
-            function(event, ui) {
-              map.getLayersByName($(ui.option).val())[0].setVisibility(false);
-            }
-        });
-        $.nominatim("#autocomplete", {select: function(item) {
-          var bb = item.boundingbox;
-          bb = new OpenLayers.Bounds(bb[2], bb[0], bb[3], bb[1]);
-          bb = bb.transform(new OpenLayers.Projection('EPSG:4326'), new OpenLayers.Projection('EPSG:900913'));
-          map.zoomToExtent(bb);
-        }});
-      }
+      });
+      return display_msg;
+    }
 
-      function onPopupClose(evt) {
-        selectControl.unselect(globals.selectedFeature);
-        $("#edit_info").empty();
-      }
-
-      function save_feature_edit(value, settings) {
-        var display_msg = $(this).find("option[value='"+value+"']").text() || value;
-        var type = $(this).parent().attr("type");
-        var d = {}
-        d[type] = value;
-        if (type === "name") {
-          $("#baloon_name").text(value);
+    function save_manytomany_edit(sing, plur) {
+      return function(value, settings) {
+        var needs_new_field = false;
+        var data = [];
+        if (value === "") {
+          $(this).parent().remove();
         }
-        globals.selectedFeature.attributes[type] = value;
+        else {
+          data.push(value);
+        }
+        $(".editable_"+sing).each(function() {
+          if ($(this).text() === "Click to add") {
+            $(this).parent().remove();
+          }
+          else {
+            if (!$(this).html().match("<form")) {
+              data.push($(this).text());
+            }
+          }
+        });
         $.ajax({
-          url: "{% url api-edit-hospital 1 %}".replace("1", globals.selectedFeature.attributes.id),
+          url: "{% url 'api-edit-hospital' 1 %}".replace("1", globals.selectedFeature.attributes.id),
           type: "post",
-          data: d,
+          data: plur+"[]="+data.join("&"+plur+"[]="),
           success: function(req) {
             if (req.success === true) {
               alert_msg("Updated!", "success");
@@ -207,284 +236,233 @@
             }
           }
         });
-        return display_msg;
-      }
 
-      function save_manytomany_edit(sing, plur) {
-        return function(value, settings) {
-          var needs_new_field = false;
-          var data = [];
-          if (value === "") {
-            $(this).parent().remove();
-          }
-          else {
-            data.push(value);
-          }
-          $(".editable_"+sing).each(function() {
-            if ($(this).text() === "Click to add") {
-              $(this).parent().remove();
-            }
-            else {
-              if (!$(this).html().match("<form")) {
-                data.push($(this).text());
+        var new_input = $("<span/>").append(
+          $("<span/>").addClass("editable_"+sing)
+        );
+        $("#"+plur+"_info").append(new_input);
+        manytomany_editable(".editable_"+sing, sing, plur);
+
+        return value;
+      }
+    }
+
+    function manytomany_editable(expr, sing, plur) {
+      $(expr).editable(save_manytomany_edit(sing, plur), {
+        submit: "Save",
+        cancel: "Cancel",
+        style: "inherit",
+        type: "manytomany",
+        onblur: "submit",
+        placeholder: "Click to add",
+        autocomplete: {
+          source: function(request, response) {
+            $.ajax({
+              url: "{% url 'api-edit-hospital-data' "1" %}".replace("1", sing),
+              data: {
+                q: request.term
+              },
+              success: function(data) {
+                response($.map(data.results, function(item) {
+                  return {
+                    label: item.name,
+                    value: item.name
+                  }
+                }));
               }
-            }
-          });
+            });
+          },
+        }
+      });
+    }
+
+    function onFeatureSelect(feature){
+      globals.selectedFeature = feature;
+      if (globals.delete_mode) {
+        var agree = confirm("Are you sure you want to delete?");
+        if (agree) {
+          globals.hospital_layer.removeFeatures([globals.selectedFeature]);
           $.ajax({
-            url: "{% url api-edit-hospital 1 %}".replace("1", globals.selectedFeature.attributes.id),
+            url: "{% url 'api-delete-hospital' 1 %}".replace("1", globals.selectedFeature.attributes.id),
             type: "post",
-            data: plur+"[]="+data.join("&"+plur+"[]="),
+            data: "",
             success: function(req) {
               if (req.success === true) {
-                alert_msg("Updated!", "success");
+                alert_msg("Deleted", "success");
               }
               else {
                 alert_msg("Error :(", "error");
               }
             }
           });
-
-          var new_input = $("<span/>").append(
-            $("<span/>").addClass("editable_"+sing)
-          );
-          $("#"+plur+"_info").append(new_input);
-          manytomany_editable(".editable_"+sing, sing, plur);
-
-          return value;
         }
       }
-
-      function manytomany_editable(expr, sing, plur) {
-        $(expr).editable(save_manytomany_edit(sing, plur), {
-          submit: "Save",
-          cancel: "Cancel",
-          style: "inherit",
-          type: "manytomany",
-          onblur: "submit",
-          placeholder: "Click to add",
-          autocomplete: {
-            source: function(request, response) {
-              $.ajax({
-                url: "{% url api-edit-hospital-data "1" %}".replace("1", sing),
-                data: {
-                  q: request.term
-                },
-                success: function(data) {
-                  response($.map(data.results, function(item) {
-                    return {
-                      label: item.name,
-                      value: item.name
-                    }
-                  }));
-                }
-              });
-            },
-          }
-        });
-      }
-
-      function onFeatureSelect(feature){
+      else {
+        var attrib = feature.attributes;
         globals.selectedFeature = feature;
-        if (globals.delete_mode) {
-          var agree = confirm("Are you sure you want to delete?");
-          if (agree) {
-            globals.hospital_layer.removeFeatures([globals.selectedFeature]);
-            $.ajax({
-              url: "{% url api-delete-hospital 1 %}".replace("1", globals.selectedFeature.attributes.id),
-              type: "post",
-              data: "",
-              success: function(req) {
-                if (req.success === true) {
-                  alert_msg("Deleted", "success");
-                }
-                else {
-                  alert_msg("Error :(", "error");
-                }
-              }
-            });
-          }
-        }
-        else {
-          var attrib = feature.attributes;
-          globals.selectedFeature = feature;
-          var desc = $("<div/>");
-          desc.html("<p id='baloon_name'>"+attrib["name"]+"</p>");
-          popup = new OpenLayers.Popup.FramedCloud("chicken",
-                      feature.geometry.getBounds().getCenterLonLat(),
-                      new OpenLayers.Size(1500,1000),
-                      desc.html(),
-                      null,
-                      true,
-                      onPopupClose);
-          feature.popup = popup;
-          map.addPopup(popup);
-          $.get("{% url api-info-hospital 1 %}".replace("1", globals.selectedFeature.attributes.id), function(data) {
-            $("#edit_info").html(data);
-            $('.editable').editable(save_feature_edit, {
-              submit: "Save",
-              cancel: "Cancel",
-              style: "inherit"
-            });
-            $('.editable_text').editable(save_feature_edit, {
-              submit: "Save",
-              cancel: "Cancel",
-              style: "inherit",
-              type: "autogrow",
-              rows: 5,
-              cols: 40,
-            });
-            $('.editable_type').editable(save_feature_edit, {
-              submit: "Save",
-              cancel: "Cancel",
-              style: "inherit",
-              loadurl: "{% url api-edit-hospital-data 'type' %}",
-              type: "select"
-            });
-            $('.editable_date').editable(save_feature_edit, {
-              submit: "Save",
-              cancel: "Cancel",
-              style: "inherit",
-              type: "masked",
-              mask: "99/99/9999",
-            });
-            $('.editable_manager').editable(save_feature_edit, {
-              submit: "Save",
-              cancel: "Cancel",
-              style: "inherit",
-              loadurl: "{% url api-edit-hospital-data 'manager' %}",
-              type: "select"
-            });
-
-            manytomany_editable(".editable_pathology", "pathology", "pathologies");
-            manytomany_editable(".editable_service", "service", "services");
+        var desc = $("<div/>");
+        desc.html("<p id='baloon_name'>"+attrib["name"]+"</p>");
+        popup = new OpenLayers.Popup.FramedCloud("chicken",
+                    feature.geometry.getBounds().getCenterLonLat(),
+                    new OpenLayers.Size(1500,1000),
+                    desc.html(),
+                    null,
+                    true,
+                    onPopupClose);
+        feature.popup = popup;
+        map.addPopup(popup);
+        $.get("{% url 'api-info-hospital' 1 %}".replace("1", globals.selectedFeature.attributes.id), function(data) {
+          $("#edit_info").html(data);
+          {% if user.is_authenticated %}
+          $('.editable').editable(save_feature_edit, {
+            submit: "Save",
+            cancel: "Cancel",
+            style: "inherit"
           });
-        }
-      }
+          $('.editable_text').editable(save_feature_edit, {
+            submit: "Save",
+            cancel: "Cancel",
+            style: "inherit",
+            type: "autogrow",
+            rows: 5,
+            cols: 40,
+          });
+          $('.editable_type').editable(save_feature_edit, {
+            submit: "Save",
+            cancel: "Cancel",
+            style: "inherit",
+            loadurl: "{% url 'api-edit-hospital-data' 'type' %}",
+            type: "select"
+          });
+          $('.editable_date').editable(save_feature_edit, {
+            submit: "Save",
+            cancel: "Cancel",
+            style: "inherit",
+            type: "masked",
+            mask: "99/99/9999",
+          });
+          $('.editable_manager').editable(save_feature_edit, {
+            submit: "Save",
+            cancel: "Cancel",
+            style: "inherit",
+            loadurl: "{% url 'api-edit-hospital-data' 'manager' %}",
+            type: "select"
+          });
 
-      function onFeatureUnselect(feature) {
-        map.removePopup(feature.popup);
-        feature.popup.destroy();
-        feature.popup = undefined;
-      }
-
-      function toggle_insert() {
-        if (globals.delete_mode) {
-          toggle_delete();
-        }
-        if (globals.insert_mode) {
-          $("#insert_button").removeClass("success");
-          $("#map").removeClass("crosshair");
-          globals.insert_mode = false;
-        }
-        else {
-          $("#insert_button").addClass("success");
-          $("#map").addClass("crosshair");
-          globals.insert_mode = true;
-        }
-      }
-
-      function toggle_delete() {
-        if (globals.insert_mode) {
-          toggle_insert();
-        }
-        if (globals.delete_mode) {
-          $("#delete_button").removeClass("success");
-          $("#map").removeClass("crosshair");
-          globals.delete_mode = false;
-        }
-        else {
-          $("#delete_button").addClass("success");
-          $("#map").addClass("crosshair");
-          globals.delete_mode = true;
-        }
-      }
-
-    function alert_msg(msg, level) {
-        level = level || "error";
-        $("#alert_box").fadeOut(300, function() {
-          if (globals.close_timeout) {
-            clearTimeout(globals.close_timeout);
-          }
-          $("#alert_box").fadeIn(300);
-          $(".alert-message").removeClass("warning");
-          $(".alert-message").removeClass("info");
-          $(".alert-message").removeClass("error");
-          $(".alert-message").removeClass("success");
-          $(".alert-message").addClass(level);
-          $(".alert-message").addClass("in");
-          $("#alert_msg").html(msg);
-          globals.close_timeout = setTimeout("$('.close').click()", 5000);
+          manytomany_editable(".editable_pathology", "pathology", "pathologies");
+          manytomany_editable(".editable_service", "service", "services");
+          {% endif %}
         });
       }
+    }
 
-      $(document).ready(function() {
-        $("#tabs").tabs();
-        $("#insert_button").click(toggle_insert);
-        $("#delete_button").click(toggle_delete);
-        init();
-        $("#tabs").height("100%");
-        $(".list-container").width("49%");
-        $(".alert-message").alert();
+    function onFeatureUnselect(feature) {
+      map.removePopup(feature.popup);
+      feature.popup.destroy();
+      feature.popup = undefined;
+    }
+
+    function toggle_insert() {
+      if (globals.delete_mode) {
+        toggle_delete();
+      }
+      if (globals.insert_mode) {
+        $("#insert_button").removeClass("success");
+        $("#map").removeClass("crosshair");
+        globals.insert_mode = false;
+      }
+      else {
+        $("#insert_button").addClass("success");
+        $("#map").addClass("crosshair");
+        globals.insert_mode = true;
+      }
+    }
+
+    function toggle_delete() {
+      if (globals.insert_mode) {
+        toggle_insert();
+      }
+      if (globals.delete_mode) {
+        $("#delete_button").removeClass("success");
+        $("#map").removeClass("crosshair");
+        globals.delete_mode = false;
+      }
+      else {
+        $("#delete_button").addClass("success");
+        $("#map").addClass("crosshair");
+        globals.delete_mode = true;
+      }
+    }
+
+  function alert_msg(msg, level) {
+      level = level || "error";
+      $("#alert_box").fadeOut(300, function() {
+        if (globals.close_timeout) {
+          clearTimeout(globals.close_timeout);
+        }
+        $("#alert_box").fadeIn(300);
+        $(".alert-message").removeClass("warning");
+        $(".alert-message").removeClass("info");
+        $(".alert-message").removeClass("error");
+        $(".alert-message").removeClass("success");
+        $(".alert-message").addClass(level);
+        $(".alert-message").addClass("in");
+        $("#alert_msg").html(msg);
+        globals.close_timeout = setTimeout("$('.close').click()", 5000);
       });
-    </script>
-  </head>
-  <body>
-    <div id="wrapper">
-      <div id="header">
-        <div id="logo">
-          <h1>HSMapper <span>Health Facilities Distribution Analysis</span></h1>
-        </div>
-        <div id="alert_box" style="display:none;">
-          <div class="alert-message warning in fade">
-            <a class="close" href="#">×</a>
-            <p id="alert_msg"><strong>Error:</strong> something went wrong :/</p>
-          </div>
-        </div>
+    }
+
+    $(document).ready(function() {
+      $("#tabs").tabs();
+      $("#insert_button").click(toggle_insert);
+      $("#delete_button").click(toggle_delete);
+      init();
+      $("#tabs").height("100%");
+      $(".list-container").width("49%");
+      $(".alert-message").alert();
+    });
+  </script>
+
+{% endblock %}
+
+{% block content %}
+  <div id="sidebar">
+    <div id="tabs">
+    <ul>
+      <li><a href="#tabs-1">Map Control</a></li>
+      <li><a href="#tabs-2">About</a></li>
+      <li><a href="#tabs-3">Contact us</a></li>
+    </ul>
+    <div id="tabs-1">
+      <select id="layers" class="multiselect" multiple="multiple" name="layers[]">
+      </select>
+      <div id="nominatim">
+        <label for="autocomplete">Search:</label>
+        <input type="text" name="autocomplete" id="autocomplete" />
       </div>
-      <div id="page">
-        <div id="sidebar">
-          <div id="tabs">
-          <ul>
-            <li><a href="#tabs-1">Map Control</a></li>
-            <li><a href="#tabs-2">About</a></li>
-            <li><a href="#tabs-3">Contact us</a></li>
-          </ul>
-          <div id="tabs-1">
-            <select id="layers" class="multiselect" multiple="multiple" name="layers[]">
-            </select>
-            <div id="nominatim">
-              <label for="autocomplete">Search:</label>
-              <input type="text" name="autocomplete" id="autocomplete" />
-            </div>
-            <div class="buttons">
-              <button class="btn" id="insert_button">Insert mode</button>
-              <button class="btn" id="delete_button">Delete mode</button>
-            </div>
-            <div>
-              <div id="edit_info"></div>
-            </div>
-          </div>
-          <div id="tabs-2">
-            <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
-          </div>
-          <div id="tabs-3">
-            <p>Developed by:</p>
-            <ul>
-              <li>Andrea Nodari - andrea.nodari91 at gmail dot com</li>
-              <li>Davide Kirchner - davide.kirchner at yahoo dot it</li>
-              <li>Matteo Poletti - pollo1_91 at yahoo dot it</li>
-              <li><a href="http://autistici.org/fox">Federico Scrinzi - fox91 at anche dot no</a></li>
-            </ul>
-          </div>
-          </div>
-        </div>
-        <div id="map"></div>
+      <div class="buttons">
+        {% if user.is_authenticated %}
+          <button class="btn" id="insert_button">Insert mode</button>
+          <button class="btn" id="delete_button">Delete mode</button>
+        {% endif %}
+      </div>
+      <div>
+        <div id="edit_info"></div>
       </div>
     </div>
-{#    {% csrf_token %}#}
-{#    <script>#}
-{#        var csrf = $('input[name="csrfmiddlewaretoken"').val();#}
-{#        $.ajaxSetup({headers: {'CSRFToken': csrf} });#}
-{#    </script>#}
-</body>
-</html>
+    <div id="tabs-2">
+      <p>Morbi tincidunt, dui sit amet facilisis feugiat, odio metus gravida ante, ut pharetra massa metus id nunc. Duis scelerisque molestie turpis. Sed fringilla, massa eget luctus malesuada, metus eros molestie lectus, ut tempus eros massa ut dolor. Aenean aliquet fringilla sem. Suspendisse sed ligula in ligula suscipit aliquam. Praesent in eros vestibulum mi adipiscing adipiscing. Morbi facilisis. Curabitur ornare consequat nunc. Aenean vel metus. Ut posuere viverra nulla. Aliquam erat volutpat. Pellentesque convallis. Maecenas feugiat, tellus pellentesque pretium posuere, felis lorem euismod felis, eu ornare leo nisi vel felis. Mauris consectetur tortor et purus.</p>
+    </div>
+    <div id="tabs-3">
+      <p>Developed by:</p>
+      <ul>
+        <li>Andrea Nodari - andrea.nodari91 at gmail dot com</li>
+        <li>Davide Kirchner - davide.kirchner at yahoo dot it</li>
+        <li>Matteo Poletti - pollo1_91 at yahoo dot it</li>
+        <li><a href="http://autistici.org/fox">Federico Scrinzi - fox91 at anche dot no</a></li>
+      </ul>
+    </div>
+    </div>
+  </div>
+  <div id="map"></div>
+{% endblock %}
