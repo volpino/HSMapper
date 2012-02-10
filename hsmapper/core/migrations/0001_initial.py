@@ -9,28 +9,28 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         
         # Adding model 'Pathology'
-        db.create_table(u'pathology', (
+        db.create_table('core_pathology', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
         ))
         db.send_create_signal('core', ['Pathology'])
 
         # Adding model 'MedicalService'
-        db.create_table(u'medicalservice', (
+        db.create_table('core_medicalservice', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
         ))
         db.send_create_signal('core', ['MedicalService'])
 
         # Adding model 'FacilityType'
-        db.create_table(u'facilitytype', (
+        db.create_table('core_facilitytype', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
         ))
         db.send_create_signal('core', ['FacilityType'])
 
         # Adding model 'Facility'
-        db.create_table(u'facility', (
+        db.create_table('core_facility', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('the_geom', self.gf('django.contrib.gis.db.models.fields.PointField')(srid=23032)),
@@ -47,23 +47,23 @@ class Migration(SchemaMigration):
         db.send_create_signal('core', ['Facility'])
 
         # Adding M2M table for field pathologies on 'Facility'
-        db.create_table(u'facility_pathologies', (
+        db.create_table('core_facility_pathologies', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('facility', models.ForeignKey(orm['core.facility'], null=False)),
             ('pathology', models.ForeignKey(orm['core.pathology'], null=False))
         ))
-        db.create_unique(u'facility_pathologies', ['facility_id', 'pathology_id'])
+        db.create_unique('core_facility_pathologies', ['facility_id', 'pathology_id'])
 
         # Adding M2M table for field services on 'Facility'
-        db.create_table(u'facility_services', (
+        db.create_table('core_facility_services', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('facility', models.ForeignKey(orm['core.facility'], null=False)),
             ('medicalservice', models.ForeignKey(orm['core.medicalservice'], null=False))
         ))
-        db.create_unique(u'facility_services', ['facility_id', 'medicalservice_id'])
+        db.create_unique('core_facility_services', ['facility_id', 'medicalservice_id'])
 
         # Adding model 'OpeningTime'
-        db.create_table(u'openingtime', (
+        db.create_table('core_openingtime', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('facility', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Facility'])),
             ('opening', self.gf('django.db.models.fields.TimeField')()),
@@ -72,8 +72,8 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('core', ['OpeningTime'])
 
-        # Adding model 'SpecialDays'
-        db.create_table(u'specialdays', (
+        # Adding model 'SpecialDay'
+        db.create_table('core_specialday', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('facility', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Facility'])),
             ('holiday_date', self.gf('django.db.models.fields.DateField')()),
@@ -81,34 +81,34 @@ class Migration(SchemaMigration):
             ('opening', self.gf('django.db.models.fields.TimeField')(null=True, blank=True)),
             ('closing', self.gf('django.db.models.fields.TimeField')(null=True, blank=True)),
         ))
-        db.send_create_signal('core', ['SpecialDays'])
+        db.send_create_signal('core', ['SpecialDay'])
 
 
     def backwards(self, orm):
         
         # Deleting model 'Pathology'
-        db.delete_table(u'pathology')
+        db.delete_table('core_pathology')
 
         # Deleting model 'MedicalService'
-        db.delete_table(u'medicalservice')
+        db.delete_table('core_medicalservice')
 
         # Deleting model 'FacilityType'
-        db.delete_table(u'facilitytype')
+        db.delete_table('core_facilitytype')
 
         # Deleting model 'Facility'
-        db.delete_table(u'facility')
+        db.delete_table('core_facility')
 
         # Removing M2M table for field pathologies on 'Facility'
-        db.delete_table('facility_pathologies')
+        db.delete_table('core_facility_pathologies')
 
         # Removing M2M table for field services on 'Facility'
-        db.delete_table('facility_services')
+        db.delete_table('core_facility_services')
 
         # Deleting model 'OpeningTime'
-        db.delete_table(u'openingtime')
+        db.delete_table('core_openingtime')
 
-        # Deleting model 'SpecialDays'
-        db.delete_table(u'specialdays')
+        # Deleting model 'SpecialDay'
+        db.delete_table('core_specialday')
 
 
     models = {
@@ -149,7 +149,7 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
         'core.facility': {
-            'Meta': {'object_name': 'Facility', 'db_table': "u'facility'"},
+            'Meta': {'object_name': 'Facility'},
             'address': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'email': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
@@ -166,17 +166,17 @@ class Migration(SchemaMigration):
             'updated_by': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'})
         },
         'core.facilitytype': {
-            'Meta': {'object_name': 'FacilityType', 'db_table': "u'facilitytype'"},
+            'Meta': {'object_name': 'FacilityType'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'})
         },
         'core.medicalservice': {
-            'Meta': {'object_name': 'MedicalService', 'db_table': "u'medicalservice'"},
+            'Meta': {'object_name': 'MedicalService'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'})
         },
         'core.openingtime': {
-            'Meta': {'object_name': 'OpeningTime', 'db_table': "u'openingtime'"},
+            'Meta': {'object_name': 'OpeningTime'},
             'closing': ('django.db.models.fields.TimeField', [], {}),
             'facility': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['core.Facility']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -184,12 +184,12 @@ class Migration(SchemaMigration):
             'weekday': ('django.db.models.fields.IntegerField', [], {})
         },
         'core.pathology': {
-            'Meta': {'object_name': 'Pathology', 'db_table': "u'pathology'"},
+            'Meta': {'object_name': 'Pathology'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'})
         },
-        'core.specialdays': {
-            'Meta': {'object_name': 'SpecialDays', 'db_table': "u'specialdays'"},
+        'core.specialday': {
+            'Meta': {'object_name': 'SpecialDay'},
             'closed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'closing': ('django.db.models.fields.TimeField', [], {'null': 'True', 'blank': 'True'}),
             'facility': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['core.Facility']"}),

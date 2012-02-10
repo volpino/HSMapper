@@ -20,7 +20,7 @@ class FacilityType(models.Model):
 
 class Facility(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
-    #the_geom = models.TextField() 
+    the_geom = models.TextField() 
     the_geom = models.PointField(srid=PROJECTION_SRID)
     description = models.TextField(null=True, blank=True)
     manager = models.CharField(max_length=255, null=True, blank=True)
@@ -34,7 +34,7 @@ class Facility(models.Model):
     updated_by = models.ForeignKey(User, null=True, blank=True)
     expiration = models.DateField(null=True, blank=True)
 
-    #objects = models.GeoManager()
+    objects = models.GeoManager()
 
 
 WEEKDAY_CHOICES = ((1, u"Lunedì"),
