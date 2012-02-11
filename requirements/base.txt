@@ -6,5 +6,4 @@ django-devserver==0.3.1
 django-extensions==0.7.1
 South==0.7.3
 django-reversion==1.5.1
-
--e git://github.com/ahref/django-ajaxutils.git@83fdacf0fb9bf4e6b035c5b00375aa4d371e444b#egg=django-ajaxutils_dev
+django-ajaxutils==0.1.1
