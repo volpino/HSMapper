@@ -1,4 +1,5 @@
 {% load url from future %}
+{% load i18n %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -33,7 +34,9 @@
         <div id="alert_box" style="display:none;">
           <div class="alert-message warning in fade">
             <a class="close" href="#">×</a>
-            <p id="alert_msg"><strong>Error:</strong> something went wrong :/</p>
+            <p id="alert_msg">
+              <strong>{% trans "Error" %}:</strong> {% trans "something went wrong" %} :/
+            </p>
           </div>
         </div>
       </div>

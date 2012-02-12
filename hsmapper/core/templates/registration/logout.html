@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 
-<p>You're logged out.</p>
-<p>Redirect...</p>
+<p>{% trans "You're logged out." %}</p>
+<p>{% trans "Redirect..." %}</p>
 
 <script type="text/javascript">
   window.location.href = "/";

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 12:09+0100\n"
+"POT-Creation-Date: 2012-02-12 13:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,64 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: settings.py:39
+msgid "Italian"
+msgstr ""
+
+#: settings.py:40
+msgid "English"
+msgstr ""
+
+#: core/templates/base.html:38
+msgid "Error"
+msgstr ""
+
+#: core/templates/base.html:38
+msgid "something went wrong"
+msgstr ""
+
+#: core/templates/home.html:199 core/templates/home.html.py:236
+msgid "Updated!"
+msgstr ""
+
+#: core/templates/home.html:202 core/templates/home.html.py:239
+msgid "Error :("
+msgstr ""
+
+#: core/templates/home.html:221 core/templates/home.html.py:262
+msgid "Click to add"
+msgstr ""
+
+#: core/templates/home.html:327 core/templates/home.html.py:336
+#: core/templates/home.html:344 core/templates/home.html.py:352
+#: core/templates/home.html:360
+msgid "Click to edit"
+msgstr ""
+
+#: core/templates/home.html:447
+msgid "Map Control"
+msgstr ""
+
+#: core/templates/home.html:448
+msgid "About"
+msgstr ""
+
+#: core/templates/home.html:449
+msgid "Contact us"
+msgstr ""
+
+#: core/templates/home.html:460
+msgid "Insert mode"
+msgstr ""
+
+#: core/templates/home.html:461
+msgid "Delete mode"
+msgstr ""
+
+#: core/templates/home.html:472
+msgid "Developed by"
+msgstr ""
 
 #: core/templates/hospital_info.html:6
 msgid "Name"
@@ -68,4 +126,16 @@ msgstr ""
 
 #: core/templates/hospital_info.html:102
 msgid "Error: Not found"
+msgstr ""
+
+#: core/templates/registration/login.html:8
+msgid "Your username and password didn't match. Please try again."
+msgstr ""
+
+#: core/templates/registration/logout.html:6
+msgid "You're logged out."
+msgstr ""
+
+#: core/templates/registration/logout.html:7
+msgid "Redirect..."
 msgstr ""
