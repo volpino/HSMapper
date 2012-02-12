@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 15:20+0100\n"
+"POT-Creation-Date: 2012-02-12 23:15+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,82 +26,86 @@ msgstr ""
 msgid "English"
 msgstr ""
 
-#: core/models.py:14
+#: core/models.py:17
 #, fuzzy
 msgid "Pathology"
 msgstr "Patologie"
 
-#: core/models.py:15 core/templates/hospital_info.html:56
+#: core/models.py:18 core/templates/hospital_info.html:56
 msgid "Pathologies"
 msgstr "Patologie"
 
-#: core/models.py:22
+#: core/models.py:28
 #, fuzzy
 msgid "Medical Service"
 msgstr "Prestazioni"
 
-#: core/models.py:23
+#: core/models.py:29
 #, fuzzy
 msgid "Medical Services"
 msgstr "Prestazioni"
 
-#: core/models.py:30
+#: core/models.py:39
 msgid "Facility Type"
 msgstr ""
 
-#: core/models.py:31
+#: core/models.py:40
 msgid "Facility Types"
 msgstr ""
 
-#: core/models.py:52
+#: core/models.py:61
+msgid "<No name>"
+msgstr ""
+
+#: core/models.py:64
 msgid "Facility"
 msgstr ""
 
-#: core/models.py:53
+#: core/models.py:65
 msgid "Facilities"
 msgstr ""
 
-#: core/models.py:56
+#: core/models.py:68
 msgid "Monday"
 msgstr ""
 
-#: core/models.py:57
+#: core/models.py:69
 msgid "Tuesday"
 msgstr ""
 
-#: core/models.py:58
+#: core/models.py:70
 msgid "Wednesday"
 msgstr ""
 
-#: core/models.py:59
+#: core/models.py:71
 msgid "Thursday"
 msgstr ""
 
-#: core/models.py:60
+#: core/models.py:72
 msgid "Friday"
 msgstr ""
 
-#: core/models.py:61
+#: core/models.py:73
 msgid "Saturday"
 msgstr ""
 
-#: core/models.py:62
+#: core/models.py:74
 msgid "Sunday"
 msgstr ""
 
-#: core/models.py:72
+#: core/models.py:84
 msgid "Opening Time"
 msgstr ""
 
-#: core/models.py:73
+#: core/models.py:85
 msgid "Opening Times"
 msgstr ""
 
-#: core/models.py:84
+#: core/models.py:96
 msgid "Special Day"
 msgstr ""
 
-#: core/models.py:85
+#: core/models.py:97
 msgid "Special Days"
 msgstr ""
 
@@ -129,50 +133,75 @@ msgstr "Errore"
 msgid "something went wrong"
 msgstr "si è verificato un errore"
 
-#: core/templates/home.html:199 core/templates/home.html.py:236
-msgid "Updated!"
-msgstr "Aggiornato!"
+#: core/templates/home.html:125
+msgid "Point inserted"
+msgstr "Punto inserito"
 
-#: core/templates/home.html:202 core/templates/home.html.py:239
+#: core/templates/home.html:130 core/templates/home.html.py:203
+#: core/templates/home.html:240 core/templates/home.html.py:300
 msgid "Error :("
 msgstr "Errore :("
 
-#: core/templates/home.html:221 core/templates/home.html.py:262
+#: core/templates/home.html:200 core/templates/home.html.py:237
+msgid "Updated!"
+msgstr "Aggiornato!"
+
+#: core/templates/home.html:222 core/templates/home.html.py:263
 msgid "Click to add"
 msgstr "Clicca per aggiungere"
 
-#: core/templates/home.html:327 core/templates/home.html.py:336
-#: core/templates/home.html:344 core/templates/home.html.py:352
-#: core/templates/home.html:360
+#: core/templates/home.html:258 core/templates/home.html.py:324
+#: core/templates/home.html:331 core/templates/home.html.py:340
+#: core/templates/home.html:348 core/templates/home.html.py:356
+msgid "Save"
+msgstr "Salva"
+
+#: core/templates/home.html:259 core/templates/home.html.py:325
+#: core/templates/home.html:332 core/templates/home.html.py:341
+#: core/templates/home.html:349 core/templates/home.html.py:357
+msgid "Cancel"
+msgstr "Annulla"
+
+#: core/templates/home.html:288
+msgid "Are you sure you want to delete?"
+msgstr "Confermi eliminazione?"
+
+#: core/templates/home.html:297
+#, fuzzy
+msgid "Deleted"
+msgstr "Modalità eliminazione"
+
+#: core/templates/home.html:328 core/templates/home.html.py:337
+#: core/templates/home.html:345 core/templates/home.html.py:353
+#: core/templates/home.html:361
 msgid "Click to edit"
 msgstr "Clicca per modificare"
 
-#: core/templates/home.html:447
+#: core/templates/home.html:456
 msgid "Map Control"
 msgstr "Gestione mappa"
 
-#: core/templates/home.html:448
+#: core/templates/home.html:457
 msgid "About"
 msgstr "About"
 
-#: core/templates/home.html:449
+#: core/templates/home.html:458
 msgid "Contact us"
 msgstr "Contatti"
 
-#: core/templates/home.html:455
-#, fuzzy
+#: core/templates/home.html:464
 msgid "Go to address"
-msgstr "Indirizzo"
+msgstr "Vai all'indirizzo"
 
-#: core/templates/home.html:460
+#: core/templates/home.html:469
 msgid "Insert mode"
 msgstr "Modalità inserimento"
 
-#: core/templates/home.html:461
+#: core/templates/home.html:470
 msgid "Delete mode"
 msgstr "Modalità eliminazione"
 
-#: core/templates/home.html:472
+#: core/templates/home.html:481
 msgid "Developed by"
 msgstr "Sviluppato da"
 
