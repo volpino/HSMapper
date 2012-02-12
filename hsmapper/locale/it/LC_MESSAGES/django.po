@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 13:22+0100\n"
+"POT-Creation-Date: 2012-02-12 14:29+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,6 +25,94 @@ msgstr "Italiano"
 #: settings.py:40
 msgid "English"
 msgstr "Inglese"
+
+#: core/models.py:14
+msgid "Pathology"
+msgstr ""
+
+#: core/models.py:15 core/templates/hospital_info.html:56
+msgid "Pathologies"
+msgstr ""
+
+#: core/models.py:22
+msgid "Medical Service"
+msgstr ""
+
+#: core/models.py:23
+msgid "Medical Services"
+msgstr ""
+
+#: core/models.py:30
+msgid "Facility Type"
+msgstr ""
+
+#: core/models.py:31
+msgid "Facility Types"
+msgstr ""
+
+#: core/models.py:52
+msgid "Facility"
+msgstr ""
+
+#: core/models.py:53
+msgid "Facilities"
+msgstr ""
+
+#: core/models.py:56
+msgid "Monday"
+msgstr ""
+
+#: core/models.py:57
+msgid "Tuesday"
+msgstr ""
+
+#: core/models.py:58
+msgid "Wednesday"
+msgstr ""
+
+#: core/models.py:59
+msgid "Thursday"
+msgstr ""
+
+#: core/models.py:60
+msgid "Friday"
+msgstr ""
+
+#: core/models.py:61
+msgid "Saturday"
+msgstr ""
+
+#: core/models.py:62
+msgid "Sunday"
+msgstr ""
+
+#: core/models.py:72
+msgid "Opening Time"
+msgstr ""
+
+#: core/models.py:73
+msgid "Opening Times"
+msgstr ""
+
+#: core/models.py:84
+msgid "Special Day"
+msgstr ""
+
+#: core/models.py:85
+msgid "Special Days"
+msgstr ""
+
+#: core/templates/base.html:26
+msgid "Logged in as"
+msgstr ""
+
+#: core/templates/base.html:27
+msgid "Logout"
+msgstr ""
+
+#: core/templates/base.html:29
+msgid "Login"
+msgstr ""
 
 #: core/templates/base.html:38
 msgid "Error"
@@ -62,6 +150,10 @@ msgstr ""
 
 #: core/templates/home.html:449
 msgid "Contact us"
+msgstr ""
+
+#: core/templates/home.html:455
+msgid "Search"
 msgstr ""
 
 #: core/templates/home.html:460
@@ -102,10 +194,6 @@ msgstr ""
 
 #: core/templates/hospital_info.html:48
 msgid "Depends on"
-msgstr ""
-
-#: core/templates/hospital_info.html:56
-msgid "Pathologies"
 msgstr ""
 
 #: core/templates/hospital_info.html:68

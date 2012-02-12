@@ -33,7 +33,7 @@ def edit_hospital(request, id_):
             try:
                 current_obj = Facility.objects.get(id=id_)
             except Facility.DoesNotExist:
-              return {'success': False, 'error': 'Not found'}
+                return {'success': False, 'error': 'Not found'}
 
             current_data = dict([(k.name, getattr(current_obj, k.name))
                                  for k in current_obj._meta.fields])
@@ -45,7 +45,7 @@ def edit_hospital(request, id_):
             obj = Facility(**current_data)
             obj.updated_by = request.user
 
-            if request.POST.has_key("pathologies[]"):
+            if "pathologies[]" in request.POST:
                 p_data = request.POST.getlist("pathologies[]")
                 obj.pathologies.clear()
                 obj.save(force_update=True)
@@ -56,7 +56,7 @@ def edit_hospital(request, id_):
                     except Pathology.DoesNotExist:
                         obj.pathologies.create(name=p)
 
-            if request.POST.has_key("services[]"):
+            if "services[]" in request.POST:
                 p_data = request.POST.getlist("services[]")
                 obj.services.clear()
                 obj.save(force_update=True)
@@ -77,11 +77,13 @@ def edit_hospital_data(request, key):
     if key == "type":
         return dict([(k.id, k.name)
                      for k in FacilityType.objects.all()])
+
     if key == "manager":
         return dict([(k.id, k.name)
                      for k in Facility.objects.all()])
+
     elif key == "pathology":
-        if request.GET.has_key(u'q'):
+        if "q" in request.GET:
             results = []
             q = request.GET[u'q']
             if len(q) > 2:
@@ -89,15 +91,20 @@ def edit_hospital_data(request, key):
                 for x in model_results:
                     results.append({"id": x.id, "name": x.name})
             return {"results": results}
+
     elif key == "service":
-        if request.GET.has_key(u'q'):
+        if "q" in request.GET:
             results = []
             q = request.GET[u'q']
+
             if len(q) > 2:
-                model_results = MedicalService.objects.filter(name__icontains=q)
+                model_results = MedicalService.objects.filter(
+                                    name__icontains=q
+                                )
                 for x in model_results:
                     results.append({"id": x.id, "name": x.name})
             return {"results": results}
+
     return {}
 
 
