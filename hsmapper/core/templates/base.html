@@ -23,10 +23,10 @@
           <div class="login_menu">
             <ul>
               {% if user.is_authenticated %}
-              <li>Logged in as {{ user }}</li>
-              <li><a href="{% url 'logout' %}">Logout</a></li>
+              <li>{% trans "Logged in as" %} {{ user }}</li>
+              <li><a href="{% url 'logout' %}">{% trans "Logout" %}</a></li>
               {% else %}
-              <li><a href="{% url 'login' %}">Login</a></li>
+              <li><a href="{% url 'login' %}">{% trans "Login" %}</a></li>
               {% endif %}
             </ul>
           </div>

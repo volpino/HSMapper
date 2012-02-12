@@ -4,18 +4,31 @@ from django.contrib.gis.db import models
 #from django.db import models
 from django.contrib.auth.models import User
 from settings import PROJECTION_SRID
+from django.utils.translation import ugettext_lazy as _
 
 
 class Pathology(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
+    class Meta:
+        verbose_name = _('Pathology')
+        verbose_name_plural = _('Pathologies')
+
 
 class MedicalService(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
+    class Meta:
+        verbose_name = _('Medical Service')
+        verbose_name_plural = _('Medical Services')
+
 
 class FacilityType(models.Model):
     name = models.CharField(max_length=255, unique=True)
+
+    class Meta:
+        verbose_name = _('Facility Type')
+        verbose_name_plural = _('Facility Types')
 
 
 class Facility(models.Model):
@@ -35,14 +48,18 @@ class Facility(models.Model):
 
     objects = models.GeoManager()
 
+    class Meta:
+        verbose_name = _('Facility')
+        verbose_name_plural = _('Facilities')
 
-WEEKDAY_CHOICES = ((1, u"Lunedì"),
-                   (2, u"Martedì"),
-                   (3, u"Mercoledì"),
-                   (4, u"Giovedì"),
-                   (5, u"Venerdì"),
-                   (6, u"Sabato"),
-                   (7, u"Domenica"))
+
+WEEKDAY_CHOICES = ((1, _("Monday")),
+                   (2, _("Tuesday")),
+                   (3, _("Wednesday")),
+                   (4, _("Thursday")),
+                   (5, _("Friday")),
+                   (6, _("Saturday")),
+                   (7, _("Sunday")))
 
 
 class OpeningTime(models.Model):
@@ -51,6 +68,10 @@ class OpeningTime(models.Model):
     closing = models.TimeField()
     weekday = models.IntegerField(choices=WEEKDAY_CHOICES)
 
+    class Meta:
+        verbose_name = _('Opening Time')
+        verbose_name_plural = _('Opening Times')
+
 
 class SpecialDay(models.Model):
     facility = models.ForeignKey(Facility)
@@ -58,3 +79,7 @@ class SpecialDay(models.Model):
     closed = models.BooleanField()
     opening = models.TimeField(null=True, blank=True)
     closing = models.TimeField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = _('Special Day')
+        verbose_name_plural = _('Special Days')
