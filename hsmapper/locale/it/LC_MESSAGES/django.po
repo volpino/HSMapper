@@ -1,0 +1,71 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-02-12 12:09+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: core/templates/hospital_info.html:6
+msgid "Name"
+msgstr "Nome"
+
+#: core/templates/hospital_info.html:13
+msgid "Description"
+msgstr "Descrizione"
+
+#: core/templates/hospital_info.html:20
+msgid "Address"
+msgstr "Indirizzo"
+
+#: core/templates/hospital_info.html:27
+msgid "Phone"
+msgstr ""
+
+#: core/templates/hospital_info.html:34
+msgid "Email"
+msgstr ""
+
+#: core/templates/hospital_info.html:41
+msgid "Type"
+msgstr ""
+
+#: core/templates/hospital_info.html:48
+msgid "Depends on"
+msgstr ""
+
+#: core/templates/hospital_info.html:56
+msgid "Pathologies"
+msgstr ""
+
+#: core/templates/hospital_info.html:68
+msgid "Services"
+msgstr ""
+
+#: core/templates/hospital_info.html:80
+msgid "Expiration"
+msgstr ""
+
+#: core/templates/hospital_info.html:87
+msgid "Last update"
+msgstr ""
+
+#: core/templates/hospital_info.html:94
+msgid "Updated by"
+msgstr ""
+
+#: core/templates/hospital_info.html:102
+msgid "Error: Not found"
+msgstr ""

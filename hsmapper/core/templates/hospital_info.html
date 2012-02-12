@@ -1,49 +1,51 @@
+{% load i18n %}
+
 {% if hospital %}
 
 <p>
-  <span>Name:</span>
+  <span>{% trans "Name" %}:</span>
   <span class="edit" type="name">
     <span class="editable">{{ hospital.name }}</span>
   </span>
 </p>
 
 <p>
-  <span>Description:</span>
+  <span>{% trans "Description" %}:</span>
   <span class="edit" type="description">
     <span class="editable_text">{{ hospital.description }}</span>
   </span>
 </p>
 
 <p>
-  <span>Address:</span>
+  <span>{% trans "Address" %}:</span>
   <span class="edit" type="address">
     <span class="editable_text">{{ hospital.address }}</span>
   </span>
 </p>
 
 <p>
-  <span>Phone:</span>
+<span>{% trans "Phone" %}:</span>
   <span class="edit" type="phone">
     <span class="editable_text">{{ hospital.phone }}</span>
   </span>
 </p>
 
 <p>
-  <span>Email:</span>
+<span>{% trans "Email" %}:</span>
   <span class="edit" type="email">
     <span class="editable_text">{{ hospital.email }}</span>
   </span>
 </p>
 
 <p>
-  <span>Type:</span>
+  <span>{% trans "Type" %}:</span>
   <span class="edit" type="facility_type">
     <span class="editable_type">{{ hospital.facility_type.name }}</span>
   </span>
 </p>
 
 <p>
-  <span>Depends on:</span>
+<span>{% trans "Depends on" %}:</span>
   <span class="edit" type="manager">
     <span class="editable_manager">{{ hospital.manager.name }}</span>
   </span>
@@ -51,7 +53,7 @@
 
 
 <p id="pathologies_info">
-  <span>Pathologies:</span>
+  <span>{% trans "Pathologies" %}:</span>
 {% for p in hospital.pathologies.all %}
   <span class="edit">
     <span class="editable_pathology">{{ p.name }}</span>
@@ -63,7 +65,7 @@
 </p>
 
 <p id="services_info">
-  <span class="edit">Services:</span>
+  <span class="edit">{% trans "Services" %}:</span>
 {% for s in hospital.services.all %}
   <span>
     <span class="editable_service">{{ s.name }}</span>
@@ -75,28 +77,28 @@
 </p>
 
 <p>
-  <span>Expiration:</span>
+  <span>{% trans "Expiration" %}:</span>
   <span class="edit" type="expiration">
     <span class="editable_date">{{ hospital.expiration|date:"d/m/Y" }}</span>
   </span>
 </p>
 
 <p>
-  <span>Last update:</span>
+  <span>{% trans "Last update" %}:</span>
   <span class="edit">
     <span>{{ hospital.last_updated|date:"d/m/Y" }}</span>
   </span>
 </p>
 
 <p>
-  <span>Updated by:</span>
+  <span>{% trans "Updated by" %}:</span>
   <span>
-    <span>{{ hospital.updated_by }}</span>
+    <span id="updated_by">{{ hospital.updated_by }}</span>
   </span>
 </p>
 
 {% else %}
 
-<p>Error: Not found</p>
+<p>{% trans "Error: Not found" %}</p>
 
 {% endif %}

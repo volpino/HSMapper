@@ -21,6 +21,9 @@
     var map;
     globals.insert_mode = false;
     globals.delete_mode = false;
+    {% if user.is_authenticated %}
+    globals.username = "{{ user }}";
+    {% endif %}
     globals.hospital_layer;
     globals.selectedFeature;
     function init() {
@@ -29,7 +32,6 @@
         allOverlays: true,
         projection: new OpenLayers.Projection("EPSG:900913"),
         controls: [new OpenLayers.Control.Navigation(),
-                   new OpenLayers.Control.LayerSwitcher(),
                    new OpenLayers.Control.PanZoomBar()]
       });
 
@@ -84,7 +86,7 @@
         }
       );
 
-      map.addLayers([osm, heatmap_layer, globals.hospital_layer]);
+      map.addLayers([osm, globals.hospital_layer]);
       selectControl = new OpenLayers.Control.SelectFeature(
                       [globals.hospital_layer],{clickout: true, toggle: false,
                                         multiple: false, hover: false });
@@ -198,6 +200,7 @@
           else {
             alert_msg("Error :(", "error");
           }
+          $("#updated_by").text(globals.username);
         }
       });
       return display_msg;
@@ -234,6 +237,7 @@
             else {
               alert_msg("Error :(", "error");
             }
+            $("#updated_by").text(globals.username);
           }
         });
 
@@ -379,6 +383,7 @@
         $("#map").addClass("crosshair");
         globals.insert_mode = true;
       }
+      onFeatureUnselect(globals.selectedFeature);
     }
 
     function toggle_delete() {
@@ -395,6 +400,7 @@
         $("#map").addClass("crosshair");
         globals.delete_mode = true;
       }
+      onFeatureUnselect(globals.selectedFeature);
     }
 
   function alert_msg(msg, level) {
