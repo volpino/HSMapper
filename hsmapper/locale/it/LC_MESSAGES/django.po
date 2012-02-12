@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 23:15+0100\n"
+"POT-Creation-Date: 2012-02-12 23:27+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -200,6 +200,15 @@ msgstr "Modalità inserimento"
 #: core/templates/home.html:470
 msgid "Delete mode"
 msgstr "Modalità eliminazione"
+
+#: core/templates/home.html:478
+msgid ""
+"The project is developed in collaboration with the Italian pediatrics "
+"association (S.I.P. - Società Italiana di Pediatria). It aims at developing "
+"a new informatics platform that helps context-aware location of health "
+"facilities, supporting the timely access to the most appropriate health "
+"resource."
+msgstr "Il progetto è sviluppato in collaborazione con la Società Italiana di Pediatria (S.I.P.). L'obbiettivo è sviluppare un supporto informatico che aiuti nell'individuazione del centro pediatrico idoneo."
 
 #: core/templates/home.html:481
 msgid "Developed by"
