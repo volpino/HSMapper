@@ -43,6 +43,7 @@ def edit_hospital(request, id_):
                     current_data[key] = value
 
             obj = Facility(**current_data)
+            obj.updated_by = request.user
 
             if request.POST.has_key("pathologies[]"):
                 p_data = request.POST.getlist("pathologies[]")
