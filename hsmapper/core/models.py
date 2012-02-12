@@ -10,6 +10,9 @@ from django.utils.translation import ugettext_lazy as _
 class Pathology(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
+    def __unicode__(self):
+        return self.name
+
     class Meta:
         verbose_name = _('Pathology')
         verbose_name_plural = _('Pathologies')
@@ -18,6 +21,9 @@ class Pathology(models.Model):
 class MedicalService(models.Model):
     name = models.CharField(max_length=255, unique=True)
 
+    def __unicode__(self):
+        return self.name
+
     class Meta:
         verbose_name = _('Medical Service')
         verbose_name_plural = _('Medical Services')
@@ -25,6 +31,9 @@ class MedicalService(models.Model):
 
 class FacilityType(models.Model):
     name = models.CharField(max_length=255, unique=True)
+
+    def __unicode__(self):
+        return self.name
 
     class Meta:
         verbose_name = _('Facility Type')
@@ -35,7 +44,7 @@ class Facility(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     the_geom = models.PointField(srid=PROJECTION_SRID)
     description = models.TextField(null=True, blank=True)
-    manager = models.CharField(max_length=255, null=True, blank=True)
+    manager = models.ForeignKey('self', null=True, blank=True)
     address = models.TextField(null=True, blank=True)
     phone = models.TextField(null=True, blank=True)
     email = models.TextField(null=True, blank=True)
@@ -47,6 +56,9 @@ class Facility(models.Model):
     expiration = models.DateField(null=True, blank=True)
 
     objects = models.GeoManager()
+
+    def __unicode__(self):
+        return self.name or unicode(_("<No name>"))
 
     class Meta:
         verbose_name = _('Facility')

@@ -39,7 +39,7 @@ def edit_hospital(request, id_):
                                  for k in current_obj._meta.fields])
 
             for key, value in data.items():
-                if value:
+                if key == "manager" or value:
                     current_data[key] = value
 
             obj = Facility(**current_data)
@@ -80,7 +80,7 @@ def edit_hospital_data(request, key):
 
     if key == "manager":
         return dict([(k.id, k.name)
-                     for k in Facility.objects.all()])
+                     for k in Facility.objects.all()] + [("", "--------")])
 
     elif key == "pathology":
         if "q" in request.GET:

@@ -3,20 +3,20 @@
 {% load i18n %}
 
 {% block head %}
-  <script type="text/javascript" src="{{ STATIC_URL }}/js/proj4js/lib/proj4js-compressed.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}/js/proj4js/lib/defs/EPSG23032.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}/openlayers/OpenLayers.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/proj4js/lib/proj4js-compressed.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/proj4js/lib/defs/EPSG23032.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}openlayers/OpenLayers.js"></script>
 
-  <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.tmpl.1.1.1.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}/js/ui.multiselect.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.jeditable.mini.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.jeditable.manytomany.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.jeditable.autogrow.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.autogrow.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.jeditable.masked.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}/js/jquery.maskedinput.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}/js/nominatim.autocomplete.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}/js/bootstrap-alerts.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.tmpl.1.1.1.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/ui.multiselect.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.jeditable.mini.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.jeditable.manytomany.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.jeditable.autogrow.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.autogrow.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.jeditable.masked.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.maskedinput.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/nominatim.autocomplete.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-alerts.js"></script>
   <script type="text/javascript">
     var globals = {};
     var map;
@@ -115,17 +115,19 @@
               }
           }
           globals.hospital_layer.addFeatures([f]);
+
           $.ajax({
             url: "{% url 'api-add-hospital' %}",
             type: "post",
             data: {lat: p["lat"], lon: p["lon"]},
             success: function(req) {
               if (req.success === true) {
-                alert_msg("Point inserted", "success");
+                alert_msg("{% trans "Point inserted" %}", "success");
                 f.attributes["id"] = req.id;
+                onFeatureSelect(f);
               }
               else {
-                alertmsg("Error :(");
+                alertmsg("{% trans "Error :(" %}");
               }
             }
           });
@@ -178,7 +180,6 @@
 
     function onPopupClose(evt) {
       selectControl.unselect(globals.selectedFeature);
-      $("#edit_info").empty();
     }
 
     function save_feature_edit(value, settings) {
@@ -254,8 +255,8 @@
 
     function manytomany_editable(expr, sing, plur) {
       $(expr).editable(save_manytomany_edit(sing, plur), {
-        submit: "Save",
-        cancel: "Cancel",
+        submit: "{% trans "Save" %}",
+        cancel: "{% trans "Cancel" %}",
         style: "inherit",
         type: "manytomany",
         onblur: "submit",
@@ -284,7 +285,7 @@
     function onFeatureSelect(feature){
       globals.selectedFeature = feature;
       if (globals.delete_mode) {
-        var agree = confirm("Are you sure you want to delete?");
+        var agree = confirm("{% trans "Are you sure you want to delete?" %}");
         if (agree) {
           globals.hospital_layer.removeFeatures([globals.selectedFeature]);
           $.ajax({
@@ -293,10 +294,10 @@
             data: "",
             success: function(req) {
               if (req.success === true) {
-                alert_msg("Deleted", "success");
+                alert_msg("{% trans "Deleted" %}", "success");
               }
               else {
-                alert_msg("Error :(", "error");
+                alert_msg("{% trans "Error :(" %}", "error");
               }
             }
           });
@@ -318,17 +319,17 @@
         map.addPopup(popup);
         $.get("{% url 'api-info-hospital' 1 %}".replace("1", globals.selectedFeature.attributes.id), function(data) {
           $("#edit_info").html(data);
-          {% if user.is_authenticated %}
+          {% if user.is_authenticated or user.is_staff %}
           $('.editable').editable(save_feature_edit, {
-            submit: "Save",
-            cancel: "Cancel",
+            submit: "{% trans "Save" %}",
+            cancel: "{% trans "Cancel" %}",
             style: "inherit",
             width: 180,
             tooltip: "{% trans "Click to edit" %}"
           });
           $('.editable_text').editable(save_feature_edit, {
-            submit: "Save",
-            cancel: "Cancel",
+            submit: "{% trans "Save" %}",
+            cancel: "{% trans "Cancel" %}",
             style: "inherit",
             type: "autogrow",
             rows: 5,
@@ -336,24 +337,24 @@
             tooltip: "{% trans "Click to edit" %}"
           });
           $('.editable_type').editable(save_feature_edit, {
-            submit: "Save",
-            cancel: "Cancel",
+            submit: "{% trans "Save" %}",
+            cancel: "{% trans "Cancel" %}",
             style: "inherit",
             loadurl: "{% url 'api-edit-hospital-data' 'type' %}",
             type: "select",
             tooltip: "{% trans "Click to edit" %}"
           });
           $('.editable_date').editable(save_feature_edit, {
-            submit: "Save",
-            cancel: "Cancel",
+            submit: "{% trans "Save" %}",
+            cancel: "{% trans "Cancel" %}",
             style: "inherit",
             type: "masked",
             mask: "99/99/9999",
             tooltip: "{% trans "Click to edit" %}"
           });
           $('.editable_manager').editable(save_feature_edit, {
-            submit: "Save",
-            cancel: "Cancel",
+            submit: "{% trans "Save" %}",
+            cancel: "{% trans "Cancel" %}",
             style: "inherit",
             loadurl: "{% url 'api-edit-hospital-data' 'manager' %}",
             type: "select",
@@ -370,9 +371,13 @@
     }
 
     function onFeatureUnselect(feature) {
-      map.removePopup(feature.popup);
-      feature.popup.destroy();
-      feature.popup = undefined;
+      if (feature.popup) {
+        map.removePopup(feature.popup);
+        feature.popup.destroy();
+        feature.popup = undefined;
+      }
+      globals.selectedFeature = undefined;
+      $("#edit_info").empty();
     }
 
     function toggle_insert() {
@@ -388,8 +393,10 @@
         $("#insert_button").addClass("success");
         $("#map").addClass("crosshair");
         globals.insert_mode = true;
+        if (globals.selectedFeature) {
+          onFeatureUnselect(globals.selectedFeature);
+        }
       }
-      onFeatureUnselect(globals.selectedFeature);
     }
 
     function toggle_delete() {
@@ -405,8 +412,10 @@
         $("#delete_button").addClass("success");
         $("#map").addClass("crosshair");
         globals.delete_mode = true;
+        if (globals.selectedFeature) {
+          onFeatureUnselect(globals.selectedFeature);
+        }
       }
-      onFeatureUnselect(globals.selectedFeature);
     }
 
   function alert_msg(msg, level) {
