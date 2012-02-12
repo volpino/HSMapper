@@ -79,7 +79,7 @@ def edit_hospital_data(request, key):
                      for k in FacilityType.objects.all()])
 
     if key == "manager":
-        return dict([(k.id, k.name)
+        return dict([(k.id, str(k))
                      for k in Facility.objects.all()] + [("", "--------")])
 
     elif key == "pathology":
