@@ -20,15 +20,15 @@ msgstr ""
 
 #: settings.py:39
 msgid "Italian"
-msgstr ""
+msgstr "Italiano"
 
 #: settings.py:40
 msgid "English"
-msgstr ""
+msgstr "Inglese"
 
 #: core/templates/base.html:38
 msgid "Error"
-msgstr ""
+msgstr "Errore"
 
 #: core/templates/base.html:38
 msgid "something went wrong"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: core/templates/home.html:199 core/templates/home.html.py:236
 msgid "Updated!"
-msgstr ""
+msgstr "Aggiornato!"
 
 #: core/templates/home.html:202 core/templates/home.html.py:239
 msgid "Error :("
