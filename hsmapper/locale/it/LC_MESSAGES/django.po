@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 14:31+0100\n"
+"POT-Creation-Date: 2012-02-12 15:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,27 +20,30 @@ msgstr ""
 
 #: settings.py:39
 msgid "Italian"
-msgstr "Italiano"
+msgstr ""
 
 #: settings.py:40
 msgid "English"
-msgstr "Inglese"
+msgstr ""
 
 #: core/models.py:14
+#, fuzzy
 msgid "Pathology"
-msgstr ""
+msgstr "Patologie"
 
 #: core/models.py:15 core/templates/hospital_info.html:56
 msgid "Pathologies"
-msgstr ""
+msgstr "Patologie"
 
 #: core/models.py:22
+#, fuzzy
 msgid "Medical Service"
-msgstr ""
+msgstr "Prestazioni"
 
 #: core/models.py:23
+#, fuzzy
 msgid "Medical Services"
-msgstr ""
+msgstr "Prestazioni"
 
 #: core/models.py:30
 msgid "Facility Type"
@@ -102,17 +105,21 @@ msgstr ""
 msgid "Special Days"
 msgstr ""
 
+#: core/templates/base.html:22
+msgid "Health Facilities Distribution Analysis"
+msgstr "Trova il centro pediatrico adatto al tuo bambino"
+
 #: core/templates/base.html:26
 msgid "Logged in as"
-msgstr ""
+msgstr "Autenticato come"
 
 #: core/templates/base.html:27
 msgid "Logout"
-msgstr ""
+msgstr "Logout"
 
 #: core/templates/base.html:29
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #: core/templates/base.html:38
 msgid "Error"
@@ -120,7 +127,7 @@ msgstr "Errore"
 
 #: core/templates/base.html:38
 msgid "something went wrong"
-msgstr ""
+msgstr "si è verificato un errore"
 
 #: core/templates/home.html:199 core/templates/home.html.py:236
 msgid "Updated!"
@@ -128,29 +135,29 @@ msgstr "Aggiornato!"
 
 #: core/templates/home.html:202 core/templates/home.html.py:239
 msgid "Error :("
-msgstr ""
+msgstr "Errore :("
 
 #: core/templates/home.html:221 core/templates/home.html.py:262
 msgid "Click to add"
-msgstr ""
+msgstr "Clicca per aggiungere"
 
 #: core/templates/home.html:327 core/templates/home.html.py:336
 #: core/templates/home.html:344 core/templates/home.html.py:352
 #: core/templates/home.html:360
 msgid "Click to edit"
-msgstr ""
+msgstr "Clicca per modificare"
 
 #: core/templates/home.html:447
 msgid "Map Control"
-msgstr ""
+msgstr "Gestione mappa"
 
 #: core/templates/home.html:448
 msgid "About"
-msgstr ""
+msgstr "About"
 
 #: core/templates/home.html:449
 msgid "Contact us"
-msgstr ""
+msgstr "Contatti"
 
 #: core/templates/home.html:455
 #, fuzzy
@@ -159,15 +166,15 @@ msgstr "Indirizzo"
 
 #: core/templates/home.html:460
 msgid "Insert mode"
-msgstr ""
+msgstr "Modalità inserimento"
 
 #: core/templates/home.html:461
 msgid "Delete mode"
-msgstr ""
+msgstr "Modalità eliminazione"
 
 #: core/templates/home.html:472
 msgid "Developed by"
-msgstr ""
+msgstr "Sviluppato da"
 
 #: core/templates/hospital_info.html:6
 msgid "Name"
@@ -183,48 +190,48 @@ msgstr "Indirizzo"
 
 #: core/templates/hospital_info.html:27
 msgid "Phone"
-msgstr ""
+msgstr "Telefono"
 
 #: core/templates/hospital_info.html:34
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: core/templates/hospital_info.html:41
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: core/templates/hospital_info.html:48
 msgid "Depends on"
-msgstr ""
+msgstr "Struttura di riferimento"
 
 #: core/templates/hospital_info.html:68
 msgid "Services"
-msgstr ""
+msgstr "Prestazioni"
 
 #: core/templates/hospital_info.html:80
 msgid "Expiration"
-msgstr ""
+msgstr "Validità"
 
 #: core/templates/hospital_info.html:87
 msgid "Last update"
-msgstr ""
+msgstr "Ultimo aggiornamento"
 
 #: core/templates/hospital_info.html:94
 msgid "Updated by"
-msgstr ""
+msgstr "Aggiornato da"
 
 #: core/templates/hospital_info.html:102
 msgid "Error: Not found"
-msgstr ""
+msgstr "Errore: Non è stato trovato"
 
 #: core/templates/registration/login.html:8
 msgid "Your username and password didn't match. Please try again."
-msgstr ""
+msgstr "Il tuo username e password non corrispondono. Per favore riprova."
 
 #: core/templates/registration/logout.html:6
 msgid "You're logged out."
-msgstr ""
+msgstr "Log out effettuato"
 
 #: core/templates/registration/logout.html:7
 msgid "Redirect..."
-msgstr ""
+msgstr "Redirect..."
