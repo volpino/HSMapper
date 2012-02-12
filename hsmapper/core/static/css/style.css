@@ -136,10 +136,6 @@ a:hover {
   padding: 2%;
 }
 
-#edit_info input {
-  width: 150px;
-}
-
 #footer {
   clear: both;
   text-align: center;
@@ -192,12 +188,11 @@ ul.ui-widget-header {
     border: none;
 }
 
-.editable, .editable_text, .editable_pathology, .editable_service {
+.edit {
     display: inline;
 }
 
-.editable:hover, .editable_text:hover, .editable_pathology:hover,
-.editable_service:hover {
+.edit:hover {
     display: inline;
     background-color: #ffC;
 }

@@ -237,7 +237,7 @@
           }
         });
 
-        var new_input = $("<span/>").append(
+        var new_input = $("<span/>").addClass("edit").append(
           $("<span/>").addClass("editable_"+sing)
         );
         $("#"+plur+"_info").append(new_input);
@@ -317,7 +317,8 @@
           $('.editable').editable(save_feature_edit, {
             submit: "Save",
             cancel: "Cancel",
-            style: "inherit"
+            style: "inherit",
+            width: 180
           });
           $('.editable_text').editable(save_feature_edit, {
             submit: "Save",
@@ -351,6 +352,8 @@
 
           manytomany_editable(".editable_pathology", "pathology", "pathologies");
           manytomany_editable(".editable_service", "service", "services");
+          {% else %}
+          $(".edit").removeClass("edit");
           {% endif %}
         });
       }
