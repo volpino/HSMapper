@@ -269,3 +269,7 @@ ul.ui-widget-header {
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
 }
+
+#edit_info {
+    overflow-x: hidden;
+}

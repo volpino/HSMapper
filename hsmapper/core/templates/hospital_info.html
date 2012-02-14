@@ -1,12 +1,11 @@
 {% load i18n %}
-
 {% if hospital %}
 
-{% if hospital.expiration or hospital.expiration > Now %}
- <div>
-{% else %}
+{% if not hospital.expiration %}
  <div class="alert-message error">{% trans "Warning! Data is expired" %}</div>
  <div class="expired">
+{% else %}
+ <div>
 {% endif %}
   <p>
     <span class="field-name">{% trans "Name" %}:</span>
