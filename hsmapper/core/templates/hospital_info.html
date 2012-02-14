@@ -47,7 +47,7 @@
 <p>
 <span>{% trans "Depends on" %}:</span>
   <span class="edit" type="manager">
-    <span class="editable_manager">{{ hospital.manager }}</span>
+    <span class="editable_manager">{{ hospital.manager|default_if_none:"" }}</span>
   </span>
 </p>
 
