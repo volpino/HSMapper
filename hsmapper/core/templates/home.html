@@ -90,6 +90,8 @@
       );
 
       map.addLayers([osm, globals.hospital_layer]);
+      map.zoomToMaxExtent();
+
       selectControl = new OpenLayers.Control.SelectFeature(
                       [globals.hospital_layer],{clickout: true, toggle: false,
                                         multiple: false, hover: false });
@@ -338,7 +340,7 @@
             cancel: "{% trans "Cancel" %}",
             style: "inherit",
             width: 180,
-            tooltip: "{% trans "Click to edit" %}"
+            placeholder: "{% trans "Click to edit" %}"
           });
           $('.editable_text').editable(save_feature_edit, {
             submit: "{% trans "Save" %}",
@@ -347,15 +349,13 @@
             type: "autogrow",
             rows: 5,
             cols: 40,
-            tooltip: "{% trans "Click to edit" %}"
+            placeholder: "{% trans "Click to edit" %}"
           });
           $('.editable_type').editable(save_feature_edit, {
-            submit: "{% trans "Save" %}",
-            cancel: "{% trans "Cancel" %}",
             style: "inherit",
             loadurl: "{% url 'api-edit-hospital-data' 'type' %}",
             type: "select",
-            tooltip: "{% trans "Click to edit" %}"
+            placeholder: "{% trans "Click to edit" %}"
           });
           $('.editable_date').editable(save_feature_edit, {
             submit: "{% trans "Save" %}",
@@ -363,7 +363,13 @@
             style: "inherit",
             type: "masked",
             mask: "99/99/9999",
-            tooltip: "{% trans "Click to edit" %}"
+            placeholder: "{% trans "Click to edit" %}"
+          });
+          $('.editable_time').editable(save_feature_edit, {
+            style: "inherit",
+            type: "masked",
+            mask: "99:99",
+            placeholder: "00:00"
           });
           $('.editable_manager').editable(save_feature_edit, {
             submit: "{% trans "Save" %}",
@@ -371,7 +377,7 @@
             style: "inherit",
             loadurl: "{% url 'api-edit-hospital-data' 'manager' %}",
             type: "select",
-            tooltip: "{% trans "Click to edit" %}"
+            placeholder: "{% trans "Click to edit" %}"
           });
 
           manytomany_editable(".editable_pathology", "pathology", "pathologies");
