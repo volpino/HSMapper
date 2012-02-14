@@ -220,6 +220,7 @@ ul.ui-widget-header {
 
 #edit_info button {
  cursor:pointer;
+ margin: 1px;
  display:inline-block;
  background-color:#e6e6e6;
  background-repeat:no-repeat;
