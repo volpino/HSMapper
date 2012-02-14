@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-12 23:27+0100\n"
+"POT-Creation-Date: 2012-02-14 21:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -133,84 +133,87 @@ msgstr "Errore"
 msgid "something went wrong"
 msgstr "si è verificato un errore"
 
-#: core/templates/home.html:125
+#: core/templates/home.html:130
 msgid "Point inserted"
 msgstr "Punto inserito"
 
-#: core/templates/home.html:130 core/templates/home.html.py:203
-#: core/templates/home.html:240 core/templates/home.html.py:300
+#: core/templates/home.html:135 core/templates/home.html.py:209
+#: core/templates/home.html:246 core/templates/home.html.py:309
 msgid "Error :("
 msgstr "Errore :("
 
-#: core/templates/home.html:200 core/templates/home.html.py:237
+#: core/templates/home.html:206 core/templates/home.html.py:243
 msgid "Updated!"
 msgstr "Aggiornato!"
 
-#: core/templates/home.html:222 core/templates/home.html.py:263
+#: core/templates/home.html:228 core/templates/home.html.py:269
 msgid "Click to add"
 msgstr "Clicca per aggiungere"
 
-#: core/templates/home.html:258 core/templates/home.html.py:324
-#: core/templates/home.html:331 core/templates/home.html.py:340
-#: core/templates/home.html:348 core/templates/home.html.py:356
+#: core/templates/home.html:264 core/templates/home.html.py:337
+#: core/templates/home.html:344 core/templates/home.html.py:353
+#: core/templates/home.html:361 core/templates/home.html.py:369
 msgid "Save"
 msgstr "Salva"
 
-#: core/templates/home.html:259 core/templates/home.html.py:325
-#: core/templates/home.html:332 core/templates/home.html.py:341
-#: core/templates/home.html:349 core/templates/home.html.py:357
+#: core/templates/home.html:265 core/templates/home.html.py:338
+#: core/templates/home.html:345 core/templates/home.html.py:354
+#: core/templates/home.html:362 core/templates/home.html.py:370
 msgid "Cancel"
 msgstr "Annulla"
 
-#: core/templates/home.html:288
+#: core/templates/home.html:297
 msgid "Are you sure you want to delete?"
 msgstr "Confermi eliminazione?"
 
-#: core/templates/home.html:297
+#: core/templates/home.html:306
 #, fuzzy
 msgid "Deleted"
 msgstr "Modalità eliminazione"
 
-#: core/templates/home.html:328 core/templates/home.html.py:337
-#: core/templates/home.html:345 core/templates/home.html.py:353
-#: core/templates/home.html:361
+#: core/templates/home.html:341 core/templates/home.html.py:350
+#: core/templates/home.html:358 core/templates/home.html.py:366
+#: core/templates/home.html:374
 msgid "Click to edit"
 msgstr "Clicca per modificare"
 
-#: core/templates/home.html:456
+#: core/templates/home.html:469
 msgid "Map Control"
 msgstr "Gestione mappa"
 
-#: core/templates/home.html:457
+#: core/templates/home.html:470
 msgid "About"
 msgstr "About"
 
-#: core/templates/home.html:458
+#: core/templates/home.html:471
 msgid "Contact us"
 msgstr "Contatti"
 
-#: core/templates/home.html:464
+#: core/templates/home.html:477
 msgid "Go to address"
 msgstr "Vai all'indirizzo"
 
-#: core/templates/home.html:469
-msgid "Insert mode"
-msgstr "Modalità inserimento"
+#: core/templates/home.html:482
+msgid "Insert point"
+msgstr "Inserisci punto"
 
-#: core/templates/home.html:470
-msgid "Delete mode"
-msgstr "Modalità eliminazione"
+#: core/templates/home.html:483
+msgid "Delete point"
+msgstr "Elimina punto"
 
-#: core/templates/home.html:478
+#: core/templates/home.html:491
 msgid ""
 "The project is developed in collaboration with the Italian pediatrics "
 "association (S.I.P. - Società Italiana di Pediatria). It aims at developing "
 "a new informatics platform that helps context-aware location of health "
 "facilities, supporting the timely access to the most appropriate health "
 "resource."
-msgstr "Il progetto è sviluppato in collaborazione con la Società Italiana di Pediatria (S.I.P.). L'obbiettivo è sviluppare un supporto informatico che aiuti nell'individuazione del centro pediatrico idoneo."
+msgstr ""
+"Il progetto è sviluppato in collaborazione con la Società Italiana di "
+"Pediatria (S.I.P.). L'obbiettivo è sviluppare un supporto informatico che "
+"aiuti nell'individuazione del centro pediatrico idoneo."
 
-#: core/templates/home.html:481
+#: core/templates/home.html:494
 msgid "Developed by"
 msgstr "Sviluppato da"
 
