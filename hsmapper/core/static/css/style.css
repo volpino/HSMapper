@@ -250,7 +250,7 @@ ul.ui-widget-header {
  -o-transition:0.1s linear all;
  transition:0.1s linear all;
 }
-#edit_info button:hover { 
+#edit_info button:hover {
     background-position:0 -15px;
     color:#333;text-decoration:none;}
 #edit_info button:focus {
@@ -259,4 +259,8 @@ ul.ui-widget-header {
 
 .field-name {
     font-weight: bold;
+}
+
+.editable_time input {
+    width: 40px;
 }

@@ -97,6 +97,35 @@
   </span>
 </p>
 
+<p>
+  <span class="field-name">{% trans "Opening times" %}:</span>
+  <table>
+    {% for wd in weekdays %}
+    <tr>
+      <td>
+        <span><b>{{ wd.1 }}</b></span>
+      </td>
+      <td>
+        <span type="optime_{{ wd.0 }}_0">
+          <span class="editable_time"></span> -
+        </span>
+        <span type="optime_{{ wd.0 }}_1">
+          <span class="editable_time"></span>
+        </span>
+      </td>
+      <td>
+        <span type="optime_{{ wd.0 }}_2">
+          <span class="editable_time"></span> -
+        </span>
+        <span type="optime_{{ wd.0 }}_3">
+          <span class="editable_time"></span>
+        </span>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</p>
+
 {% else %}
 
 <p>{% trans "Error: Not found" %}</p>

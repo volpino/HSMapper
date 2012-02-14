@@ -6,8 +6,9 @@ from vectorformats.Formats import Django, GeoJSON
 from ajaxutils.decorators import ajax
 
 from hsmapper import settings
-from core.models import Facility, FacilityType, Pathology, MedicalService
-from core.forms import FacilityForm
+from core.models import Facility, FacilityType, Pathology, MedicalService, \
+                        WEEKDAY_CHOICES
+from core.forms import make_facility_form
 
 
 def get_hospitals(request):
@@ -27,6 +28,7 @@ def get_hospitals(request):
 @ajax(login_required=True, require_POST=True)
 def edit_hospital(request, id_):
     if request.method == 'POST':
+        FacilityForm = make_facility_form()
         form = FacilityForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
@@ -39,7 +41,9 @@ def edit_hospital(request, id_):
                                  for k in current_obj._meta.fields])
 
             for key, value in data.items():
-                if key == "manager" or value:
+                if key.startswith("optime_"):
+                    pass  # TODO handle this!
+                elif key == "manager" or value:
                     current_data[key] = value
 
             obj = Facility(**current_data)
@@ -115,12 +119,15 @@ def info_hospital(request, id_):
         hospital = Facility.objects.get(id=params_id)
     except Facility.DoesNotExist:
         pass
-    return render_to_response('hospital_info.html', {'hospital': hospital})
+    return render_to_response('hospital_info.html',
+                              {'hospital': hospital,
+                               'weekdays': WEEKDAY_CHOICES})
 
 
 @ajax(login_required=True, require_POST=True)
 def add_hospital(request):
     if request.method == 'POST':
+        FacilityForm = make_facility_form()
         form = FacilityForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
