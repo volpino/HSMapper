@@ -13,7 +13,7 @@ from core.forms import FacilityForm
 def get_hospitals(request):
     qs = Facility.objects.exclude(the_geom=None)
     djf = Django.Django(geodjango="the_geom",
-                        properties=['id', 'name', 'description', 'manager',
+                        properties=['id', 'name', 'description', 'manager_id',
                                     'address', 'phone', 'email',
                                     'facility_type_id'])
     geoj = GeoJSON.GeoJSON()
