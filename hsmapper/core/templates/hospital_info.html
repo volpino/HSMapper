@@ -3,49 +3,49 @@
 {% if hospital %}
 
 <p>
-  <span>{% trans "Name" %}:</span>
+  <span class="field-name">{% trans "Name" %}:</span>
   <span class="edit" type="name">
     <span class="editable">{{ hospital.name }}</span>
   </span>
 </p>
 
 <p>
-  <span>{% trans "Description" %}:</span>
+  <span class="field-name">{% trans "Description" %}:</span>
   <span class="edit" type="description">
     <span class="editable_text">{{ hospital.description }}</span>
   </span>
 </p>
 
 <p>
-  <span>{% trans "Address" %}:</span>
+  <span class="field-name">{% trans "Address" %}:</span>
   <span class="edit" type="address">
     <span class="editable_text">{{ hospital.address }}</span>
   </span>
 </p>
 
 <p>
-<span>{% trans "Phone" %}:</span>
+<span class="field-name">{% trans "Phone" %}:</span>
   <span class="edit" type="phone">
     <span class="editable_text">{{ hospital.phone }}</span>
   </span>
 </p>
 
 <p>
-<span>{% trans "Email" %}:</span>
+<span class="field-name">{% trans "Email" %}:</span>
   <span class="edit" type="email">
     <span class="editable_text">{{ hospital.email }}</span>
   </span>
 </p>
 
 <p>
-  <span>{% trans "Type" %}:</span>
+  <span class="field-name">{% trans "Type" %}:</span>
   <span class="edit" type="facility_type">
     <span class="editable_type">{{ hospital.facility_type.name }}</span>
   </span>
 </p>
 
 <p>
-<span>{% trans "Depends on" %}:</span>
+<span class="field-name">{% trans "Depends on" %}:</span>
   <span class="edit" type="manager">
     <span class="editable_manager">{{ hospital.manager|default_if_none:"" }}</span>
   </span>
@@ -53,7 +53,7 @@
 
 
 <p id="pathologies_info">
-  <span>{% trans "Pathologies" %}:</span>
+  <span class="field-name">{% trans "Pathologies" %}:</span>
 {% for p in hospital.pathologies.all %}
   <span class="edit">
     <span class="editable_pathology">{{ p.name }}</span>
@@ -65,7 +65,7 @@
 </p>
 
 <p id="services_info">
-  <span class="edit">{% trans "Services" %}:</span>
+  <span class="edit field-name">{% trans "Services" %}:</span>
 {% for s in hospital.services.all %}
   <span>
     <span class="editable_service">{{ s.name }}</span>
@@ -77,21 +77,21 @@
 </p>
 
 <p>
-  <span>{% trans "Expiration" %}:</span>
+  <span class="field-name">{% trans "Expiration" %}:</span>
   <span class="edit" type="expiration">
     <span class="editable_date">{{ hospital.expiration|date:"d/m/Y" }}</span>
   </span>
 </p>
 
 <p>
-  <span>{% trans "Last update" %}:</span>
+  <span class="field-name">{% trans "Last update" %}:</span>
   <span>
     <span>{{ hospital.last_updated|date:"d/m/Y" }}</span>
   </span>
 </p>
 
 <p>
-  <span>{% trans "Updated by" %}:</span>
+  <span class="field-name">{% trans "Updated by" %}:</span>
   <span>
     <span id="updated_by">{{ hospital.updated_by }}</span>
   </span>

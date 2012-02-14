@@ -256,3 +256,7 @@ ul.ui-widget-header {
 #edit_info button:focus {
     outline:1px dotted #666;
 }
+
+.field-name {
+    font-weight: bold;
+}
