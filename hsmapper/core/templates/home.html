@@ -81,9 +81,10 @@
       globals.hospital_layer.events.register("featuresadded", globals.hospital_layer,
         function() {
           var extent = globals.hospital_layer.getDataExtent();
-          if (extent) {
+          if (extent && !(globals.featuresAdded)) {
             map.zoomToExtent(extent);
           }
+          globals.featuresAdded = true
         }
       );
 
@@ -105,6 +106,9 @@
 
       map.events.register("click", map, function(e) {
         if (globals.insert_mode) {
+          if (globals.selectedFeature) {
+            onFeatureUnselect(globals.selectedFeature);
+          }
           var p = map.getLonLatFromPixel(e.xy);
           var point = new OpenLayers.Geometry.Point(p["lon"], p["lat"]);
           var f = new OpenLayers.Feature.Vector(point);
@@ -188,7 +192,7 @@
       var d = {}
       d[type] = value;
       if (type === "name") {
-        $("#baloon_name").text(value);
+        globals.selectedFeature.popup.setContentHTML("<p>"+value+"</p>");
       }
       globals.selectedFeature.attributes[type] = value;
       $.ajax({
@@ -282,7 +286,10 @@
       });
     }
 
-    function onFeatureSelect(feature){
+    function onFeatureSelect(feature) {
+      if (globals.selectedFeature) {
+        onFeatureUnselect(globals.selectedFeature);
+      }
       globals.selectedFeature = feature;
       if (globals.delete_mode) {
         var agree = confirm("{% trans "Are you sure you want to delete?" %}");
@@ -304,10 +311,13 @@
         }
       }
       else {
+        if (globals.selectedFeature) {
+          onFeatureUnselect(globals.selectedFeature);
+        }
         var attrib = feature.attributes;
         globals.selectedFeature = feature;
         var desc = $("<div/>");
-        desc.html("<p id='baloon_name'>"+attrib["name"]+"</p>");
+        desc.html("<p>"+attrib["name"]+"</p>");
         popup = new OpenLayers.Popup.FramedCloud("chicken",
                     feature.geometry.getBounds().getCenterLonLat(),
                     new OpenLayers.Size(1500,1000),
