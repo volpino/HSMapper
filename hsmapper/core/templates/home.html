@@ -90,6 +90,8 @@
       );
 
       map.addLayers([osm, globals.hospital_layer]);
+      map.zoomToMaxExtent();
+
       selectControl = new OpenLayers.Control.SelectFeature(
                       [globals.hospital_layer],{clickout: true, toggle: false,
                                         multiple: false, hover: false });
