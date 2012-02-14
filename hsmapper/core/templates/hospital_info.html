@@ -2,132 +2,139 @@
 
 {% if hospital %}
 
-<p>
-  <span class="field-name">{% trans "Name" %}:</span>
-  <span class="edit" type="name">
-    <span class="editable">{{ hospital.name }}</span>
-  </span>
-</p>
-
-<p>
-  <span class="field-name">{% trans "Description" %}:</span>
-  <span class="edit" type="description">
-    <span class="editable_text">{{ hospital.description }}</span>
-  </span>
-</p>
-
-<p>
-  <span class="field-name">{% trans "Address" %}:</span>
-  <span class="edit" type="address">
-    <span class="editable_text">{{ hospital.address }}</span>
-  </span>
-</p>
-
-<p>
-<span class="field-name">{% trans "Phone" %}:</span>
-  <span class="edit" type="phone">
-    <span class="editable_text">{{ hospital.phone }}</span>
-  </span>
-</p>
-
-<p>
-<span class="field-name">{% trans "Email" %}:</span>
-  <span class="edit" type="email">
-    <span class="editable_text">{{ hospital.email }}</span>
-  </span>
-</p>
-
-<p>
-  <span class="field-name">{% trans "Type" %}:</span>
-  <span class="edit" type="facility_type">
-    <span class="editable_type">{{ hospital.facility_type.name }}</span>
-  </span>
-</p>
-
-<p>
-<span class="field-name">{% trans "Depends on" %}:</span>
-  <span class="edit" type="manager">
-    <span class="editable_manager">{{ hospital.manager|default_if_none:"" }}</span>
-  </span>
-</p>
-
-
-<p id="pathologies_info">
-  <span class="field-name">{% trans "Pathologies" %}:</span>
-{% for p in hospital.pathologies.all %}
-  <span class="edit">
-    <span class="editable_pathology">{{ p.name }}</span>
-  </span>
-{% endfor %}
-  <span class="edit">
-    <span class="editable_pathology"></span>
-  </span>
-</p>
-
-<p id="services_info">
-  <span class="edit field-name">{% trans "Services" %}:</span>
-{% for s in hospital.services.all %}
-  <span>
-    <span class="editable_service">{{ s.name }}</span>
-  </span>
-{% endfor %}
-  <span class="edit">
-    <span class="editable_service"></span>
-  </span>
-</p>
-
-<p>
-  <span class="field-name">{% trans "Expiration" %}:</span>
-  <span class="edit" type="expiration">
-    <span class="editable_date">{{ hospital.expiration|date:"d/m/Y" }}</span>
-  </span>
-</p>
-
-<p>
-  <span class="field-name">{% trans "Last update" %}:</span>
-  <span>
-    <span>{{ hospital.last_updated|date:"d/m/Y" }}</span>
-  </span>
-</p>
-
-<p>
-  <span class="field-name">{% trans "Updated by" %}:</span>
-  <span>
-    <span id="updated_by">{{ hospital.updated_by }}</span>
-  </span>
-</p>
-
-<p>
-  <span class="field-name">{% trans "Opening times" %}:</span>
-  <table>
-    {% for wd in weekdays %}
-    <tr>
-      <td>
-        <span><b>{{ wd.1 }}</b></span>
-      </td>
-      <td>
-        <span type="optime_{{ wd.0 }}_0">
-          <span class="editable_time"></span> -
-        </span>
-        <span type="optime_{{ wd.0 }}_1">
-          <span class="editable_time"></span>
-        </span>
-      </td>
-      <td>
-        <span type="optime_{{ wd.0 }}_2">
-          <span class="editable_time"></span> -
-        </span>
-        <span type="optime_{{ wd.0 }}_3">
-          <span class="editable_time"></span>
-        </span>
-      </td>
-    </tr>
-    {% endfor %}
-  </table>
-</p>
-
+{% if hospital.expiration or hospital.expiration > now %}
+<div>
 {% else %}
-
-<p>{% trans "Error: Not found" %}</p>
-
+<div class="alert-message error">{% trans "Warning! Data is expired" %}</div>
+<div class="expired">
 {% endif %}
+  <p>
+    <span class="field-name">{% trans "Name" %}:</span>
+    <span class="edit" type="name">
+      <span class="editable">{{ hospital.name }}</span>
+    </span>
+  </p>
+
+  <p>
+    <span class="field-name">{% trans "Description" %}:</span>
+    <span class="edit" type="description">
+      <span class="editable_text">{{ hospital.description }}</span>
+    </span>
+  </p>
+
+  <p>
+    <span class="field-name">{% trans "Address" %}:</span>
+    <span class="edit" type="address">
+      <span class="editable_text">{{ hospital.address }}</span>
+    </span>
+  </p>
+
+  <p>
+    <span class="field-name">{% trans "Phone" %}:</span>
+    <span class="edit" type="phone">
+      <span class="editable_text">{{ hospital.phone }}</span>
+    </span>
+  </p>
+
+  <p>
+    <span class="field-name">{% trans "Email" %}:</span>
+    <span class="edit" type="email">
+      <span class="editable_text">{{ hospital.email }}</span>
+    </span>
+  </p>
+
+  <p>
+    <span class="field-name">{% trans "Type" %}:</span>
+    <span class="edit" type="facility_type">
+      <span class="editable_type">{{ hospital.facility_type.name }}</span>
+    </span>
+  </p>
+
+  <p>
+    <span class="field-name">{% trans "Depends on" %}:</span>
+    <span class="edit" type="manager">
+      <span class="editable_manager">{{ hospital.manager|default_if_none:"" }}</span>
+    </span>
+  </p>
+
+
+  <p id="pathologies_info">
+    <span class="field-name">{% trans "Pathologies" %}:</span>
+    {% for p in hospital.pathologies.all %}
+    <span class="edit">
+      <span class="editable_pathology">{{ p.name }}</span>
+    </span>
+    {% endfor %}
+    <span class="edit">
+      <span class="editable_pathology"></span>
+    </span>
+  </p>
+
+  <p id="services_info">
+    <span class="edit field-name">{% trans "Services" %}:</span>
+    {% for s in hospital.services.all %}
+    <span>
+      <span class="editable_service">{{ s.name }}</span>
+    </span>
+    {% endfor %}
+    <span class="edit">
+      <span class="editable_service"></span>
+    </span>
+  </p>
+
+  <p>
+    <span class="field-name">{% trans "Expiration" %}:</span>
+    <span class="edit" type="expiration">
+      <span class="editable_date">{{ hospital.expiration|date:"d/m/Y" }}</span>
+    </span>
+  </p>
+
+  <p>
+    <span class="field-name">{% trans "Last update" %}:</span>
+    <span>
+      <span>{{ hospital.last_updated|date:"d/m/Y" }}</span>
+    </span>
+  </p>
+
+  <p>
+    <span class="field-name">{% trans "Updated by" %}:</span>
+    <span>
+      <span id="updated_by">{{ hospital.updated_by }}</span>
+    </span>
+  </p>
+
+  <p>
+    <span class="field-name">{% trans "Opening times" %}:</span>
+    <table>
+      {% for wd in weekdays %}
+      <tr>
+        <td>
+          <span><b>{{ wd.1 }}</b></span>
+        </td>
+        <td>
+          <span type="optime_{{ wd.0 }}_0">
+            <span class="editable_time"></span> -
+          </span>
+          <span type="optime_{{ wd.0 }}_1">
+            <span class="editable_time"></span>
+          </span>
+        </td>
+        <td>
+          <span type="optime_{{ wd.0 }}_2">
+            <span class="editable_time"></span> -
+          </span>
+          <span type="optime_{{ wd.0 }}_3">
+            <span class="editable_time"></span>
+          </span>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+  </p>
+
+  {% else %}
+
+  <p>{% trans "Error: Not found" %}</p>
+
+  {% endif %}
+</div>
