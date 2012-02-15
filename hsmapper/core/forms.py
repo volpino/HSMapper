@@ -35,9 +35,10 @@ def make_facility_form():
                                       required=False)}
     weekdays = {}
     for wd in WEEKDAY_CHOICES:
-        for n in range(4):
-            id_ = "optime_%d_%d" % (wd[0], n)
-            weekdays[id_] = forms.TimeField(required=False)
+        for i in range(2):
+            for j in range(2):
+                id_ = "optime_%d_%d_%d" % (wd[0], i, j)
+                weekdays[id_] = forms.TimeField(required=False)
     fields.update(weekdays)
     #the_geom = jsonfield.JSONField(blank=True)
     return type('FacilityForm', (forms.BaseForm,), { 'base_fields': fields })
