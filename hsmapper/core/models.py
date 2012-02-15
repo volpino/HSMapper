@@ -65,20 +65,26 @@ class Facility(models.Model):
         verbose_name_plural = _('Facilities')
 
 
-WEEKDAY_CHOICES = ((1, _("Monday")),
-                   (2, _("Tuesday")),
-                   (3, _("Wednesday")),
-                   (4, _("Thursday")),
-                   (5, _("Friday")),
-                   (6, _("Saturday")),
-                   (7, _("Sunday")))
+WEEKDAY_CHOICES = ((0, _("Monday")),
+                   (1, _("Tuesday")),
+                   (2, _("Wednesday")),
+                   (3, _("Thursday")),
+                   (4, _("Friday")),
+                   (5, _("Saturday")),
+                   (6, _("Sunday")))
 
 
 class OpeningTime(models.Model):
     facility = models.ForeignKey(Facility)
-    opening = models.TimeField()
-    closing = models.TimeField()
+    opening = models.TimeField(null=True, blank=True)
+    closing = models.TimeField(null=True, blank=True)
     weekday = models.IntegerField(choices=WEEKDAY_CHOICES)
+
+    def __unicode__(self):
+        return u"[%d] %s: %s-%s" % (
+            self.facility.pk, WEEKDAY_CHOICES[self.weekday][1],
+            self.opening, self.closing
+        )
 
     class Meta:
         verbose_name = _('Opening Time')
@@ -87,8 +93,8 @@ class OpeningTime(models.Model):
 
 class SpecialDay(models.Model):
     facility = models.ForeignKey(Facility)
-    holiday_date = models.DateField()
-    closed = models.BooleanField()
+    holiday_date = models.DateField(null=True, blank=True)
+    closed = models.NullBooleanField()
     opening = models.TimeField(null=True, blank=True)
     closing = models.TimeField(null=True, blank=True)
 
