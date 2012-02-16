@@ -1,11 +1,14 @@
-from datetime import datetime
+import datetime
 from django import template
 
 register = template.Library()
 
 @register.filter
 def in_the_past(date):
-    return date < datetime.now()
+    #debug = open('debug', 'a')
+    #debug.write('date: '+str(date))
+    #debug.write('now: '+str(date))
+    return date < datetime.date.today()
 
 @register.filter
 def get_item(list_, index):

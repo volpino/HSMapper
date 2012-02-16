@@ -1,8 +1,7 @@
 {% load i18n core_filters %}
 {% if hospital %}
-
-
-{% if not hospital.expiration %}
+{{ hospital.expiration|in_the_past }}
+{% if not hospital.expiration or hospital.expiration|in_the_past %}
  <div class="alert-message error">{% trans "Warning! Data is expired" %}</div>
  <div class="expired">
 {% else %}
