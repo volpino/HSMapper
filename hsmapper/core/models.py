@@ -85,6 +85,12 @@ class OpeningTime(models.Model):
             self.facility.pk, WEEKDAY_CHOICES[self.weekday][1],
             self.opening, self.closing
         )
+    
+    #def clean(self):
+    #    for django.core.exceptins import ValidationError
+    #    if opening > closing:
+    #        raise ValidationError("Opening time should be before closing time.")
+        
 
     class Meta:
         verbose_name = _('Opening Time')

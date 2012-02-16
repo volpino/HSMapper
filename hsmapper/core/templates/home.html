@@ -444,12 +444,12 @@
           clearTimeout(globals.close_timeout);
         }
         $("#alert_box").fadeIn(300);
-        $(".alert-message").removeClass("warning");
-        $(".alert-message").removeClass("info");
-        $(".alert-message").removeClass("error");
-        $(".alert-message").removeClass("success");
-        $(".alert-message").addClass(level);
-        $(".alert-message").addClass("in");
+        $("#alert_box .alert-message").removeClass("warning");
+        $("#alert_box .alert-message").removeClass("info");
+        $("#alert_box .alert-message").removeClass("error");
+        $("#alert_box .alert-message").removeClass("success");
+        $("#alert_box .alert-message").addClass(level);
+        $("#alert_box .alert-message").addClass("in");
         $("#alert_msg").html(msg);
         globals.close_timeout = setTimeout("$('.close').click()", 5000);
       });

@@ -4,11 +4,11 @@ from django import template
 register = template.Library()
 
 @register.filter
-def in_the_past(date):
-    #debug = open('debug', 'a')
-    #debug.write('date: '+str(date))
-    #debug.write('now: '+str(date))
-    return date < datetime.date.today()
+def is_still_valid(date):
+    if not date:
+        return False
+    else:
+        return datetime.date.today() < date
 
 @register.filter
 def get_item(list_, index):
