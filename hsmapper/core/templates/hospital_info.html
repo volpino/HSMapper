@@ -106,21 +106,31 @@
     <table>
       {% for wd in weekdays %}
       <tr>
+        <th>
+          <span>{{ wd.1 }}</span>
+        </th>
+        {% for optime in hospital.openingtime_set|filter_wd:wd %}
         <td>
-          <span><b>{{ wd.1 }}</b></span>
-        </td>
-        {% for i in "01"|make_list %}
-        {% with optime=hospital.openingtime_set|filter_wd:wd|get_item:i %}
-        <td>
-          <span type="optime_{{ wd.0 }}_{{ i }}_0">
-            <span class="editable_time">{{ optime.opening|default_if_none:""|time:"H:i" }}</span> -
+          <span class="edit" type="opening" wd="{{ wd.0 }}" index="{{ optime.index }}" >
+            <span class="editable_time">{{ optime.opening|default_if_none:""|time:"H:i" }}</span>
           </span>
-          <span type="optime_{{ wd.0 }}_{{ i }}_1">
+          -
+          <span class="edit" type="closing" wd="{{ wd.0 }}" index="{{ optime.index }}" >
             <span class="editable_time">{{ optime.closing|default_if_none:""|time:"H:i" }}</span>
           </span>
         </td>
-        {% endwith %}
-        {% endfor%}
+        {% endfor %}
+        {% if user.is_authenticated or user.is_staff %}
+          <td> {# new field for new data #}
+            <span class="edit" type="opening" wd="{{ wd.0 }}">
+              <span class="editable_time"></span>
+            </span>
+            -
+            <span class="edit" type="closing" wd="{{ wd.0 }}">
+              <span class="editable_time"></span>
+            </span>
+          </td>
+        {% endif %}
       </tr>
       {% endfor %}
     </table>

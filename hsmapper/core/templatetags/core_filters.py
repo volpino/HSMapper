@@ -19,4 +19,4 @@ def get_item(list_, index):
 
 @register.filter
 def filter_wd(queryset, weekday):
-    return queryset.filter(weekday=weekday[0]).order_by("id")
+    return queryset.filter(weekday=weekday[0]).order_by("opening")

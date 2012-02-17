@@ -1,14 +1,15 @@
+from vectorformats.Formats import Django, GeoJSON
+from ajaxutils.decorators import ajax
+
 from django.contrib.gis.geos.point import Point
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
-from vectorformats.Formats import Django, GeoJSON
-
-from ajaxutils.decorators import ajax
+from django.template.context import RequestContext
 
 from hsmapper import settings
 from core.models import Facility, FacilityType, Pathology, MedicalService, \
                         OpeningTime, WEEKDAY_CHOICES
-from core.forms import make_facility_form
+from core.forms import FacilityForm
 
 
 def get_hospitals(request):
@@ -28,52 +29,53 @@ def get_hospitals(request):
 @ajax(login_required=True, require_POST=True)
 def edit_hospital(request, id_):
     if request.method == 'POST':
-        FacilityForm = make_facility_form()
         form = FacilityForm(request.POST)
         if form.is_valid():
-            data = form.cleaned_data
             try:
                 current_obj = Facility.objects.get(id=id_)
             except Facility.DoesNotExist:
                 return {'success': False, 'error': 'Not found'}
 
+            data = form.cleaned_data
+            print data
+
+
+            # timetable data
+            weekday = int(data["weekday"])
+            optime = data["optime"]
+            opening = data["opening"]
+            closing = data["closing"]
+            del data["weekday"], data["optime"], data["opening"], \
+                data["closing"]
+
+            if weekday >= 0 and optime >= 0:
+                try:
+                    op_time = current_obj.openingtime_set.get(
+                        weekday=weekday,
+                        index=optime
+                    )
+                except OpeningTime.DoesNotExist:
+                    op = OpeningTime(
+                        facility=current_obj,
+                        weekday=weekday,
+                        opening=(opening or None),
+                        closing=(closing or None),
+                        index=optime
+                    )
+                    op.save()
+                else:
+                    if opening is None and closing is None:
+                        op_time.delete()
+                    else:
+                        op_time.opening = opening or op_time.opening
+                        op_time.closing = closing or op_time.closing
+                        op_time.save(force_update=True)
+
             current_data = dict([(k.name, getattr(current_obj, k.name))
                                  for k in current_obj._meta.fields])
 
             for key, value in data.items():
-                if key.startswith("optime_") and value:
-                    key = key.split("_")
-                    print key, value
-                    try:
-                        weekday = int(key[1])
-                        rel_index = int(key[2])
-                        type_ = int(key[3])
-                    except (ValueError, TypeError, IndexError):
-                        pass
-                    else:
-                        op_times = current_obj.openingtime_set.\
-                                   filter(weekday=weekday).order_by("id")
-
-                        if len(op_times) < 2:
-                            for _ in range(2):  # build openingtimes
-                                op = OpeningTime(
-                                    facility=current_obj,
-                                    weekday=weekday
-                                )
-                                op.save()
-
-                        op_times = current_obj.openingtime_set.\
-                                   filter(weekday=weekday).order_by("id")
-                        op = op_times[rel_index]
-                        if type_ == 0:
-                            op.opening = value
-                        elif type_ == 1:
-                            op.closing = value
-                        else:
-                            raise ValueError
-                        op.save()
-
-                elif key == "manager" or value:
+                if key == "manager" or value:
                     current_data[key] = value
 
             obj = Facility(**current_data)
@@ -153,13 +155,13 @@ def info_hospital(request, id_):
         pass
     return render_to_response('hospital_info.html',
                               {'hospital': hospital,
-                               'weekdays': WEEKDAY_CHOICES})
+                               'weekdays': WEEKDAY_CHOICES},
+                              context_instance=RequestContext(request))
 
 
 @ajax(login_required=True, require_POST=True)
 def add_hospital(request):
     if request.method == 'POST':
-        FacilityForm = make_facility_form()
         form = FacilityForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
@@ -169,10 +171,9 @@ def add_hospital(request):
             if not (lat and lon):
                 return {'success': False, 'error': 'Lat or long are empty'}
 
-            del data['lat'], data['lon']
-            data['the_geom'] = Point(lon, lat, srid=settings.DISPLAY_SRID)
+            the_geom = Point(lon, lat, srid=settings.DISPLAY_SRID)
 
-            obj = Facility.objects.create(**data)
+            obj = Facility.objects.create(the_geom=the_geom)
             return {'success': True, 'id': obj.pk}
     return {'success': False}
 

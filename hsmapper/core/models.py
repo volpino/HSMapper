@@ -79,22 +79,23 @@ class OpeningTime(models.Model):
     opening = models.TimeField(null=True, blank=True)
     closing = models.TimeField(null=True, blank=True)
     weekday = models.IntegerField(choices=WEEKDAY_CHOICES)
+    index = models.IntegerField()
 
     def __unicode__(self):
         return u"[%d] %s: %s-%s" % (
             self.facility.pk, WEEKDAY_CHOICES[self.weekday][1],
             self.opening, self.closing
         )
-    
+
     #def clean(self):
-    #    for django.core.exceptins import ValidationError
-    #    if opening > closing:
+    #    from django.core.exceptions import ValidationError
+    #    if self.opening > self.closing:
     #        raise ValidationError("Opening time should be before closing time.")
-        
 
     class Meta:
         verbose_name = _('Opening Time')
         verbose_name_plural = _('Opening Times')
+        unique_together = ("facility", "weekday", "index")
 
 
 class SpecialDay(models.Model):

@@ -22,7 +22,7 @@
     var map;
     globals.insert_mode = false;
     globals.delete_mode = false;
-    {% if user.is_authenticated %}
+    {% if user.is_authenticated or user.is_staff %}
     globals.username = "{{ user }}";
     {% endif %}
     globals.hospital_layer;
@@ -216,9 +216,83 @@
       return display_msg;
     }
 
+    function save_timetable_edit(value, settings) {
+      var display_msg = $(this).find("option[value='"+value+"']").text() || value;
+      var weekday = $(this).parent().attr("wd");
+      var index = $(this).parent().attr("index");
+      var type = $(this).parent().attr("type");
+      var n_fields = $(this).closest("tr").find("td").length;
+
+      if (!index) {
+        index = n_fields - 1;  // set index
+        $(this).parent().attr("index", index);
+      }
+
+      var needs_new_input = true;
+      $(this).closest("tr").find(".edit").each(function() {
+        if ($(this).attr("index") === undefined) {
+          needs_new_input = false;
+        }
+      });
+
+      if (!value || value === "__:__") {
+        needs_new_input = false;
+        value = "";
+        $(this).closest("td").remove();
+      }
+
+      console.log(needs_new_input);
+      // add another field
+      if (needs_new_input) {
+        var new_input = $("<td/>").append(
+          $("<span/>").addClass("edit")
+                      .attr("wd", weekday)
+                      .attr("type", "opening")
+            .append(
+              $("<span/>").addClass("editable_time")
+            )
+        );
+        new_input.append($("<span/>").text(" - "))
+        new_input.append(
+          $("<span/>").addClass("edit")
+                      .attr("wd", weekday)
+                      .attr("type", "closing")
+            .append(
+              $("<span/>").addClass("editable_time")
+            )
+        );
+        $(this).closest("tr").append(new_input);
+        new_input.find('.editable_time').editable(save_timetable_edit, {
+          style: "inherit",
+          type: "masked",
+          mask: "99:99",
+          placeholder: "00:00"
+        });
+      }
+
+      var d = {weekday: weekday,
+               optime: index}
+      d[type] = value;  // type = opening or closing
+
+      $.ajax({
+        url: "{% url 'api-edit-hospital' 1 %}".replace("1", globals.selectedFeature.attributes.id),
+        type: "post",
+        data: d,
+        success: function(req) {
+          if (req.success === true) {
+            alert_msg("{% trans "Updated!" %}", "success");
+          }
+          else {
+            alert_msg("{% trans "Error :(" %}", "error");
+          }
+          $("#updated_by").text(globals.username);
+        }
+      });
+      return display_msg;
+    }
+
     function save_manytomany_edit(sing, plur) {
       return function(value, settings) {
-        var needs_new_field = false;
         var data = [];
         if (value === "") {
           $(this).parent().remove();
@@ -365,7 +439,7 @@
             mask: "99/99/9999",
             placeholder: "{% trans "Click to edit" %}"
           });
-          $('.editable_time').editable(save_feature_edit, {
+          $('.editable_time').editable(save_timetable_edit, {
             style: "inherit",
             type: "masked",
             mask: "99:99",
