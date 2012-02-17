@@ -37,11 +37,9 @@ def edit_hospital(request, id_):
                 return {'success': False, 'error': 'Not found'}
 
             data = form.cleaned_data
-            print data
-
 
             # timetable data
-            weekday = int(data["weekday"])
+            weekday = data["weekday"]
             optime = data["optime"]
             opening = data["opening"]
             closing = data["closing"]
