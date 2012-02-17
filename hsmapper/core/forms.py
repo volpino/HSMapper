@@ -6,7 +6,7 @@ from core.models import Facility, FacilityType, WEEKDAY_CHOICES
 
 class FacilityForm(forms.Form):
     """Form for editing facilities properties
-    """
+"""
     # ModelForm is not used because required must be False everywhere
     name = forms.CharField(max_length=255,
                            required=False)
@@ -26,6 +26,6 @@ class FacilityForm(forms.Form):
 
     # timetable fields
     weekday = forms.ChoiceField(choices=WEEKDAY_CHOICES, required=False)
-    optime = forms.IntegerField(required=False)  # index of the opening time
+    optime = forms.IntegerField(required=False) # index of the opening time
     opening = forms.TimeField(required=False)
     closing = forms.TimeField(required=False)

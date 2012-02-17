@@ -88,9 +88,9 @@ class OpeningTime(models.Model):
         )
 
     #def clean(self):
-    #    from django.core.exceptions import ValidationError
-    #    if self.opening > self.closing:
-    #        raise ValidationError("Opening time should be before closing time.")
+    # from django.core.exceptions import ValidationError
+    # if self.opening > self.closing:
+    # raise ValidationError("Opening time should be before closing time.")
 
     class Meta:
         verbose_name = _('Opening Time')
