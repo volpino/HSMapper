@@ -218,7 +218,7 @@ msgstr "Sviluppato da"
 
 #: core/templates/hospital_info.html:6
 msgid "Warning! Data is expired"
-msgstr "Attenzione! I dati potrebbero non essere validi"
+msgstr "Attenzione! I dati potrebbero non essere aggiornati"
 
 #: core/templates/hospital_info.html:12
 msgid "Name"

@@ -89,7 +89,7 @@ class OpeningTime(models.Model):
     #def clean(self):
     #    for django.core.exceptins import ValidationError
     #    if opening > closing:
-    #        raise ValidationError("Opening time should be before closing time.")
+    #        raise ValidationError(_("Opening time should be before closing time."))
         
 
     class Meta:
