@@ -1,7 +1,7 @@
 {% load i18n core_filters %}
 {% if hospital %}
 {% if not hospital.expiration|is_still_valid %}
- <div class="alert-message error">{% trans "Warning! Data is expired" %}</div>
+ <div id="expired_alert" class="alert-message error">{% trans "Warning! Data is expired" %}</div>
  <div class="expired">
 {% else %}
  <div>
@@ -9,42 +9,42 @@
   <p>
     <span class="field-name">{% trans "Name" %}:</span>
     <span class="edit" type="name">
-      <span class="editable">{{ hospital.name }}</span>
+      <span class="editable">{{ hospital.name|default_if_none:"" }}</span>
     </span>
   </p>
 
   <p>
     <span class="field-name">{% trans "Description" %}:</span>
     <span class="edit" type="description">
-      <span class="editable_text">{{ hospital.description }}</span>
+      <span class="editable_text">{{ hospital.description|default_if_none:"" }}</span>
     </span>
   </p>
 
   <p>
     <span class="field-name">{% trans "Address" %}:</span>
     <span class="edit" type="address">
-      <span class="editable_text">{{ hospital.address }}</span>
+      <span class="editable_text">{{ hospital.address|default_if_none:"" }}</span>
     </span>
   </p>
 
   <p>
     <span class="field-name">{% trans "Phone" %}:</span>
     <span class="edit" type="phone">
-      <span class="editable_text">{{ hospital.phone }}</span>
+      <span class="editable_text">{{ hospital.phone|default_if_none:"" }}</span>
     </span>
   </p>
 
   <p>
     <span class="field-name">{% trans "Email" %}:</span>
     <span class="edit" type="email">
-      <span class="editable_text">{{ hospital.email }}</span>
+      <span class="editable_text">{{ hospital.email|default_if_none:"" }}</span>
     </span>
   </p>
 
   <p>
     <span class="field-name">{% trans "Type" %}:</span>
     <span class="edit" type="facility_type">
-      <span class="editable_type">{{ hospital.facility_type.name }}</span>
+      <span class="editable_type">{{ hospital.facility_type.name|default_if_none:"" }}</span>
     </span>
   </p>
 
@@ -60,7 +60,7 @@
     <span class="field-name">{% trans "Pathologies" %}:</span>
     {% for p in hospital.pathologies.all %}
     <span class="edit">
-      <span class="editable_pathology">{{ p.name }}</span>
+      <span class="editable_pathology">{{ p.name|default_if_none:"" }}</span>
     </span>
     {% endfor %}
     <span class="edit">
@@ -72,7 +72,7 @@
     <span class="edit field-name">{% trans "Services" %}:</span>
     {% for s in hospital.services.all %}
     <span>
-      <span class="editable_service">{{ s.name }}</span>
+      <span class="editable_service">{{ s.name|default_if_none:"" }}</span>
     </span>
     {% endfor %}
     <span class="edit">
@@ -97,7 +97,7 @@
   <p>
     <span class="field-name">{% trans "Updated by" %}:</span>
     <span>
-      <span id="updated_by">{{ hospital.updated_by }}</span>
+      <span id="updated_by">{{ hospital.updated_by|default_if_none:"" }}</span>
     </span>
   </p>
 

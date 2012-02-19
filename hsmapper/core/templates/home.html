@@ -131,7 +131,7 @@
               if (req.success === true) {
                 alert_msg("{% trans "Point inserted" %}", "success");
                 f.attributes["id"] = req.id;
-                onFeatureSelect(f);
+                onFeatureSelect(f, true);
               }
               else {
                 alertmsg("{% trans "Error :(" %}");
@@ -363,7 +363,7 @@
       });
     }
 
-    function onFeatureSelect(feature) {
+    function onFeatureSelect(feature, not_expired) {
       if (globals.selectedFeature) {
         onFeatureUnselect(globals.selectedFeature);
       }
@@ -407,6 +407,10 @@
         map.addPopup(popup);
         $.get("{% url 'api-info-hospital' 1 %}".replace("1", globals.selectedFeature.attributes.id), function(data) {
           $("#edit_info").html(data);
+          if (not_expired) {
+            $(".expired").removeClass("expired");
+            $("#expired_alert").remove();
+          }
           {% if user.is_authenticated or user.is_staff %}
           $('.editable').editable(save_feature_edit, {
             submit: "{% trans "Save" %}",
