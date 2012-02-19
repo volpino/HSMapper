@@ -5,6 +5,7 @@ from django.contrib.gis.geos.point import Point
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
+from django.core.exceptions import ValidationError
 
 from hsmapper import settings
 from core.models import Facility, FacilityType, Pathology, MedicalService, \
@@ -28,84 +29,88 @@ def get_hospitals(request):
 
 @ajax(login_required=True, require_POST=True)
 def edit_hospital(request, id_):
-    if request.method == 'POST':
-        form = FacilityForm(request.POST)
-        if form.is_valid():
+    form = FacilityForm(request.POST)
+    if form.is_valid():
+        try:
+            current_obj = Facility.objects.get(id=id_)
+        except Facility.DoesNotExist:
+            return {'success': False, 'error': 'Not found'}
+
+        data = form.cleaned_data
+
+        # timetable data
+        weekday = data["weekday"]
+        optime = data["optime"]
+        opening = data["opening"]
+        closing = data["closing"]
+        del data["weekday"], data["optime"], data["opening"], \
+            data["closing"]
+
+        if weekday >= 0 and optime >= 0:
             try:
-                current_obj = Facility.objects.get(id=id_)
-            except Facility.DoesNotExist:
-                return {'success': False, 'error': 'Not found'}
-
-            data = form.cleaned_data
-
-            # timetable data
-            weekday = data["weekday"]
-            optime = data["optime"]
-            opening = data["opening"]
-            closing = data["closing"]
-            del data["weekday"], data["optime"], data["opening"], \
-                data["closing"]
-
-            if weekday >= 0 and optime >= 0:
+                op_time = current_obj.openingtime_set.get(
+                    weekday=weekday,
+                    index=optime
+                )
+            except OpeningTime.DoesNotExist:
+                op = OpeningTime(
+                    facility=current_obj,
+                    weekday=weekday,
+                    opening=(opening or None),
+                    closing=(closing or None),
+                    index=optime
+                )
                 try:
-                    op_time = current_obj.openingtime_set.get(
-                        weekday=weekday,
-                        index=optime
-                    )
-                except OpeningTime.DoesNotExist:
-                    op = OpeningTime(
-                        facility=current_obj,
-                        weekday=weekday,
-                        opening=(opening or None),
-                        closing=(closing or None),
-                        index=optime
-                    )
                     op.save()
+                except ValidationError, exc:
+                    return {"success": False, "error": "%r" % exc}
+            else:
+                if opening is None and closing is None:
+                    op_time.delete()
                 else:
-                    if opening is None and closing is None:
-                        op_time.delete()
-                    else:
-                        op_time.opening = opening or op_time.opening
-                        op_time.closing = closing or op_time.closing
+                    op_time.opening = opening or op_time.opening
+                    op_time.closing = closing or op_time.closing
+                    try:
                         op_time.save(force_update=True)
+                    except ValidationError, exc:
+                        return {"success": False, "error": "%r" % exc}
 
-            current_data = dict([(k.name, getattr(current_obj, k.name))
-                                 for k in current_obj._meta.fields])
+        current_data = dict([(k.name, getattr(current_obj, k.name))
+                             for k in current_obj._meta.fields])
 
-            for key, value in data.items():
-                if key == "manager" or value:
-                    current_data[key] = value
+        for key, value in data.items():
+            if key == "manager" or value:
+                current_data[key] = value
 
-            obj = Facility(**current_data)
-            obj.updated_by = request.user
+        obj = Facility(**current_data)
+        obj.updated_by = request.user
 
-            if "pathologies[]" in request.POST:
-                p_data = request.POST.getlist("pathologies[]")
-                obj.pathologies.clear()
-                obj.save(force_update=True)
-                for p in p_data:
-                    if p:
-                        try:
-                            obj_p = Pathology.objects.get(name=p)
-                            obj.pathologies.add(obj_p)
-                        except Pathology.DoesNotExist:
-                            obj.pathologies.create(name=p)
-
-            if "services[]" in request.POST:
-                p_data = request.POST.getlist("services[]")
-                obj.services.clear()
-                obj.save(force_update=True)
-                for p in p_data:
-                    if p:
-                        try:
-                            obj_p = MedicalService.objects.get(name=p)
-                            obj.services.add(obj_p)
-                        except MedicalService.DoesNotExist:
-                            obj.services.create(name=p)
-
+        if "pathologies[]" in request.POST:
+            p_data = request.POST.getlist("pathologies[]")
+            obj.pathologies.clear()
             obj.save(force_update=True)
-            return {'success': True}
-    return {'success': False}
+            for p in p_data:
+                if p:
+                    try:
+                        obj_p = Pathology.objects.get(name=p)
+                        obj.pathologies.add(obj_p)
+                    except Pathology.DoesNotExist:
+                        obj.pathologies.create(name=p)
+
+        if "services[]" in request.POST:
+            p_data = request.POST.getlist("services[]")
+            obj.services.clear()
+            obj.save(force_update=True)
+            for p in p_data:
+                if p:
+                    try:
+                        obj_p = MedicalService.objects.get(name=p)
+                        obj.services.add(obj_p)
+                    except MedicalService.DoesNotExist:
+                        obj.services.create(name=p)
+
+        obj.save(force_update=True)
+        return {'success': True}
 
 
 @ajax(login_required=True)
