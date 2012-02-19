@@ -54,6 +54,7 @@ class Facility(models.Model):
     last_updated = models.DateField(auto_now=True)
     updated_by = models.ForeignKey(User, null=True, blank=True)
     expiration = models.DateField(null=True, blank=True)
+    open_24h = models.NullBooleanField()
 
     objects = models.GeoManager()
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-15 17:24+0100\n"
+"POT-Creation-Date: 2012-02-19 14:51+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr "Inglese"
 msgid "Pathology"
 msgstr "Patologie"
 
-#: core/models.py:18 core/templates/hospital_info.html:62
+#: core/models.py:18 core/templates/hospital_info.html:60
 msgid "Pathologies"
 msgstr "Patologie"
 
@@ -53,59 +53,59 @@ msgstr "Tipo di Struttura"
 msgid "Facility Types"
 msgstr "Tipi di Struttura"
 
-#: core/models.py:61
+#: core/models.py:62
 msgid "<No name>"
 msgstr "<Nessun nome>"
 
-#: core/models.py:64
+#: core/models.py:65
 msgid "Facility"
 msgstr "Struttura"
 
-#: core/models.py:65
+#: core/models.py:66
 msgid "Facilities"
 msgstr "Strutture"
 
-#: core/models.py:68
+#: core/models.py:69
 msgid "Monday"
 msgstr "Lunedì"
 
-#: core/models.py:69
+#: core/models.py:70
 msgid "Tuesday"
 msgstr "Martedì"
 
-#: core/models.py:70
+#: core/models.py:71
 msgid "Wednesday"
 msgstr "Mercoledì"
 
-#: core/models.py:71
+#: core/models.py:72
 msgid "Thursday"
 msgstr "Giovedì"
 
-#: core/models.py:72
+#: core/models.py:73
 msgid "Friday"
 msgstr "Venerdì"
 
-#: core/models.py:73
+#: core/models.py:74
 msgid "Saturday"
 msgstr "Sabato"
 
-#: core/models.py:74
+#: core/models.py:75
 msgid "Sunday"
 msgstr "Domenica"
 
-#: core/models.py:90
+#: core/models.py:99
 msgid "Opening Time"
 msgstr "Orario di apertura"
 
-#: core/models.py:91
+#: core/models.py:100
 msgid "Opening Times"
 msgstr "Orari di apertura"
 
-#: core/models.py:102
+#: core/models.py:112
 msgid "Special Day"
 msgstr "Giorno speciale"
 
-#: core/models.py:103
+#: core/models.py:113
 msgid "Special Days"
 msgstr "Giorni Speciali"
 
@@ -133,74 +133,84 @@ msgstr "Errore"
 msgid "something went wrong"
 msgstr "si è verificato un errore"
 
-#: core/templates/home.html:132
+#: core/templates/home.html:133
 msgid "Point inserted"
 msgstr "Punto inserito"
 
-#: core/templates/home.html:137 core/templates/home.html.py:211
-#: core/templates/home.html:248 core/templates/home.html.py:311
+#: core/templates/home.html:138 core/templates/home.html.py:212
+#: core/templates/home.html:286 core/templates/home.html.py:322
+#: core/templates/home.html:385
 msgid "Error :("
 msgstr "Errore :("
 
-#: core/templates/home.html:208 core/templates/home.html.py:245
+#: core/templates/home.html:209 core/templates/home.html.py:283
+#: core/templates/home.html:319
 msgid "Updated!"
 msgstr "Aggiornato!"
 
-#: core/templates/home.html:230 core/templates/home.html.py:271
+#: core/templates/home.html:304 core/templates/home.html.py:345
 msgid "Click to add"
 msgstr "Clicca per aggiungere"
 
-#: core/templates/home.html:266 core/templates/home.html.py:339
-#: core/templates/home.html:346 core/templates/home.html.py:361
-#: core/templates/home.html:375
+#: core/templates/home.html:340 core/templates/home.html.py:417
+#: core/templates/home.html:424 core/templates/home.html.py:439
+#: core/templates/home.html:453 core/templates/home.html.py:461
 msgid "Save"
 msgstr "Salva"
 
-#: core/templates/home.html:267 core/templates/home.html.py:340
-#: core/templates/home.html:347 core/templates/home.html.py:362
-#: core/templates/home.html:376
+#: core/templates/home.html:341 core/templates/home.html.py:418
+#: core/templates/home.html:425 core/templates/home.html.py:440
+#: core/templates/home.html:454 core/templates/home.html.py:462
 msgid "Cancel"
 msgstr "Annulla"
 
-#: core/templates/home.html:299
+#: core/templates/home.html:373
 msgid "Are you sure you want to delete?"
 msgstr "Confermi l'eliminazione?"
 
-#: core/templates/home.html:308
+#: core/templates/home.html:382
 msgid "Deleted"
 msgstr "Eliminato"
 
-#: core/templates/home.html:343 core/templates/home.html.py:352
-#: core/templates/home.html:358 core/templates/home.html.py:366
-#: core/templates/home.html:380
+#: core/templates/home.html:421 core/templates/home.html.py:430
+#: core/templates/home.html:436 core/templates/home.html.py:444
+#: core/templates/home.html:458 core/templates/home.html.py:467
 msgid "Click to edit"
 msgstr "Clicca per modificare"
 
-#: core/templates/home.html:475
+#: core/templates/home.html:465
+msgid "Yes"
+msgstr "Sì"
+
+#: core/templates/home.html:466
+msgid "No"
+msgstr "No"
+
+#: core/templates/home.html:562
 msgid "Map Control"
 msgstr "Gestione mappa"
 
-#: core/templates/home.html:476
+#: core/templates/home.html:563
 msgid "About"
 msgstr "About"
 
-#: core/templates/home.html:477
+#: core/templates/home.html:564
 msgid "Contact us"
 msgstr "Contatti"
 
-#: core/templates/home.html:483
+#: core/templates/home.html:570
 msgid "Go to address"
 msgstr "Vai all'indirizzo"
 
-#: core/templates/home.html:488
+#: core/templates/home.html:575
 msgid "Insert point"
 msgstr "Inserisci punto"
 
-#: core/templates/home.html:489
+#: core/templates/home.html:576
 msgid "Delete point"
 msgstr "Elimina punto"
 
-#: core/templates/home.html:497
+#: core/templates/home.html:584
 msgid ""
 "The project is developed in collaboration with the Italian pediatrics "
 "association (S.I.P. - Società Italiana di Pediatria). It aims at developing "
@@ -212,63 +222,71 @@ msgstr ""
 "Pediatria (S.I.P.). L'obbiettivo è sviluppare un supporto informatico che "
 "aiuti nell'individuazione del centro pediatrico idoneo."
 
-#: core/templates/home.html:500
+#: core/templates/home.html:587
 msgid "Developed by"
 msgstr "Sviluppato da"
 
-#: core/templates/hospital_info.html:6
+#: core/templates/hospital_info.html:4
 msgid "Warning! Data is expired"
 msgstr "Attenzione! I dati potrebbero non essere aggiornati"
 
-#: core/templates/hospital_info.html:12
+#: core/templates/hospital_info.html:10
 msgid "Name"
 msgstr "Nome"
 
-#: core/templates/hospital_info.html:19
+#: core/templates/hospital_info.html:17
 msgid "Description"
 msgstr "Descrizione"
 
-#: core/templates/hospital_info.html:26
+#: core/templates/hospital_info.html:24
 msgid "Address"
 msgstr "Indirizzo"
 
-#: core/templates/hospital_info.html:33
+#: core/templates/hospital_info.html:31
 msgid "Phone"
 msgstr "Telefono"
 
-#: core/templates/hospital_info.html:40
+#: core/templates/hospital_info.html:38
 msgid "Email"
 msgstr "Email"
 
-#: core/templates/hospital_info.html:47
+#: core/templates/hospital_info.html:45
 msgid "Type"
 msgstr "Tipo"
 
-#: core/templates/hospital_info.html:54
+#: core/templates/hospital_info.html:52
 msgid "Depends on"
 msgstr "Struttura di riferimento"
 
-#: core/templates/hospital_info.html:74
+#: core/templates/hospital_info.html:72
 msgid "Services"
 msgstr "Prestazioni"
 
-#: core/templates/hospital_info.html:86
+#: core/templates/hospital_info.html:84
 msgid "Expiration"
 msgstr "Validità"
 
-#: core/templates/hospital_info.html:93
+#: core/templates/hospital_info.html:91
 msgid "Last update"
 msgstr "Ultimo aggiornamento"
 
-#: core/templates/hospital_info.html:100
+#: core/templates/hospital_info.html:98
 msgid "Updated by"
 msgstr "Aggiornato da"
 
-#: core/templates/hospital_info.html:107
+#: core/templates/hospital_info.html:105
 msgid "Opening times"
 msgstr "Orari di apertura"
 
-#: core/templates/hospital_info.html:133
+#: core/templates/hospital_info.html:109
+msgid "Open 24h"
+msgstr ""
+
+#: core/templates/hospital_info.html:111
+msgid "Yes,No,Unknown"
+msgstr "Sì,No,N/A"
+
+#: core/templates/hospital_info.html:152
 msgid "Error: Not found"
 msgstr "Errore: Dato non trovato"
 

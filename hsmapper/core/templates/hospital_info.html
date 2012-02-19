@@ -103,6 +103,16 @@
 
   <p>
     <span class="field-name">{% trans "Opening times" %}:</span>
+
+    {% if user.is_authenticated or user.is_staff or hospital.open_24h %}
+      <p>
+        <span class="field-name">{% trans "Open 24h" %}:</span>
+        <span class="edit" type="open_24h">
+          <span class="editable_checkbox">{{ hospital.open_24h|yesno:_("Yes,No,Unknown") }}</span>
+        </span>
+      </p>
+    {% endif %}
+    {% if user.is_authenticated or user.is_staff or not hospital.open_24h %}
     <table>
       {% for wd in weekdays %}
       <tr>
@@ -134,6 +144,7 @@
       </tr>
       {% endfor %}
     </table>
+    {% endif %}
   </p>
 
   {% else %}

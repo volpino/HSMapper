@@ -15,6 +15,7 @@
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.autogrow.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.jeditable.masked.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.maskedinput.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.jeditable.checkbox.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/nominatim.autocomplete.js"></script>
   <script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap-alerts.js"></script>
   <script type="text/javascript">
@@ -454,6 +455,15 @@
             style: "inherit",
             loadurl: "{% url 'api-edit-hospital-data' 'manager' %}",
             type: "select",
+            placeholder: "{% trans "Click to edit" %}"
+          });
+          $('.editable_checkbox').editable(save_feature_edit, {
+            submit: "{% trans "Save" %}",
+            cancel: "{% trans "Cancel" %}",
+            style: "inherit",
+            type: "checkbox",
+            checkbox: {trueValue: '{% trans 'Yes' %}',
+                       falseValue: '{% trans 'No' %}'},
             placeholder: "{% trans "Click to edit" %}"
           });
 
