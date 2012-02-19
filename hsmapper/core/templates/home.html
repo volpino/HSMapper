@@ -306,7 +306,9 @@
           }
           else {
             if (!$(this).html().match("<form")) {
-              data.push($(this).text());
+              if ($(this).text()) {
+                data.push($(this).text());
+              }
             }
           }
         });
