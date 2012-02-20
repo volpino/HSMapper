@@ -360,9 +360,7 @@
     }
 
     function onFeatureSelect(feature, not_expired) {
-      console.log(feature);
       if (globals.selectedFeature) {
-        console.log("TOLGO SELECT");
         selectControl.unselect(globals.selectedFeature);
       }
       if (globals.delete_mode) {
