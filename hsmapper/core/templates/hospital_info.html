@@ -1,11 +1,12 @@
 {% load i18n core_filters %}
+
 {% if hospital %}
-{% if not hospital.expiration|is_still_valid %}
- <div id="expired_alert" class="alert-message error">{% trans "Warning! Data is expired" %}</div>
- <div class="expired">
-{% else %}
- <div>
-{% endif %}
+  {% if not hospital.expiration|is_still_valid %}
+    <div id="expired_alert" class="alert-message error">{% trans "Warning! Data is expired" %}</div>
+    <div class="expired">
+  {% else %}
+    <div>
+  {% endif %}
   <p>
     <span class="field-name">{% trans "Name" %}:</span>
     <span class="edit" type="name">
@@ -101,18 +102,18 @@
     </span>
   </p>
 
+  {% if user.is_authenticated or user.is_staff or hospital.open_24h %}
+    <p>
+      <span class="field-name">{% trans "Open 24h" %}:</span>
+      <span class="edit" type="open_24h">
+        <span class="editable_checkbox">{{ hospital.open_24h|yesno:_("Yes,No,Unknown") }}</span>
+      </span>
+    </p>
+  {% endif %}
+
+  {% if user.is_authenticated or user.is_staff or not hospital.open_24h %}
   <p>
     <span class="field-name">{% trans "Opening times" %}:</span>
-
-    {% if user.is_authenticated or user.is_staff or hospital.open_24h %}
-      <p>
-        <span class="field-name">{% trans "Open 24h" %}:</span>
-        <span class="edit" type="open_24h">
-          <span class="editable_checkbox">{{ hospital.open_24h|yesno:_("Yes,No,Unknown") }}</span>
-        </span>
-      </p>
-    {% endif %}
-    {% if user.is_authenticated or user.is_staff or not hospital.open_24h %}
     <table>
       {% for wd in weekdays %}
       <tr>
@@ -144,12 +145,12 @@
       </tr>
       {% endfor %}
     </table>
-    {% endif %}
   </p>
 
-  {% else %}
-
-  <p>{% trans "Error: Not found" %}</p>
-
   {% endif %}
+
+{% else %}
+  <p>{% trans "Error: Not found" %}</p>
+{% endif %}
+
 </div>
