@@ -129,7 +129,7 @@
                 onFeatureSelect(f, true);
               }
               else {
-                alertmsg("{% trans "Error :(" %}");
+                alert_______msg("{% trans "Error :(" %}");
               }
             }
           });
@@ -192,6 +192,7 @@
       d[type] = value;
       if (type === "name") {
         globals.selectedFeature.popup.setContentHTML("<p>"+value+"</p>");
+        globals.selectedFeature.attributes["name"] = value;
       }
       $.ajax({
         url: "{% url 'api-edit-hospital' 1 %}".replace("1", globals.selectedFeature.attributes.id),
@@ -385,10 +386,10 @@
         toggle_delete();
       }
       else {
-        var attrib = feature.attributes;
         globals.selectedFeature = feature;
+        var name = feature.attributes["name"] || "{% trans "No name" %}";
         var desc = $("<div/>");
-        desc.html("<p>"+attrib["name"]+"</p>");
+        desc.html("<p>"+name+"</p>");
         popup = new OpenLayers.Popup.FramedCloud("chicken",
                     feature.geometry.getBounds().getCenterLonLat(),
                     new OpenLayers.Size(1500,1000),
@@ -422,6 +423,8 @@
             placeholder: "{% trans "Click to edit" %}"
           });
           $('.editable_type').editable(save_feature_edit, {
+            submit: "{% trans "Save" %}",
+            cancel: "{% trans "Cancel" %}",
             style: "inherit",
             loadurl: "{% url 'api-edit-hospital-data' 'type' %}",
             type: "select",
