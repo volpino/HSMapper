@@ -111,6 +111,7 @@ def edit_hospital(request, id_):
 
         obj.save(force_update=True)
         return {'success': True}
+    return {'success': False, 'error': form.errors}
 
 
 @ajax(login_required=True)
