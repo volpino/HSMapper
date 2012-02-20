@@ -17,5 +17,5 @@ settings_local.py
 
 *.bak
 
-static/
-media/
+/hsmapper/static/
+/hsmapper/media/
