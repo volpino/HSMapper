@@ -1,5 +1,5 @@
 {% load i18n core_filters %}
-
+{% testforsentry %}
 {% if hospital %}
   {% if not hospital.expiration|is_still_valid %}
     <div id="expired_alert" class="alert-message error">{% trans "Warning! Data is expired" %}</div>

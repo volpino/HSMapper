@@ -271,6 +271,7 @@
                optime: index}
       d[type] = value;  // type = opening or closing
 
+      var that = this;
       $.ajax({
         url: "{% url 'api-edit-hospital' 1 %}".replace("1", globals.selectedFeature.attributes.id),
         type: "post",
@@ -281,6 +282,8 @@
           }
           else {
             alert_msg("{% trans "Error :(" %}", "error");
+            console.log(that);
+            $(that).text("00:00");
           }
           $("#updated_by").text(globals.username);
         }
