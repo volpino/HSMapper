@@ -111,17 +111,11 @@
       map.events.register("click", map, function(e) {
         if (globals.insert_mode) {
           if (globals.selectedFeature) {
-            onFeatureUnselect(globals.selectedFeature);
+            selectControl.unselect(globals.selectedFeature);
           }
           var p = map.getLonLatFromPixel(e.xy);
           var point = new OpenLayers.Geometry.Point(p["lon"], p["lat"]);
           var f = new OpenLayers.Feature.Vector(point);
-          if (globals.hospital_layer.features.length > 0) {
-              f.attributes = globals.hospital_layer.features[0].attributes;
-              for (key in f.attributes) {
-                f.attributes[key] = "";
-              }
-          }
           globals.hospital_layer.addFeatures([f]);
 
           $.ajax({
@@ -199,7 +193,6 @@
       if (type === "name") {
         globals.selectedFeature.popup.setContentHTML("<p>"+value+"</p>");
       }
-      globals.selectedFeature.attributes[type] = value;
       $.ajax({
         url: "{% url 'api-edit-hospital' 1 %}".replace("1", globals.selectedFeature.attributes.id),
         type: "post",
@@ -367,16 +360,18 @@
     }
 
     function onFeatureSelect(feature, not_expired) {
+      console.log(feature);
       if (globals.selectedFeature) {
-        onFeatureUnselect(globals.selectedFeature);
+        console.log("TOLGO SELECT");
+        selectControl.unselect(globals.selectedFeature);
       }
-      globals.selectedFeature = feature;
       if (globals.delete_mode) {
         var agree = confirm("{% trans "Are you sure you want to delete?" %}");
         if (agree) {
-          globals.hospital_layer.removeFeatures([globals.selectedFeature]);
+          globals.hospital_layer.removeFeatures([feature]);
+          globals.selectedFeature = undefined;
           $.ajax({
-            url: "{% url 'api-delete-hospital' 1 %}".replace("1", globals.selectedFeature.attributes.id),
+            url: "{% url 'api-delete-hospital' 1 %}".replace("1", feature.attributes.id),
             type: "post",
             data: "",
             success: function(req) {
@@ -499,7 +494,7 @@
         $("#map").addClass("crosshair");
         globals.insert_mode = true;
         if (globals.selectedFeature) {
-          onFeatureUnselect(globals.selectedFeature);
+          selectControl.unselect(globals.selectedFeature);
         }
       }
     }
@@ -518,7 +513,7 @@
         $("#map").addClass("crosshair");
         globals.delete_mode = true;
         if (globals.selectedFeature) {
-          onFeatureUnselect(globals.selectedFeature);
+          selectControl.unselect(globals.selectedFeature);
         }
       }
     }
