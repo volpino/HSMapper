@@ -106,7 +106,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'reversion.middleware.RevisionMiddleware'
+    'reversion.middleware.RevisionMiddleware',
+    'sentry.client.middleware.Sentry404CatchMiddleware',
+    'sentry.client.middleware.SentryResponseErrorIdMiddleware',
 )
 
 ROOT_URLCONF = 'hsmapper.urls'
@@ -133,8 +135,13 @@ INSTALLED_APPS = (
     'reversion',
     'core',
 
-    'devserver',
     'django_extensions',
+
+    # sentry
+    'indexer',
+    'paging',
+    'sentry',
+    'sentry.client',
 )
 
 # A sample logging configuration. The only tangible logging
