@@ -131,17 +131,21 @@
           </span>
         </td>
         {% endfor %}
-        {% if user.is_authenticated or user.is_staff %}
-          <td> {# new field for new data #}
-            <span class="edit" type="opening" wd="{{ wd.0 }}">
-              <span class="editable_time"></span>
-            </span>
-            -
-            <span class="edit" type="closing" wd="{{ wd.0 }}">
-              <span class="editable_time"></span>
-            </span>
-          </td>
-        {% endif %}
+        {% with last_op=hospital.openingtime_set.all|filter_wd:wd|get_item:-1 %}
+          {% if user.is_authenticated or user.is_staff %}
+            {% if not last_op or last_op.opening and last_op.closing %}
+              <td> {# new field for new data #}
+                <span class="edit" type="opening" wd="{{ wd.0 }}">
+                  <span class="editable_time"></span>
+                </span>
+                -
+                <span class="edit" type="closing" wd="{{ wd.0 }}">
+                  <span class="editable_time"></span>
+                </span>
+              </td>
+            {% endif %}
+          {% endif %}
+        {% endwith %}
       </tr>
       {% endfor %}
     </table>

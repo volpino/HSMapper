@@ -13,7 +13,7 @@ def is_still_valid(date):
 @register.filter
 def get_item(list_, index):
     try:
-        return list_[int(index)]
+        return [x for x in list_][int(index)]
     except (ValueError, TypeError, IndexError):
         return u""
 

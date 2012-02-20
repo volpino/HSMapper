@@ -4,6 +4,7 @@ from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 from settings import PROJECTION_SRID
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext
 from django.core.exceptions import ValidationError
 
 
@@ -59,7 +60,7 @@ class Facility(models.Model):
     objects = models.GeoManager()
 
     def __unicode__(self):
-        return self.name or unicode(_("<No name>"))
+        return self.name or ugettext("<No name>")
 
     class Meta:
         verbose_name = _('Facility')

@@ -11,6 +11,7 @@ from hsmapper import settings
 from core.models import Facility, FacilityType, Pathology, MedicalService, \
                         OpeningTime, WEEKDAY_CHOICES
 from core.forms import FacilityForm
+from django.utils.translation import ugettext as _
 
 
 def get_hospitals(request):
@@ -79,7 +80,7 @@ def edit_hospital(request, id_):
                              for k in current_obj._meta.fields])
 
         for key, value in data.items():
-            if key == "manager" or value:
+            if key in request.POST:
                 current_data[key] = value
 
         obj = Facility(**current_data)
@@ -121,8 +122,8 @@ def edit_hospital_data(request, key):
                      for k in FacilityType.objects.all()])
 
     if key == "manager":
-        return dict([(k.id, str(k))
-                     for k in Facility.objects.all()] + [("", "--------")])
+        return dict([(k.id, str(k)) for k in Facility.objects.all()] + \
+                    [("", _("None"))])
 
     elif key == "pathology":
         if "q" in request.GET:

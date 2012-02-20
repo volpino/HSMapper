@@ -129,7 +129,7 @@
                 onFeatureSelect(f, true);
               }
               else {
-                alert_______msg("{% trans "Error :(" %}");
+                alert_msg("{% trans "Error :(" %}");
               }
             }
           });
@@ -187,6 +187,9 @@
 
     function save_feature_edit(value, settings) {
       var display_msg = $(this).find("option[value='"+value+"']").text() || value;
+      if (settings.checkbox && settings.checkbox.trueValue) {
+        value = (value === settings.checkbox.trueValue) ? 1 : 0;
+      }
       var type = $(this).parent().attr("type");
       var d = {}
       d[type] = value;
