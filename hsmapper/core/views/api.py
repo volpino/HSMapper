@@ -24,7 +24,7 @@ def get_hospitals(request):
     geojson_output = geoj.encode(djf.decode(qs))
     response = HttpResponse(mimetype="application/json")
     response.write(geojson_output)
-    raise ValueError
+
     return response
 
 
