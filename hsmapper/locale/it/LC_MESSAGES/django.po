@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-20 15:00+0100\n"
+"POT-Creation-Date: 2012-02-22 17:43+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -133,95 +133,31 @@ msgstr "Errore"
 msgid "something went wrong"
 msgstr "si è verificato un errore"
 
-#: core/templates/base.html:74
-msgid "Error! Request failed"
-msgstr "Errore! Richiesta fallita"
-
-#: core/templates/home.html:127
-msgid "Point inserted"
-msgstr "Punto inserito"
-
-#: core/templates/home.html:132 core/templates/home.html.py:209
-#: core/templates/home.html:283 core/templates/home.html.py:321
-#: core/templates/home.html:384
-msgid "Error :("
-msgstr "Errore :("
-
-#: core/templates/home.html:206 core/templates/home.html.py:280
-#: core/templates/home.html:318
-msgid "Updated!"
-msgstr "Aggiornato!"
-
-#: core/templates/home.html:301 core/templates/home.html.py:344
-msgid "Click to add"
-msgstr "Clicca per aggiungere"
-
-#: core/templates/home.html:339 core/templates/home.html.py:413
-#: core/templates/home.html:420 core/templates/home.html.py:429
-#: core/templates/home.html:437 core/templates/home.html.py:451
-#: core/templates/home.html:459
-msgid "Save"
-msgstr "Salva"
-
-#: core/templates/home.html:340 core/templates/home.html.py:414
-#: core/templates/home.html:421 core/templates/home.html.py:430
-#: core/templates/home.html:438 core/templates/home.html.py:452
-#: core/templates/home.html:460
-msgid "Cancel"
-msgstr "Annulla"
-
-#: core/templates/home.html:371
-msgid "Are you sure you want to delete?"
-msgstr "Confermi l'eliminazione?"
-
-#: core/templates/home.html:381
-msgid "Deleted"
-msgstr "Eliminato"
-
-#: core/templates/home.html:393
-#, fuzzy
-msgid "No name"
-msgstr "<Nessun nome>"
-
-#: core/templates/home.html:417 core/templates/home.html.py:426
-#: core/templates/home.html:434 core/templates/home.html.py:442
-#: core/templates/home.html:456 core/templates/home.html.py:465
-msgid "Click to edit"
-msgstr "Clicca per modificare"
-
-#: core/templates/home.html:463
-msgid "Yes"
-msgstr "Sì"
-
-#: core/templates/home.html:464
-msgid "No"
-msgstr "No"
-
-#: core/templates/home.html:560
+#: core/templates/home.html:65
 msgid "Map Control"
 msgstr "Gestione mappa"
 
-#: core/templates/home.html:561
+#: core/templates/home.html:66
 msgid "About"
 msgstr "About"
 
-#: core/templates/home.html:562
+#: core/templates/home.html:67
 msgid "Contact us"
 msgstr "Contatti"
 
-#: core/templates/home.html:568
+#: core/templates/home.html:73
 msgid "Go to address"
 msgstr "Vai all'indirizzo"
 
-#: core/templates/home.html:573
+#: core/templates/home.html:78
 msgid "Insert point"
 msgstr "Inserisci punto"
 
-#: core/templates/home.html:574
+#: core/templates/home.html:79
 msgid "Delete point"
 msgstr "Elimina punto"
 
-#: core/templates/home.html:582
+#: core/templates/home.html:87
 msgid ""
 "The project is developed in collaboration with the Italian pediatrics "
 "association (S.I.P. - Società Italiana di Pediatria). It aims at developing "
@@ -233,7 +169,7 @@ msgstr ""
 "Pediatria (S.I.P.). L'obbiettivo è sviluppare un supporto informatico che "
 "aiuti nell'individuazione del centro pediatrico idoneo."
 
-#: core/templates/home.html:585
+#: core/templates/home.html:90
 msgid "Developed by"
 msgstr "Sviluppato da"
 
@@ -316,3 +252,43 @@ msgstr "Redirect..."
 #: core/views/api.py:126
 msgid "None"
 msgstr "Nessuna"
+
+#~ msgid "Error! Request failed"
+#~ msgstr "Errore! Richiesta fallita"
+
+#~ msgid "Point inserted"
+#~ msgstr "Punto inserito"
+
+#~ msgid "Error :("
+#~ msgstr "Errore :("
+
+#~ msgid "Updated!"
+#~ msgstr "Aggiornato!"
+
+#~ msgid "Click to add"
+#~ msgstr "Clicca per aggiungere"
+
+#~ msgid "Save"
+#~ msgstr "Salva"
+
+#~ msgid "Cancel"
+#~ msgstr "Annulla"
+
+#~ msgid "Are you sure you want to delete?"
+#~ msgstr "Confermi l'eliminazione?"
+
+#~ msgid "Deleted"
+#~ msgstr "Eliminato"
+
+#, fuzzy
+#~ msgid "No name"
+#~ msgstr "<Nessun nome>"
+
+#~ msgid "Click to edit"
+#~ msgstr "Clicca per modificare"
+
+#~ msgid "Yes"
+#~ msgstr "Sì"
+
+#~ msgid "No"
+#~ msgstr "No"

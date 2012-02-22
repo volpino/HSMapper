@@ -132,7 +132,8 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'south',
     'reversion',
-    'core',
+    'hsmapper',
+    'hsmapper.core',
 
     'django_extensions',
 

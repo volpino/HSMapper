@@ -5,6 +5,10 @@ from django.conf import settings
 from django.contrib import admin
 admin.autodiscover()
 
+js_info_dict = {
+    'packages': ('hsmapper', ),
+}
+
 urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
@@ -16,6 +20,7 @@ urlpatterns = patterns('',
         {'template_name': 'registration/logout.html'}, name="logout"),
     url(r'', include('hsmapper.core.urls')),
     url(r'^sentry/', include('sentry.web.urls')),
+    url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
 )
 
 
