@@ -107,7 +107,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'reversion.middleware.RevisionMiddleware',
-    'sentry.client.middleware.Sentry404CatchMiddleware',
+    #'sentry.client.middleware.Sentry404CatchMiddleware',
 )
 
 ROOT_URLCONF = 'hsmapper.urls'
@@ -138,8 +138,8 @@ INSTALLED_APPS = (
     'django_extensions',
 
     # sentry
-    'sentry',
-    'raven.contrib.django',
+    #'sentry',
+    #'raven.contrib.django',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -152,6 +152,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.csrf",
 )
 
+"""
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -193,3 +194,4 @@ LOGGING = {
         },
     },
 }
+"""
