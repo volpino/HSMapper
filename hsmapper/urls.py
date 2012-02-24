@@ -19,7 +19,7 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'django.contrib.auth.views.logout',
         {'template_name': 'registration/logout.html'}, name="logout"),
     url(r'', include('hsmapper.core.urls')),
-    url(r'^sentry/', include('sentry.web.urls')),
+    #url(r'^sentry/', include('sentry.web.urls')),
     url(r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
 )
 
