@@ -248,7 +248,7 @@ function onFeatureSelect(feature, not_expired) {
         submit: gettext("Save"),
         cancel: gettext("Cancel"),
         style: "inherit",
-        loadurl: globals.urls.editdata.type,
+        loadurl: globals.urls.editdata.replace("1", "type"),
         type: "select",
         placeholder: gettext("Click to edit")
       });
@@ -270,7 +270,7 @@ function onFeatureSelect(feature, not_expired) {
         submit: gettext("Save"),
         cancel: gettext("Cancel"),
         style: "inherit",
-        loadurl: globals.urls.editdata.manager,
+        loadurl: globals.urls.editdata.replace("1", "type"),
         type: "select",
         placeholder: gettext("Click to edit")
       });

@@ -33,8 +33,7 @@
       delete: "{% url 'api-delete-hospital' 1 %}",
       get: "{% url 'api-get-hospitals' %}",
       info: "{% url 'api-info-hospital' 1 %}",
-      editdata: {type: "{% url 'api-edit-hospital-data' 'type' %}",
-                 manager: "{% url 'api-edit-hospital-data' 'manager' %}"}
+      editdata: "{% url 'api-edit-hospital-data' '1' %}",
     }
     {% if user.is_authenticated or user.is_staff %}
     globals.username = "{{ user }}";

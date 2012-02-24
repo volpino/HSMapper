@@ -161,7 +161,7 @@ function manytomany_editable(expr, sing, plur) {
     autocomplete: {
       source: function(request, response) {
         $.ajax({
-          url: globals.urls.edit.replace("1", sing),
+          url: globals.urls.editdata.replace("1", sing),
           data: {
             q: request.term
           },

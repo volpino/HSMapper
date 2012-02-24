@@ -72,7 +72,7 @@
   <p id="services_info">
     <span class="edit field-name">{% trans "Services" %}:</span>
     {% for s in hospital.services.all %}
-    <span>
+    <span class="edit">
       <span class="editable_service">{{ s.name|default_if_none:"" }}</span>
     </span>
     {% endfor %}
