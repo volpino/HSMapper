@@ -1,3 +1,7 @@
+"""
+Views for hsmapper.core
+"""
+
 from vectorformats.Formats import Django, GeoJSON
 from ajaxutils.decorators import ajax
 
@@ -5,13 +9,13 @@ from django.contrib.gis.geos.point import Point
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
-from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext as _
 
 from hsmapper import settings
 from core.models import Facility, FacilityType, Pathology, MedicalService, \
-                        OpeningTime, WEEKDAY_CHOICES
+                        WEEKDAY_CHOICES
 from core.forms import FacilityForm
-from django.utils.translation import ugettext as _
+from core.helpers import lookup_query, timetable_filler
 
 
 def get_hospitals(request):
@@ -47,34 +51,9 @@ def edit_hospital(request, id_):
         del data["weekday"], data["optime"], data["opening"], \
             data["closing"]
 
-        if weekday >= 0 and optime >= 0:
-            try:
-                op_time = current_obj.openingtime_set.get(
-                    weekday=weekday,
-                    index=optime
-                )
-            except OpeningTime.DoesNotExist:
-                op = OpeningTime(
-                    facility=current_obj,
-                    weekday=weekday,
-                    opening=(opening or None),
-                    closing=(closing or None),
-                    index=optime
-                )
-                try:
-                    op.save()
-                except ValidationError, exc:
-                    return {"success": False, "error": "%r" % exc}
-            else:
-                if opening is None and closing is None:
-                    op_time.delete()
-                else:
-                    op_time.opening = opening or op_time.opening
-                    op_time.closing = closing or op_time.closing
-                    try:
-                        op_time.save(force_update=True)
-                    except ValidationError, exc:
-                        return {"success": False, "error": "%r" % exc}
+        res = timetable_filler(current_obj, weekday, optime, opening, closing)
+        if res:
+            return res
 
         current_data = dict([(k.name, getattr(current_obj, k.name))
                              for k in current_obj._meta.fields])
@@ -125,28 +104,11 @@ def edit_hospital_data(request, key):
         return dict([(k.id, str(k)) for k in Facility.objects.all()] + \
                     [("", _("None"))])
 
-    elif key == "pathology":
-        if "q" in request.GET:
-            results = []
-            q = request.GET[u'q']
-            if len(q) > 2:
-                model_results = Pathology.objects.filter(name__icontains=q)
-                for x in model_results:
-                    results.append({"id": x.id, "name": x.name})
-            return {"results": results}
+    elif key == "pathology" and "q" in request.GET:
+            return lookup_query(request.GET[u'q'], Pathology)
 
-    elif key == "service":
-        if "q" in request.GET:
-            results = []
-            q = request.GET[u'q']
-
-            if len(q) > 2:
-                model_results = MedicalService.objects.filter(
-                                    name__icontains=q
-                                )
-                for x in model_results:
-                    results.append({"id": x.id, "name": x.name})
-            return {"results": results}
+    elif key == "service" and "q" in request.GET:
+            return lookup_query(request.GET[u'q'], MedicalService)
 
     return {}
 
@@ -158,10 +120,11 @@ def info_hospital(request, id_):
         hospital = Facility.objects.get(id=params_id)
     except Facility.DoesNotExist:
         pass
-    return render_to_response('hospital_info.html',
-                              {'hospital': hospital,
-                               'weekdays': WEEKDAY_CHOICES},
-                              context_instance=RequestContext(request))
+    return render_to_response(
+        'hospital_info.html',
+        {'hospital': hospital, 'weekdays': WEEKDAY_CHOICES},
+        context_instance=RequestContext(request)
+    )
 
 
 @ajax(login_required=True, require_POST=True)
