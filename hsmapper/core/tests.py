@@ -4,6 +4,7 @@ Tests for hsmapper.core app
 
 from BeautifulSoup import BeautifulSoup
 import json
+import datetime
 
 from hsmapper.core.tests_helpers import BaseTestCase
 from hsmapper.core.models import Facility, FacilityType, Pathology, \
@@ -154,10 +155,10 @@ class ApiTest(BaseTestCase):
     def test_edit_hospital_simple_fields(self):
         facility = Facility.objects.all()[0]
         data = {}
-        self._test_edit_hospital(facility.pk, data)
-
-        self._test_edit_hospital(999, data)
         json_response = self._test_edit_hospital(facility.pk, data)
+        self.assertFalse(json_response["success"])
+
+        json_response = self._test_edit_hospital(999, data)
         self.assertFalse(json_response["success"])
 
         data = {"name": "totallynewname!",
@@ -181,7 +182,55 @@ class ApiTest(BaseTestCase):
         self.assertEqual(attrs, new_attrs)
 
     def test_edit_hospital_timetable(self):
-        pass
+        facility = Facility.objects.all()[0]
+        facility.openingtime_set.all().delete()
+
+        test_data = {"weekday": 1, "optime": 0, "opening": "08:00",
+                     "closing": "12:00"}
+
+        # test inserting new opening time
+        json_response = self._test_edit_hospital(facility.pk, test_data)
+        self.assertTrue(json_response["success"])
+        self.assertEqual(len(list(facility.openingtime_set.all())), 1)
+
+        # test editing
+        data = test_data.copy()
+        data["opening"] = "10:00"
+        json_response = self._test_edit_hospital(facility.pk, data)
+        self.assertTrue(json_response["success"])
+        self.assertEqual(len(list(facility.openingtime_set.all())), 1)
+        self.assertEqual(facility.openingtime_set.get().opening,
+                         datetime.time(10, 0))
+
+        # test deleting
+        data = test_data.copy()
+        data["opening"] = ""
+        data["closing"] = ""
+        json_response = self._test_edit_hospital(facility.pk, data)
+        self.assertTrue(json_response["success"])
+        self.assertEqual(len(list(facility.openingtime_set.all())), 0)
+
+        # test weird input
+        data = test_data.copy()
+        data["opening"] = test_data["closing"]
+        data["closing"] = test_data["opening"]
+        json_response = self._test_edit_hospital(facility.pk, data)
+        self.assertFalse(json_response["success"])
+
+        data = test_data.copy()
+        data["weekday"] = 1337
+        json_response = self._test_edit_hospital(facility.pk, data)
+        self.assertFalse(json_response["success"])
+
+        data = test_data.copy()
+        data["opening"] = "antani"
+        json_response = self._test_edit_hospital(facility.pk, data)
+        self.assertFalse(json_response["success"])
+
+        data = test_data.copy()
+        data["closing"] = "antani"
+        json_response = self._test_edit_hospital(facility.pk, data)
+        self.assertFalse(json_response["success"])
 
     def _test_edit_hospital_m2m(self, model, key):
         obj = Facility.objects.all()[0]

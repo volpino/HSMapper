@@ -138,31 +138,27 @@ def info_hospital(request, id_):
 
 @ajax(login_required=True, require_POST=True)
 def add_hospital(request):
-    if request.method == 'POST':
-        form = FacilityForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
+    form = FacilityForm(request.POST)
+    if form.is_valid():
+        data = form.cleaned_data
 
-            lat = data['lat']
-            lon = data['lon']
-            if not (lat and lon):
-                return {'success': False, 'error': 'lat or lon are empty'}
+        lat = data['lat']
+        lon = data['lon']
+        if not (lat and lon):
+            return {'success': False, 'error': 'lat or lon are empty'}
 
-            the_geom = Point(lon, lat, srid=settings.DISPLAY_SRID)
+        the_geom = Point(lon, lat, srid=settings.DISPLAY_SRID)
 
-            obj = Facility.objects.create(the_geom=the_geom)
-            return {'success': True, 'id': obj.pk}
-    return {'success': False}
+        obj = Facility.objects.create(the_geom=the_geom)
+        return {'success': True, 'id': obj.pk}
 
 
 @ajax(login_required=True, require_POST=True)
 def delete_hospital(request, id_):
-    if request.method == 'POST':
-        params_id = int(id_)
-        try:
-            hospital = Facility.objects.get(id=params_id)
-            hospital.delete()
-        except Facility.DoesNotExist:
-            return {'success': False}
-        return {'success': True}
-    return {'success': False}
+    params_id = int(id_)
+    try:
+        hospital = Facility.objects.get(id=params_id)
+        hospital.delete()
+    except Facility.DoesNotExist:
+        return {'success': False}
+    return {'success': True}
