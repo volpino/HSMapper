@@ -2,12 +2,14 @@
 Helpers for hsmapper tests
 """
 
-from django.utils import unittest
+from django.test import TestCase
 from django.test.client import Client
 from django.core.urlresolvers import reverse
 
 
-class BaseTestCase(unittest.TestCase):
+class BaseTestCase(TestCase):
+    fixtures = ["test_data.json"]
+
     def setUp(self):
         self.client = Client()
 
