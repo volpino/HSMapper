@@ -17,7 +17,7 @@ class BaseTestCase(TestCase):
         return self.client.get(reverse(url_name, args=args, kwargs=kwargs))
 
     def post(self, url_name, *args, **kwargs):
-        data = kwargs.pop("data", None)
+        data = kwargs.pop("data", {})
         return self.client.post(
             reverse(url_name, args=args, kwargs=kwargs),
             data
@@ -25,6 +25,9 @@ class BaseTestCase(TestCase):
 
     def login(self, user, password):
         return Login(self, user, password)
+
+    def superuser_login(self):
+        return Login(self, "admin", "pass")
 
 
 class Login(object):

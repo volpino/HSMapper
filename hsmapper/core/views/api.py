@@ -102,11 +102,11 @@ def edit_hospital(request, id_):
 @ajax(login_required=True)
 def edit_hospital_data(request, key):
     if key == "type":
-        return dict([(k.id, k.name)
+        return dict([(k.pk, k.name)
                      for k in FacilityType.objects.all()])
 
     if key == "manager":
-        return dict([(k.id, str(k)) for k in Facility.objects.all()] + \
+        return dict([(k.pk, str(k)) for k in Facility.objects.all()] + \
                     [("", _("None"))])
 
     elif key == "pathology" and "q" in request.GET:
@@ -142,7 +142,7 @@ def add_hospital(request):
             lat = data['lat']
             lon = data['lon']
             if not (lat and lon):
-                return {'success': False, 'error': 'Lat or long are empty'}
+                return {'success': False, 'error': 'lat or lon are empty'}
 
             the_geom = Point(lon, lat, srid=settings.DISPLAY_SRID)
 
