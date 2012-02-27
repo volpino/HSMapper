@@ -15,7 +15,8 @@ from hsmapper import settings
 from core.models import Facility, FacilityType, Pathology, MedicalService, \
                         WEEKDAY_CHOICES
 from core.forms import FacilityForm
-from core.helpers import lookup_query, timetable_filler
+from core.helpers import lookup_query, timetable_filler, \
+                         remove_dangling_objects
 
 
 def get_hospitals(request):
@@ -76,6 +77,8 @@ def edit_hospital(request, id_):
                         obj.pathologies.add(obj_p)
                     except Pathology.DoesNotExist:
                         obj.pathologies.create(name=p)
+            # TODO: This should be an async task
+            remove_dangling_objects(Pathology)
 
         if "services[]" in request.POST:
             p_data = request.POST.getlist("services[]")
@@ -88,6 +91,8 @@ def edit_hospital(request, id_):
                         obj.services.add(obj_p)
                     except MedicalService.DoesNotExist:
                         obj.services.create(name=p)
+            # TODO: This should be an async task
+            remove_dangling_objects(MedicalService)
 
         obj.save(force_update=True)
         return {'success': True}

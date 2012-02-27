@@ -114,7 +114,7 @@ function save_manytomany_edit(sing, plur) {
       data.push(value);
     }
     $(".editable_"+sing).each(function() {
-      if ($(this).text() === gettext("Click to add")) {
+      if ($(this).text() === settings.placeholder) {
         $(this).parent().remove();
       }
       else {

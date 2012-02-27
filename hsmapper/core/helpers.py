@@ -50,3 +50,7 @@ def timetable_filler(facility, weekday, index, opening, closing):
                     op_time.save(force_update=True)
                 except ValidationError, exc:
                     return {"success": False, "error": "%r" % exc}
+
+
+def remove_dangling_objects(model):
+    model.objects.filter(facility=None).delete()
