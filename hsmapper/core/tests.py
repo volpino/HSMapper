@@ -6,7 +6,8 @@ from BeautifulSoup import BeautifulSoup
 import json
 
 from hsmapper.core.tests_helpers import BaseTestCase
-from hsmapper.core.models import Facility, FacilityType
+from hsmapper.core.models import Facility, FacilityType, Pathology, \
+                                 MedicalService
 
 
 class NavigationTest(BaseTestCase):
@@ -138,3 +139,69 @@ class ApiTest(BaseTestCase):
         param = {"q": "hosp"}
         json_response = self._test_edit_hospital_data("service", param)
         self.assertTrue(len(json_response["results"]) == 1)
+
+    def _test_edit_hospital(self, facility_pk, data):
+        response = self.get("api-edit-hospital", facility_pk)
+        self.assertEqual(response.status_code, 401)
+
+        with self.superuser_login():
+            response = self.post("api-edit-hospital", facility_pk,
+                                 data=data)
+            self.assertEqual(response.status_code, 200)
+
+        return json.loads(response.content)
+
+    def test_edit_hospital_simple_fields(self):
+        facility = Facility.objects.all()[0]
+        data = {}
+        self._test_edit_hospital(facility.pk, data)
+
+        self._test_edit_hospital(999, data)
+        json_response = self._test_edit_hospital(facility.pk, data)
+        self.assertFalse(json_response["success"])
+
+        data = {"name": "totallynewname!",
+                "description": "this is a really new description"}
+        ignore = ("last_updated", "updated_by")
+
+        # create a dictionary with current data
+        attrs = dict([(f.name, getattr(facility, f.name))
+                      for f in facility._meta.fields
+                      if f.name not in data and f.name not in ignore])
+        attrs.update(data)  # update it with edited data
+
+        json_response = self._test_edit_hospital(facility.pk, data)
+        self.assertTrue(json_response["success"])
+
+        # create a dictionary with edited data
+        facility = Facility.objects.get(pk=facility.pk)
+        new_attrs = dict([(f.name, getattr(facility, f.name))
+                         for f in facility._meta.fields
+                         if f.name not in ignore])
+        self.assertEqual(attrs, new_attrs)
+
+    def test_edit_hospital_timetable(self):
+        pass
+
+    def _test_edit_hospital_m2m(self, model, key):
+        obj = Facility.objects.all()[0]
+
+        edit_attr = model.objects.all()[:2]
+        post_key = "%s[]" % key
+        data = {post_key: [p.name for p in edit_attr]}
+
+        json_response = self._test_edit_hospital(obj.pk, data)
+        self.assertTrue(json_response["success"])
+
+        self.assertEqual(set(getattr(obj, key).all()), set(edit_attr))
+
+        data[post_key].append("SuperCoolNewObj")
+        json_response = self._test_edit_hospital(obj.pk, data)
+        self.assertTrue(json_response["success"])
+        self.assertIsNotNone(getattr(obj, key).get(name="SuperCoolNewObj"))
+
+    def test_edit_hospital_pathologies(self):
+        self._test_edit_hospital_m2m(Pathology, "pathologies")
+
+    def test_edit_hospital_services(self):
+        self._test_edit_hospital_m2m(MedicalService, "services")

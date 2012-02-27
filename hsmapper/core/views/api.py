@@ -36,7 +36,7 @@ def get_hospitals(request):
 @ajax(login_required=True, require_POST=True)
 def edit_hospital(request, id_):
     form = FacilityForm(request.POST)
-    if form.is_valid():
+    if form.is_valid() and request.POST:
         try:
             current_obj = Facility.objects.get(id=id_)
         except Facility.DoesNotExist:
