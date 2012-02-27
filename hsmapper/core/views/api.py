@@ -77,6 +77,7 @@ def edit_hospital(request, id_):
                         obj.pathologies.add(obj_p)
                     except Pathology.DoesNotExist:
                         obj.pathologies.create(name=p)
+            # TODO: is it good or bad?
             # TODO: This should be an async task
             remove_dangling_objects(Pathology)
 
@@ -91,6 +92,7 @@ def edit_hospital(request, id_):
                         obj.services.add(obj_p)
                     except MedicalService.DoesNotExist:
                         obj.services.create(name=p)
+            # TODO: is it good or bad?
             # TODO: This should be an async task
             remove_dangling_objects(MedicalService)
 
@@ -101,6 +103,8 @@ def edit_hospital(request, id_):
 
 @ajax(login_required=True)
 def edit_hospital_data(request, key):
+    qry = request.GET.get("q", None)
+
     if key == "type":
         return dict([(k.pk, k.name)
                      for k in FacilityType.objects.all()])
@@ -109,11 +113,11 @@ def edit_hospital_data(request, key):
         return dict([(k.pk, str(k)) for k in Facility.objects.all()] + \
                     [("", _("None"))])
 
-    elif key == "pathology" and "q" in request.GET:
-            return lookup_query(request.GET[u'q'], Pathology)
+    elif key == "pathology" and qry:
+            return lookup_query(qry, Pathology)
 
-    elif key == "service" and "q" in request.GET:
-            return lookup_query(request.GET[u'q'], MedicalService)
+    elif key == "service" and qry:
+            return lookup_query(qry, MedicalService)
 
     return {}
 

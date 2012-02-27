@@ -2,6 +2,8 @@
 Helpers for hsmapper tests
 """
 
+from urllib import urlencode
+
 from django.test import TestCase
 from django.test.client import Client
 from django.core.urlresolvers import reverse
@@ -14,14 +16,18 @@ class BaseTestCase(TestCase):
         self.client = Client()
 
     def get(self, url_name, *args, **kwargs):
-        return self.client.get(reverse(url_name, args=args, kwargs=kwargs))
+        param = kwargs.pop("param", None)
+        if param:
+            url = "%s?%s" % (reverse(url_name, args=args, kwargs=kwargs),
+                             urlencode(param))
+        else:
+            url = reverse(url_name, args=args, kwargs=kwargs)
+        return self.client.get(url)
 
     def post(self, url_name, *args, **kwargs):
         data = kwargs.pop("data", {})
-        return self.client.post(
-            reverse(url_name, args=args, kwargs=kwargs),
-            data
-        )
+        url = reverse(url_name, args=args, kwargs=kwargs)
+        return self.client.post(url, data)
 
     def login(self, user, password):
         return Login(self, user, password)

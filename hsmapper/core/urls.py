@@ -12,6 +12,6 @@ urlpatterns = patterns('',
         name="api-edit-hospital"),
     url(r'^api/info_hospital/(?P<id_>\d+)/$', api.info_hospital,
         name="api-info-hospital"),
-    url(r'^api/edit_hospital_data/(?P<key>\w+)/$', api.edit_hospital_data,
-        name="api-edit-hospital-data"),
+    url(r'^api/edit_hospital_data/(?P<key>\w+)/$',
+        api.edit_hospital_data, name="api-edit-hospital-data"),
 )

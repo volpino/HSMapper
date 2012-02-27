@@ -96,25 +96,45 @@ class ApiTest(BaseTestCase):
             json_response = json.loads(response.content)
             self.assertTrue(json_response["success"])
 
-    def test_edit_hospital_data(self):
-        response = self.get("api-edit-hospital-data", "type")
+    def _test_edit_hospital_data(self, key, param=None):
+        response = self.get("api-edit-hospital-data", key)
         self.assertEqual(response.status_code, 401)
 
         with self.superuser_login():
-            response = self.get("api-edit-hospital-data", "type")
+            if param:
+                response = self.get("api-edit-hospital-data", key, param=param)
+            else:
+                response = self.get("api-edit-hospital-data", key)
             self.assertEqual(response.status_code, 200)
 
-            json_response = json.loads(response.content)
-            self.assertEqual(
-                len(json_response),
-                len(FacilityType.objects.all())
-            )
-            a_type = FacilityType.objects.all()[0]
-            print json_response
-            self.assertEqual(
-                json_response[str(a_type.pk)],
-                a_type.name
-            )
+        return json.loads(response.content)
 
-            response = self.get("api-edit-hospital-data", "manager")
-            self.assertEqual(response.status_code, 200)
+    def test_edit_hospital_data_type(self):
+        json_response = self._test_edit_hospital_data("type")
+        self.assertEqual(len(json_response), len(FacilityType.objects.all()))
+
+        a_type = FacilityType.objects.all()[0]
+        self.assertEqual(json_response[str(a_type.pk)], a_type.name)
+
+    def test_edit_hospital_data_manager(self):
+        json_response = self._test_edit_hospital_data("manager")
+        self.assertEqual(len(json_response), len(Facility.objects.all()) + 1)
+        a_facility = Facility.objects.all()[0]
+        self.assertEqual(json_response[str(a_facility.pk)],
+                         unicode(a_facility))
+
+    def test_edit_hospital_data_pathology(self):
+        json_response = self._test_edit_hospital_data("pathology", {})
+        self.assertEqual(json_response, {})
+
+        param = {"q": "olog"}
+        json_response = self._test_edit_hospital_data("pathology", param)
+        self.assertTrue(len(json_response["results"]) == 2)
+
+    def test_edit_hospital_data_service(self):
+        json_response = self._test_edit_hospital_data("service", {})
+        self.assertEqual(json_response, {})
+
+        param = {"q": "hosp"}
+        json_response = self._test_edit_hospital_data("service", param)
+        self.assertTrue(len(json_response["results"]) == 1)
