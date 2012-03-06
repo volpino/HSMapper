@@ -1,0 +1,7 @@
+rvm:
+- 1.9.3
+before_script:
+- sudo pip install -r requirements/base.txt
+- sudo pip install -r requirements/test.txt
+script:
+- python hsmapper/manage.py test core
