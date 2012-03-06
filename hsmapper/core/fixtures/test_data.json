@@ -1,0 +1,1175 @@
+[
+  {
+    "pk": 1,
+    "model": "auth.user",
+    "fields": {
+      "username": "admin",
+      "first_name": "",
+      "last_name": "",
+      "is_active": true,
+      "is_superuser": true,
+      "is_staff": true,
+      "last_login": "2012-02-26 17:01:52",
+      "groups": [],
+      "user_permissions": [],
+      "password": "sha1$51793$2c44c1847bef03258ec43c51986e966660ceab9b",
+      "email": "admin@admin.com",
+      "date_joined": "2012-02-26 16:51:55"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "core.pathology",
+    "fields": {
+      "name": "patologia1"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "core.pathology",
+    "fields": {
+      "name": "patologia2"
+    }
+  },
+  {
+    "pk": 7,
+    "model": "core.pathology",
+    "fields": {
+      "name": "asma allergica"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "core.medicalservice",
+    "fields": {
+      "name": "ricovero"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "core.medicalservice",
+    "fields": {
+      "name": "dayhospital"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "core.medicalservice",
+    "fields": {
+      "name": "visita specialistica"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "core.medicalservice",
+    "fields": {
+      "name": "ambulatorio"
+    }
+  },
+  {
+    "pk": 10,
+    "model": "core.medicalservice",
+    "fields": {
+      "name": "pronto soccorso"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "core.facilitytype",
+    "fields": {
+      "name": "reparto ospedaliero"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "core.facilitytype",
+    "fields": {
+      "name": "ambulatorio"
+    }
+  },
+  {
+    "pk": 7,
+    "model": "core.facility",
+    "fields": {
+      "last_updated": "2012-02-12",
+      "name": "test 6 - questo nome \u00e8 probabilmente troppo troppo lungo",
+      "pathologies": [],
+      "updated_by": null,
+      "facility_type": null,
+      "phone": "",
+      "manager": null,
+      "open_24h": null,
+      "expiration": null,
+      "address": "",
+      "services": [
+        1
+      ],
+      "the_geom": "POINT (992190.9853870254009962 4200600.8493065545335412)",
+      "email": "",
+      "description": ""
+    }
+  },
+  {
+    "pk": 10,
+    "model": "core.facility",
+    "fields": {
+      "last_updated": "2012-02-24",
+      "name": "centro specialistico test",
+      "pathologies": [],
+      "updated_by": 1,
+      "facility_type": 1,
+      "phone": "y876754",
+      "manager": null,
+      "open_24h": false,
+      "expiration": "2013-01-01",
+      "address": "Corso Tukory n. 129 \n90134 PALERMO PA ",
+      "services": [
+        1,
+        2
+      ],
+      "the_geom": "POINT (882314.6287121034692973 4226979.9180795736610889)",
+      "email": "poklklk",
+      "description": "centro specialistico"
+    }
+  },
+  {
+    "pk": 34,
+    "model": "core.facility",
+    "fields": {
+      "last_updated": "2012-02-20",
+      "name": null,
+      "pathologies": [],
+      "updated_by": null,
+      "facility_type": null,
+      "phone": null,
+      "manager": null,
+      "open_24h": null,
+      "expiration": null,
+      "address": null,
+      "services": [],
+      "the_geom": "POINT (850834.7964141007978469 4183306.0593693451955914)",
+      "email": null,
+      "description": null
+    }
+  },
+  {
+    "pk": 15,
+    "model": "core.facility",
+    "fields": {
+      "last_updated": "2012-02-12",
+      "name": "centro di prova",
+      "pathologies": [],
+      "updated_by": 1,
+      "facility_type": null,
+      "phone": "",
+      "manager": null,
+      "open_24h": null,
+      "expiration": null,
+      "address": "",
+      "services": [],
+      "the_geom": "POINT (911884.3458736821776256 4136742.0960335163399577)",
+      "email": "",
+      "description": "centro di prova"
+    }
+  },
+  {
+    "pk": 12,
+    "model": "core.facility",
+    "fields": {
+      "last_updated": "2012-02-20",
+      "name": "Ambulatorio numero 10",
+      "pathologies": [
+        3,
+        7
+      ],
+      "updated_by": 1,
+      "facility_type": null,
+      "phone": "021 41205",
+      "manager": null,
+      "open_24h": true,
+      "expiration": null,
+      "address": "Via Marsala\n",
+      "services": [
+        4
+      ],
+      "the_geom": "POINT (965860.1823280301177874 4171182.2269479185342789)",
+      "email": "",
+      "description": "Ambulatorio pediatrico convenzionato"
+    }
+  },
+  {
+    "pk": 29,
+    "model": "core.facility",
+    "fields": {
+      "last_updated": "2012-02-20",
+      "name": "test7",
+      "pathologies": [],
+      "updated_by": 1,
+      "facility_type": null,
+      "phone": null,
+      "manager": null,
+      "open_24h": true,
+      "expiration": null,
+      "address": null,
+      "services": [],
+      "the_geom": "POINT (948461.4327007436659187 4201185.3385716881603003)",
+      "email": null,
+      "description": null
+    }
+  },
+  {
+    "pk": 5,
+    "model": "core.facility",
+    "fields": {
+      "last_updated": "2012-02-20",
+      "name": "test4 test test",
+      "pathologies": [
+        3,
+        5
+      ],
+      "updated_by": 1,
+      "facility_type": null,
+      "phone": "66876987698",
+      "manager": 12,
+      "open_24h": true,
+      "expiration": "2012-02-25",
+      "address": "Via Benedettini n. 1 Trapani",
+      "services": [
+        10
+      ],
+      "the_geom": "POINT (826794.8624301422387362 4189980.6172049324959517)",
+      "email": "pippo@paperino.it",
+      "description": "questo centro \u00e8 un centro di prova. questo testo \u00e8 un testo di prova. questa descrizione \u00e8 una descrizione di prova. questa descrizione deve essere abbastanza lunga da essere realistica. questa frase serve solo a rendere la descrizione abbastanza lunga da essere realistica. questa frase ha lo stesso scopo della frase precedente, tuttavia non \u00e8 certo che questa frase sia utile tanto quanto la prededente. Probabilmente la cosa non fa senso, ma aggiungiamoci anche questa che non si sa mai."
+    }
+  },
+  {
+    "pk": 20,
+    "model": "core.facility",
+    "fields": {
+      "last_updated": "2012-02-20",
+      "name": "test5",
+      "pathologies": [],
+      "updated_by": 1,
+      "facility_type": 1,
+      "phone": null,
+      "manager": null,
+      "open_24h": true,
+      "expiration": "2012-02-25",
+      "address": null,
+      "services": [
+        1
+      ],
+      "the_geom": "POINT (850828.3281296096974984 4183391.1933127329684794)",
+      "email": null,
+      "description": null
+    }
+  },
+  {
+    "pk": 2,
+    "model": "core.facility",
+    "fields": {
+      "last_updated": "2012-02-20",
+      "name": "test1",
+      "pathologies": [
+        3,
+        5
+      ],
+      "updated_by": 1,
+      "facility_type": 2,
+      "phone": "",
+      "manager": null,
+      "open_24h": true,
+      "expiration": "2013-02-09",
+      "address": "",
+      "services": [
+        1
+      ],
+      "the_geom": "POINT (1049328.5196579636540264 4115267.2983180885203183)",
+      "email": "",
+      "description": ""
+    }
+  },
+  {
+    "pk": 64,
+    "model": "core.facility",
+    "fields": {
+      "last_updated": "2012-02-24",
+      "name": null,
+      "pathologies": [
+        3
+      ],
+      "updated_by": 1,
+      "facility_type": null,
+      "phone": null,
+      "manager": null,
+      "open_24h": null,
+      "expiration": null,
+      "address": null,
+      "services": [],
+      "the_geom": "POINT (871700.6863368196645752 4167130.3313696198165417)",
+      "email": null,
+      "description": null
+    }
+  },
+  {
+    "pk": 17,
+    "model": "core.facility",
+    "fields": {
+      "last_updated": "2012-02-24",
+      "name": "test 12",
+      "pathologies": [],
+      "updated_by": 1,
+      "facility_type": null,
+      "phone": null,
+      "manager": null,
+      "open_24h": true,
+      "expiration": null,
+      "address": null,
+      "services": [],
+      "the_geom": "POINT (894609.3867974067106843 4181503.1631663688458502)",
+      "email": null,
+      "description": null
+    }
+  },
+  {
+    "pk": 19,
+    "model": "core.facility",
+    "fields": {
+      "last_updated": "2012-02-26",
+      "name": "test 3",
+      "pathologies": [
+        3,
+        5
+      ],
+      "updated_by": 1,
+      "facility_type": null,
+      "phone": "35423",
+      "manager": 12,
+      "open_24h": false,
+      "expiration": "2012-03-20",
+      "address": "via ecc...",
+      "services": [
+        1
+      ],
+      "the_geom": "POINT (863074.8887885853182524 4202748.5428340602666140)",
+      "email": "blaba test",
+      "description": "blabla"
+    }
+  },
+  {
+    "pk": 62,
+    "model": "core.facility",
+    "fields": {
+      "last_updated": "2012-02-20",
+      "name": null,
+      "pathologies": [],
+      "updated_by": null,
+      "facility_type": null,
+      "phone": null,
+      "manager": null,
+      "open_24h": null,
+      "expiration": null,
+      "address": null,
+      "services": [],
+      "the_geom": "POINT (1013658.3315473567927256 4222411.3377536507323384)",
+      "email": null,
+      "description": null
+    }
+  },
+  {
+    "pk": 33,
+    "model": "core.facility",
+    "fields": {
+      "last_updated": "2012-02-23",
+      "name": "test 1",
+      "pathologies": [],
+      "updated_by": 1,
+      "facility_type": 1,
+      "phone": null,
+      "manager": null,
+      "open_24h": false,
+      "expiration": "2012-09-20",
+      "address": null,
+      "services": [],
+      "the_geom": "POINT (929600.8895820885663852 4172112.6535205529071391)",
+      "email": null,
+      "description": "questa \u00e8 una descrizione"
+    }
+  },
+  {
+    "pk": 28,
+    "model": "core.facility",
+    "fields": {
+      "last_updated": "2012-02-20",
+      "name": "test 11",
+      "pathologies": [],
+      "updated_by": 1,
+      "facility_type": null,
+      "phone": null,
+      "manager": null,
+      "open_24h": null,
+      "expiration": null,
+      "address": null,
+      "services": [],
+      "the_geom": "POINT (926076.3785127645824105 4155437.4095613262616098)",
+      "email": null,
+      "description": null
+    }
+  },
+  {
+    "pk": 68,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 0,
+      "closing": "12:00:00",
+      "opening": "08:00:00",
+      "weekday": 1,
+      "facility": 20
+    }
+  },
+  {
+    "pk": 69,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 1,
+      "closing": "18:00:00",
+      "opening": "13:00:00",
+      "weekday": 1,
+      "facility": 20
+    }
+  },
+  {
+    "pk": 70,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 0,
+      "closing": "20:00:00",
+      "opening": "09:00:00",
+      "weekday": 2,
+      "facility": 20
+    }
+  },
+  {
+    "pk": 72,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 2,
+      "closing": "15:00:00",
+      "opening": "12:00:00",
+      "weekday": 2,
+      "facility": 20
+    }
+  },
+  {
+    "pk": 74,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 0,
+      "closing": "18:00:00",
+      "opening": "12:00:00",
+      "weekday": 3,
+      "facility": 19
+    }
+  },
+  {
+    "pk": 75,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 0,
+      "closing": "12:00:00",
+      "opening": "09:00:00",
+      "weekday": 0,
+      "facility": 33
+    }
+  },
+  {
+    "pk": 76,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 0,
+      "closing": "06:00:00",
+      "opening": "05:00:00",
+      "weekday": 1,
+      "facility": 19
+    }
+  },
+  {
+    "pk": 36,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 0,
+      "closing": "14:00:00",
+      "opening": "12:00:00",
+      "weekday": 2,
+      "facility": 5
+    }
+  },
+  {
+    "pk": 37,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 0,
+      "closing": "10:00:00",
+      "opening": "08:00:00",
+      "weekday": 3,
+      "facility": 5
+    }
+  },
+  {
+    "pk": 38,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 0,
+      "closing": "13:00:00",
+      "opening": "12:00:00",
+      "weekday": 4,
+      "facility": 5
+    }
+  },
+  {
+    "pk": 77,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 0,
+      "closing": "17:00:00",
+      "opening": "12:00:00",
+      "weekday": 2,
+      "facility": 19
+    }
+  },
+  {
+    "pk": 78,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 1,
+      "closing": "16:00:00",
+      "opening": "08:00:00",
+      "weekday": 3,
+      "facility": 19
+    }
+  },
+  {
+    "pk": 43,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 1,
+      "closing": "13:00:00",
+      "opening": "11:00:00",
+      "weekday": 4,
+      "facility": 5
+    }
+  },
+  {
+    "pk": 45,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 1,
+      "closing": "13:00:00",
+      "opening": "12:00:00",
+      "weekday": 3,
+      "facility": 5
+    }
+  },
+  {
+    "pk": 46,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 0,
+      "closing": "14:00:00",
+      "opening": "12:00:00",
+      "weekday": 5,
+      "facility": 5
+    }
+  },
+  {
+    "pk": 47,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 1,
+      "closing": "16:00:00",
+      "opening": "12:00:00",
+      "weekday": 5,
+      "facility": 5
+    }
+  },
+  {
+    "pk": 48,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 0,
+      "closing": "14:00:00",
+      "opening": "12:00:00",
+      "weekday": 6,
+      "facility": 5
+    }
+  },
+  {
+    "pk": 49,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 1,
+      "closing": "18:00:00",
+      "opening": "18:00:00",
+      "weekday": 6,
+      "facility": 5
+    }
+  },
+  {
+    "pk": 50,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 2,
+      "closing": "09:00:00",
+      "opening": "10:00:00",
+      "weekday": 3,
+      "facility": 5
+    }
+  },
+  {
+    "pk": 51,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 3,
+      "closing": "08:00:00",
+      "opening": "09:00:00",
+      "weekday": 3,
+      "facility": 5
+    }
+  },
+  {
+    "pk": 33,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 0,
+      "closing": "15:00:00",
+      "opening": "12:00:00",
+      "weekday": 0,
+      "facility": 5
+    }
+  },
+  {
+    "pk": 60,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 0,
+      "closing": "11:00:00",
+      "opening": "10:00:00",
+      "weekday": 0,
+      "facility": 17
+    }
+  },
+  {
+    "pk": 62,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 0,
+      "closing": "11:00:00",
+      "opening": "09:00:00",
+      "weekday": 0,
+      "facility": 19
+    }
+  },
+  {
+    "pk": 63,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 0,
+      "closing": "12:00:00",
+      "opening": "10:00:00",
+      "weekday": 1,
+      "facility": 17
+    }
+  },
+  {
+    "pk": 65,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 3,
+      "closing": "16:00:00",
+      "opening": "08:00:00",
+      "weekday": 1,
+      "facility": 2
+    }
+  },
+  {
+    "pk": 66,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 0,
+      "closing": "12:00:00",
+      "opening": "08:00:00",
+      "weekday": 0,
+      "facility": 2
+    }
+  },
+  {
+    "pk": 67,
+    "model": "core.openingtime",
+    "fields": {
+      "index": 1,
+      "closing": "16:00:00",
+      "opening": "13:00:00",
+      "weekday": 0,
+      "facility": 2
+    }
+  },
+  {
+    "pk": 22,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_logentry",
+      "name": "Can add log entry",
+      "content_type": 8
+    }
+  },
+  {
+    "pk": 23,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_logentry",
+      "name": "Can change log entry",
+      "content_type": 8
+    }
+  },
+  {
+    "pk": 24,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_logentry",
+      "name": "Can delete log entry",
+      "content_type": 8
+    }
+  },
+  {
+    "pk": 4,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_group",
+      "name": "Can add group",
+      "content_type": 2
+    }
+  },
+  {
+    "pk": 5,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_group",
+      "name": "Can change group",
+      "content_type": 2
+    }
+  },
+  {
+    "pk": 6,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_group",
+      "name": "Can delete group",
+      "content_type": 2
+    }
+  },
+  {
+    "pk": 10,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_message",
+      "name": "Can add message",
+      "content_type": 4
+    }
+  },
+  {
+    "pk": 11,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_message",
+      "name": "Can change message",
+      "content_type": 4
+    }
+  },
+  {
+    "pk": 12,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_message",
+      "name": "Can delete message",
+      "content_type": 4
+    }
+  },
+  {
+    "pk": 1,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_permission",
+      "name": "Can add permission",
+      "content_type": 1
+    }
+  },
+  {
+    "pk": 2,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_permission",
+      "name": "Can change permission",
+      "content_type": 1
+    }
+  },
+  {
+    "pk": 3,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_permission",
+      "name": "Can delete permission",
+      "content_type": 1
+    }
+  },
+  {
+    "pk": 7,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_user",
+      "name": "Can add user",
+      "content_type": 3
+    }
+  },
+  {
+    "pk": 8,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_user",
+      "name": "Can change user",
+      "content_type": 3
+    }
+  },
+  {
+    "pk": 9,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_user",
+      "name": "Can delete user",
+      "content_type": 3
+    }
+  },
+  {
+    "pk": 13,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_contenttype",
+      "name": "Can add content type",
+      "content_type": 5
+    }
+  },
+  {
+    "pk": 14,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_contenttype",
+      "name": "Can change content type",
+      "content_type": 5
+    }
+  },
+  {
+    "pk": 15,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_contenttype",
+      "name": "Can delete content type",
+      "content_type": 5
+    }
+  },
+  {
+    "pk": 43,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_facility",
+      "name": "Can add Facility",
+      "content_type": 15
+    }
+  },
+  {
+    "pk": 44,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_facility",
+      "name": "Can change Facility",
+      "content_type": 15
+    }
+  },
+  {
+    "pk": 45,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_facility",
+      "name": "Can delete Facility",
+      "content_type": 15
+    }
+  },
+  {
+    "pk": 40,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_facilitytype",
+      "name": "Can add Facility Type",
+      "content_type": 14
+    }
+  },
+  {
+    "pk": 41,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_facilitytype",
+      "name": "Can change Facility Type",
+      "content_type": 14
+    }
+  },
+  {
+    "pk": 42,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_facilitytype",
+      "name": "Can delete Facility Type",
+      "content_type": 14
+    }
+  },
+  {
+    "pk": 37,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_medicalservice",
+      "name": "Can add Medical Service",
+      "content_type": 13
+    }
+  },
+  {
+    "pk": 38,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_medicalservice",
+      "name": "Can change Medical Service",
+      "content_type": 13
+    }
+  },
+  {
+    "pk": 39,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_medicalservice",
+      "name": "Can delete Medical Service",
+      "content_type": 13
+    }
+  },
+  {
+    "pk": 46,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_openingtime",
+      "name": "Can add Opening Time",
+      "content_type": 16
+    }
+  },
+  {
+    "pk": 47,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_openingtime",
+      "name": "Can change Opening Time",
+      "content_type": 16
+    }
+  },
+  {
+    "pk": 48,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_openingtime",
+      "name": "Can delete Opening Time",
+      "content_type": 16
+    }
+  },
+  {
+    "pk": 34,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_pathology",
+      "name": "Can add Pathology",
+      "content_type": 12
+    }
+  },
+  {
+    "pk": 35,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_pathology",
+      "name": "Can change Pathology",
+      "content_type": 12
+    }
+  },
+  {
+    "pk": 36,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_pathology",
+      "name": "Can delete Pathology",
+      "content_type": 12
+    }
+  },
+  {
+    "pk": 49,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_specialday",
+      "name": "Can add Special Day",
+      "content_type": 17
+    }
+  },
+  {
+    "pk": 50,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_specialday",
+      "name": "Can change Special Day",
+      "content_type": 17
+    }
+  },
+  {
+    "pk": 51,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_specialday",
+      "name": "Can delete Special Day",
+      "content_type": 17
+    }
+  },
+  {
+    "pk": 28,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_revision",
+      "name": "Can add revision",
+      "content_type": 10
+    }
+  },
+  {
+    "pk": 29,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_revision",
+      "name": "Can change revision",
+      "content_type": 10
+    }
+  },
+  {
+    "pk": 30,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_revision",
+      "name": "Can delete revision",
+      "content_type": 10
+    }
+  },
+  {
+    "pk": 31,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_version",
+      "name": "Can add version",
+      "content_type": 11
+    }
+  },
+  {
+    "pk": 32,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_version",
+      "name": "Can change version",
+      "content_type": 11
+    }
+  },
+  {
+    "pk": 33,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_version",
+      "name": "Can delete version",
+      "content_type": 11
+    }
+  },
+  {
+    "pk": 16,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_session",
+      "name": "Can add session",
+      "content_type": 6
+    }
+  },
+  {
+    "pk": 17,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_session",
+      "name": "Can change session",
+      "content_type": 6
+    }
+  },
+  {
+    "pk": 18,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_session",
+      "name": "Can delete session",
+      "content_type": 6
+    }
+  },
+  {
+    "pk": 19,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_site",
+      "name": "Can add site",
+      "content_type": 7
+    }
+  },
+  {
+    "pk": 20,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_site",
+      "name": "Can change site",
+      "content_type": 7
+    }
+  },
+  {
+    "pk": 21,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_site",
+      "name": "Can delete site",
+      "content_type": 7
+    }
+  },
+  {
+    "pk": 25,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "add_migrationhistory",
+      "name": "Can add migration history",
+      "content_type": 9
+    }
+  },
+  {
+    "pk": 26,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "change_migrationhistory",
+      "name": "Can change migration history",
+      "content_type": 9
+    }
+  },
+  {
+    "pk": 27,
+    "model": "auth.permission",
+    "fields": {
+      "codename": "delete_migrationhistory",
+      "name": "Can delete migration history",
+      "content_type": 9
+    }
+  }
+]

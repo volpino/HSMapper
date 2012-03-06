@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 
 
 class Pathology(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(_("Name"), max_length=255, unique=True)
 
     def __unicode__(self):
         return self.name
@@ -20,7 +20,7 @@ class Pathology(models.Model):
 
 
 class MedicalService(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(_("Name"), max_length=255, unique=True)
 
     def __unicode__(self):
         return self.name
@@ -31,7 +31,7 @@ class MedicalService(models.Model):
 
 
 class FacilityType(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(_("Name"), max_length=255, unique=True)
 
     def __unicode__(self):
         return self.name
@@ -42,20 +42,28 @@ class FacilityType(models.Model):
 
 
 class Facility(models.Model):
-    name = models.CharField(max_length=255, null=True, blank=True)
-    the_geom = models.PointField(srid=PROJECTION_SRID)
-    description = models.TextField(null=True, blank=True)
-    manager = models.ForeignKey('self', null=True, blank=True)
-    address = models.TextField(null=True, blank=True)
-    phone = models.TextField(null=True, blank=True)
-    email = models.TextField(null=True, blank=True)
-    facility_type = models.ForeignKey(FacilityType, null=True, blank=True)
-    pathologies = models.ManyToManyField(Pathology, null=True, blank=True)
-    services = models.ManyToManyField(MedicalService, null=True, blank=True)
-    last_updated = models.DateField(auto_now=True)
-    updated_by = models.ForeignKey(User, null=True, blank=True)
-    expiration = models.DateField(null=True, blank=True)
-    open_24h = models.NullBooleanField()
+    name = models.CharField(_("Name"), max_length=255, null=True, blank=True)
+    the_geom = models.PointField(_("Geometry"), srid=PROJECTION_SRID)
+    description = models.TextField(_("Description"), null=True, blank=True)
+    manager = models.ForeignKey('self', verbose_name=_("Depends on"),
+                                null=True, blank=True)
+    address = models.TextField(_("Address"), null=True, blank=True)
+    phone = models.TextField(_("Phone"), null=True, blank=True)
+    email = models.TextField(_("E-mail"), null=True, blank=True)
+    facility_type = models.ForeignKey(FacilityType,
+                                      verbose_name=_("Facility Type"),
+                                      null=True, blank=True)
+    pathologies = models.ManyToManyField(Pathology,
+                                         verbose_name=_("Pathologies"),
+                                         null=True, blank=True)
+    services = models.ManyToManyField(MedicalService,
+                                      verbose_name=_("Services"),
+                                      null=True, blank=True)
+    last_updated = models.DateField(_("Last update"), auto_now=True)
+    updated_by = models.ForeignKey(User, verbose_name=_("Updated by"),
+                                   null=True, blank=True)
+    expiration = models.DateField(_("Expiration"), null=True, blank=True)
+    open_24h = models.NullBooleanField(_("Open 24h"))
 
     objects = models.GeoManager()
 
@@ -77,11 +85,11 @@ WEEKDAY_CHOICES = ((0, _("Monday")),
 
 
 class OpeningTime(models.Model):
-    facility = models.ForeignKey(Facility)
-    opening = models.TimeField(null=True, blank=True)
-    closing = models.TimeField(null=True, blank=True)
-    weekday = models.IntegerField(choices=WEEKDAY_CHOICES)
-    index = models.IntegerField()
+    facility = models.ForeignKey(Facility, verbose_name=_("Facility"))
+    opening = models.TimeField(_("Opening time"), null=True, blank=True)
+    closing = models.TimeField(_("Closing time"), null=True, blank=True)
+    weekday = models.IntegerField(_("Weekday"), choices=WEEKDAY_CHOICES)
+    index = models.IntegerField(_("Index"))
 
     def __unicode__(self):
         return u"[%d] %s: %s-%s" % (
@@ -103,11 +111,11 @@ class OpeningTime(models.Model):
 
 
 class SpecialDay(models.Model):
-    facility = models.ForeignKey(Facility)
-    holiday_date = models.DateField(null=True, blank=True)
-    closed = models.NullBooleanField()
-    opening = models.TimeField(null=True, blank=True)
-    closing = models.TimeField(null=True, blank=True)
+    facility = models.ForeignKey(Facility, verbose_name=_("Facility"))
+    holiday_date = models.DateField(_("Date"), null=True, blank=True)
+    closed = models.NullBooleanField(_("Closed all day"))
+    opening = models.TimeField(_("Opening time"), null=True, blank=True)
+    closing = models.TimeField(_("Closing time"), null=True, blank=True)
 
     class Meta:
         verbose_name = _('Special Day')

@@ -1,3 +1,7 @@
+"""
+Views for hsmapper.core
+"""
+
 from vectorformats.Formats import Django, GeoJSON
 from ajaxutils.decorators import ajax
 
@@ -5,13 +9,14 @@ from django.contrib.gis.geos.point import Point
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template.context import RequestContext
-from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext as _
 
 from hsmapper import settings
 from core.models import Facility, FacilityType, Pathology, MedicalService, \
-                        OpeningTime, WEEKDAY_CHOICES
+                        WEEKDAY_CHOICES
 from core.forms import FacilityForm
-from django.utils.translation import ugettext as _
+from core.helpers import lookup_query, timetable_filler, \
+                         remove_dangling_objects
 
 
 def get_hospitals(request):
@@ -31,7 +36,7 @@ def get_hospitals(request):
 @ajax(login_required=True, require_POST=True)
 def edit_hospital(request, id_):
     form = FacilityForm(request.POST)
-    if form.is_valid():
+    if form.is_valid() and request.POST:
         try:
             current_obj = Facility.objects.get(id=id_)
         except Facility.DoesNotExist:
@@ -47,34 +52,9 @@ def edit_hospital(request, id_):
         del data["weekday"], data["optime"], data["opening"], \
             data["closing"]
 
-        if weekday >= 0 and optime >= 0:
-            try:
-                op_time = current_obj.openingtime_set.get(
-                    weekday=weekday,
-                    index=optime
-                )
-            except OpeningTime.DoesNotExist:
-                op = OpeningTime(
-                    facility=current_obj,
-                    weekday=weekday,
-                    opening=(opening or None),
-                    closing=(closing or None),
-                    index=optime
-                )
-                try:
-                    op.save()
-                except ValidationError, exc:
-                    return {"success": False, "error": "%r" % exc}
-            else:
-                if opening is None and closing is None:
-                    op_time.delete()
-                else:
-                    op_time.opening = opening or op_time.opening
-                    op_time.closing = closing or op_time.closing
-                    try:
-                        op_time.save(force_update=True)
-                    except ValidationError, exc:
-                        return {"success": False, "error": "%r" % exc}
+        res = timetable_filler(current_obj, weekday, optime, opening, closing)
+        if res:
+            return res
 
         current_data = dict([(k.name, getattr(current_obj, k.name))
                              for k in current_obj._meta.fields])
@@ -97,6 +77,9 @@ def edit_hospital(request, id_):
                         obj.pathologies.add(obj_p)
                     except Pathology.DoesNotExist:
                         obj.pathologies.create(name=p)
+            # TODO: is it good or bad?
+            # TODO: This should be an async task
+            remove_dangling_objects(Pathology)
 
         if "services[]" in request.POST:
             p_data = request.POST.getlist("services[]")
@@ -109,6 +92,9 @@ def edit_hospital(request, id_):
                         obj.services.add(obj_p)
                     except MedicalService.DoesNotExist:
                         obj.services.create(name=p)
+            # TODO: is it good or bad?
+            # TODO: This should be an async task
+            remove_dangling_objects(MedicalService)
 
         obj.save(force_update=True)
         return {'success': True}
@@ -117,36 +103,21 @@ def edit_hospital(request, id_):
 
 @ajax(login_required=True)
 def edit_hospital_data(request, key):
+    qry = request.GET.get("q", None)
+
     if key == "type":
-        return dict([(k.id, k.name)
+        return dict([(k.pk, k.name)
                      for k in FacilityType.objects.all()])
 
     if key == "manager":
-        return dict([(k.id, str(k)) for k in Facility.objects.all()] + \
+        return dict([(k.pk, str(k)) for k in Facility.objects.all()] + \
                     [("", _("None"))])
 
-    elif key == "pathology":
-        if "q" in request.GET:
-            results = []
-            q = request.GET[u'q']
-            if len(q) > 2:
-                model_results = Pathology.objects.filter(name__icontains=q)
-                for x in model_results:
-                    results.append({"id": x.id, "name": x.name})
-            return {"results": results}
+    elif key == "pathology" and qry:
+            return lookup_query(qry, Pathology)
 
-    elif key == "service":
-        if "q" in request.GET:
-            results = []
-            q = request.GET[u'q']
-
-            if len(q) > 2:
-                model_results = MedicalService.objects.filter(
-                                    name__icontains=q
-                                )
-                for x in model_results:
-                    results.append({"id": x.id, "name": x.name})
-            return {"results": results}
+    elif key == "service" and qry:
+            return lookup_query(qry, MedicalService)
 
     return {}
 
@@ -158,39 +129,36 @@ def info_hospital(request, id_):
         hospital = Facility.objects.get(id=params_id)
     except Facility.DoesNotExist:
         pass
-    return render_to_response('hospital_info.html',
-                              {'hospital': hospital,
-                               'weekdays': WEEKDAY_CHOICES},
-                              context_instance=RequestContext(request))
+    return render_to_response(
+        'hospital_info.html',
+        {'hospital': hospital, 'weekdays': WEEKDAY_CHOICES},
+        context_instance=RequestContext(request)
+    )
 
 
 @ajax(login_required=True, require_POST=True)
 def add_hospital(request):
-    if request.method == 'POST':
-        form = FacilityForm(request.POST)
-        if form.is_valid():
-            data = form.cleaned_data
+    form = FacilityForm(request.POST)
+    if form.is_valid():
+        data = form.cleaned_data
 
-            lat = data['lat']
-            lon = data['lon']
-            if not (lat and lon):
-                return {'success': False, 'error': 'Lat or long are empty'}
+        lat = data['lat']
+        lon = data['lon']
+        if not (lat and lon):
+            return {'success': False, 'error': 'lat or lon are empty'}
 
-            the_geom = Point(lon, lat, srid=settings.DISPLAY_SRID)
+        the_geom = Point(lon, lat, srid=settings.DISPLAY_SRID)
 
-            obj = Facility.objects.create(the_geom=the_geom)
-            return {'success': True, 'id': obj.pk}
-    return {'success': False}
+        obj = Facility.objects.create(the_geom=the_geom)
+        return {'success': True, 'id': obj.pk}
 
 
 @ajax(login_required=True, require_POST=True)
 def delete_hospital(request, id_):
-    if request.method == 'POST':
-        params_id = int(id_)
-        try:
-            hospital = Facility.objects.get(id=params_id)
-            hospital.delete()
-        except Facility.DoesNotExist:
-            return {'success': False}
-        return {'success': True}
-    return {'success': False}
+    params_id = int(id_)
+    try:
+        hospital = Facility.objects.get(id=params_id)
+        hospital.delete()
+    except Facility.DoesNotExist:
+        return {'success': False}
+    return {'success': True}
