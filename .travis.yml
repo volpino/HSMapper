@@ -13,9 +13,8 @@ before_script:
 - sudo pip install -r requirements/test.txt
 - sudo su postgres -c "createdb postgistemplate"
 - sudo su postgres -c "createlang plpgsql postgistemplate"
-- sudo su postgres -c "psql -d postgistemplate -f /usr/share/postgresql*/contrib/postgis*/postgis.sql"
-- sudo su postgres -c "psql -d postgistemplate -f /usr/share/postgresql*/contrib/postgis*/spatial_ref_sys.sql"
-- sudo su postgres -c "psql -d postgistemplate -f /usr/share/postgresql*/contrib/postgis_comments.sql"
+- sudo su postgres -c "psql -d postgistemplate -f /usr/share/postgresql/8.4/contrib/postgis-1.5/postgis.sql"
+- sudo su postgres -c "psql -d postgistemplate -f /usr/share/postgresql/8.4/contrib/postgis-1.5/spatial_ref_sys.sql"
 - sudo su postgres -c "createdb -T postgistemplate hsmapper"
 script:
 - python hsmapper/manage.py test core
