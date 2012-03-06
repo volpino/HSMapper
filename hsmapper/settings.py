@@ -1,10 +1,6 @@
 import os
 import django
 
-try:
-    from settings_local import *
-except ImportError:
-    print "settings_local not found!"
 
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
@@ -206,3 +202,10 @@ LOGGING = {
     },
 }
 """
+
+
+try:
+    from settings_local import *
+except ImportError:
+    print "settings_local not found!"
+

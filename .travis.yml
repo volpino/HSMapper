@@ -2,11 +2,13 @@ rvm:
 - 1.9.3
 branches:
   only:
-    - master
     - develop
+python:
+- 2.7
 before_script:
 - sudo apt-get update
 - sudo apt-get install postgis
+- sudo apt-get install geos
 - sudo pip install -r requirements/base.txt
 - sudo pip install -r requirements/test.txt
 script:
