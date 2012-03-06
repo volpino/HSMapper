@@ -270,7 +270,7 @@ function onFeatureSelect(feature, not_expired) {
         submit: gettext("Save"),
         cancel: gettext("Cancel"),
         style: "inherit",
-        loadurl: globals.urls.editdata.replace("1", "type"),
+        loadurl: globals.urls.editdata.replace("1", "manager"),
         type: "select",
         placeholder: gettext("Click to edit")
       });
