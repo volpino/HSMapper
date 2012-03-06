@@ -134,6 +134,23 @@ function init() {
     }
   });
 
+  var DblclickFeature = OpenLayers.Class(OpenLayers.Control, {
+    initialize: function (layer, options) {
+      OpenLayers.Control.prototype.initialize.apply(this, [ options ]);
+      this.handler = new OpenLayers.Handler.Feature(this, layer, {
+        dblclick: this.dblclick
+      });
+    }
+  });
+  var dblclick = new DblclickFeature(globals.hospital_layer, {
+    dblclick: function (event) {
+      var point = event.geometry;
+      map.zoomToExtent(point.bounds);
+    }
+  });
+  map.addControl(dblclick);
+  dblclick.activate();
+
   layers = map.layers;
   for (var i=0; i<layers.length; i++) {
     if (layers[i].name.indexOf("OpenLayers.") == -1) {
