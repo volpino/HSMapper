@@ -11,5 +11,10 @@ before_script:
 - sudo apt-get install python-gdal
 - sudo pip install -r requirements/base.txt
 - sudo pip install -r requirements/test.txt
+- sudo su postgres -c "createdb postgistemplate"
+- sudo su postgres -c "createlang plpgsql postgistemplate"
+- sudo su postgres -c "psql -d postgistemplate -f /usr/share/postgresql-8.2-postgis/lwpostgis.sql"
+- sudo su postgres -c "psql -d postgistemplate -f /usr/share/postgresql-8.2-postgis/spatial_ref_sys.sql"
+- sudo su postgres -c "createdb -T postgistemplate hsmapper"
 script:
 - python hsmapper/manage.py test core
