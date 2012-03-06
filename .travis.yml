@@ -8,7 +8,7 @@ python:
 before_script:
 - sudo apt-get update
 - sudo apt-get install postgis
-- sudo apt-get install geos
+- sudo apt-get install python-gdal
 - sudo pip install -r requirements/base.txt
 - sudo pip install -r requirements/test.txt
 script:
