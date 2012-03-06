@@ -203,9 +203,11 @@ LOGGING = {
 }
 """
 
+SERVER_IP = "localhost"
+SERVER_PORT = 5432
+GEOSERVER_PORT = 50000
 
 try:
     from settings_local import *
 except ImportError:
     print "settings_local not found!"
-
