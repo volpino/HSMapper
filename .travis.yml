@@ -1,5 +1,9 @@
 rvm:
 - 1.9.3
+branches:
+  only:
+    - master
+    - stable
 before_script:
 - sudo pip install -r requirements/base.txt
 - sudo pip install -r requirements/test.txt
