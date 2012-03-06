@@ -1,6 +1,12 @@
 rvm:
 - 1.9.3
+branches:
+  only:
+    - master
+    - develop
 before_script:
+- sudo apt-get update
+- sudo apt-get install postgis
 - sudo pip install -r requirements/base.txt
 - sudo pip install -r requirements/test.txt
 script:
