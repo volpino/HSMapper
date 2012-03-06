@@ -10,10 +10,10 @@ before_script:
 - sudo apt-get install postgresql-8.4-postgis python-gdal
 - sudo pip install -r requirements/base.txt
 - sudo pip install -r requirements/test.txt
-- sudo su postgres -c "createdb postgistemplate"
-- sudo su postgres -c "createlang plpgsql postgistemplate"
-- sudo su postgres -c "psql -d postgistemplate -f `find /usr/share -name postgis.sql -print -quit`"
-- sudo su postgres -c "psql -d postgistemplate -f `find /usr/share -name spatial_ref_sys.sql -print -quit`"
-- sudo su postgres -c "createdb -T postgistemplate hsmapper"
+- sudo su postgres -c "createdb template_postgis"
+- sudo su postgres -c "createlang plpgsql template_postgis"
+- sudo su postgres -c "psql -d template_postgis -f `find /usr/share -name postgis.sql -print -quit`"
+- sudo su postgres -c "psql -d template_postgis -f `find /usr/share -name spatial_ref_sys.sql -print -quit`"
+- sudo su postgres -c "createdb -T template_postgis hsmapper"
 script:
-- python hsmapper/manage.py test core
+- python hsmapper/manage.py test --noinput core
