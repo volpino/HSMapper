@@ -273,3 +273,25 @@ ul.ui-widget-header {
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
 }
+
+.a {
+    cursor: pointer;
+    color: #222;
+    font-size: 12px;
+}
+
+.a:hover {
+    text-decoration: underline;
+}
+
+.del_point {
+    float: none;
+    color: red;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.del_point:hover {
+    color: red;
+    opacity: 1;
+}

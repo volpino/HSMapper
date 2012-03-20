@@ -123,13 +123,13 @@ function init() {
   });
   map.addControl(new OpenLayers.Control.MousePosition());
 
-/*  globals.hospital_layer.events.register("refresh", globals.hospital_layer,
+  globals.hospital_layer.events.register("moveend", globals.hospital_layer,
     function() {
       if (globals.selectedFeature) {
         globals.selectControl.unselect(globals.selectedFeature);
       }
     }
-  );*/
+  );
 
   map.events.register("click", map, function(e) {
     if (globals.insert_mode) {
@@ -139,16 +139,18 @@ function init() {
       var p = map.getLonLatFromPixel(e.xy);
       var point = new OpenLayers.Geometry.Point(p["lon"], p["lat"]);
       var f = new OpenLayers.Feature.Vector(point);
-      globals.hospital_layer.addFeatures([f]);
+      //globals.hospital_layer.addFeatures([f]);
 
       $.ajax({
         url: globals.urls.add,
         type: "post",
         data: {lat: p["lat"], lon: p["lon"]},
         success: function(req) {
+          globals.hospital_layer.refresh();
           if (req.success === true) {
             alert_msg(gettext("Point inserted"), "success");
             f.attributes["id"] = req.id;
+            f.layer = globals.hospital_layer;
             onFeatureSelect(f, true);
           }
           else {
@@ -178,8 +180,8 @@ function init() {
       onFeatureSelect(event);
     }
   });
-//  map.addControl(dblclick);
-//  dblclick.activate();
+  //map.addControl(dblclick);
+  //dblclick.activate();
 
   layers = map.layers;
   for (var i=0; i<layers.length; i++) {
@@ -229,15 +231,12 @@ function onPopupClose(evt) {
   globals.selectControl.unselect(globals.selectedFeature);
 }
 
-function onFeatureSelect(feature, not_expired) {
-  if (globals.selectedFeature) {
-    globals.selectControl.unselect(globals.selectedFeature);
-  }
-  if (globals.delete_mode) {
+function delete_feature(feature) {
+  return function() {
     var agree = confirm(gettext("Are you sure you want to delete?"));
     if (agree) {
-      globals.hospital_layer.removeFeatures([feature]);
-      globals.selectedFeature = undefined;
+      //globals.hospital_layer.removeFeatures([feature]);
+      //globals.selectedFeature = undefined;
       $.ajax({
         url: globals.urls.delete.replace("1", feature.attributes.id),
         type: "post",
@@ -249,10 +248,19 @@ function onFeatureSelect(feature, not_expired) {
           else {
             alert_msg(gettext("Error :("), "error");
           }
+          if (globals.selectedFeature) {
+            globals.selectControl.unselect(globals.selectedFeature);
+          }
+          globals.hospital_layer.refresh();
         }
       });
     }
-    toggle_delete();
+  }
+}
+
+function onFeatureSelect(feature, not_expired) {
+  if (globals.selectedFeature) {
+    globals.selectControl.unselect(globals.selectedFeature);
   }
   else {
     globals.selectedFeature = feature;
@@ -274,7 +282,9 @@ function onFeatureSelect(feature, not_expired) {
         }
         points_list.append(
           $("<li/>").append(
-            $("<a/>").text(name).click(click_callback(f))
+            $("<span/>").addClass("a").text(name).click(click_callback(f))
+          ).append(
+            $("<span/>").click(delete_feature(f)).addClass("close del_point").text("×")
           )
         );
         msg += "<p>" + name + "</p>";
@@ -391,9 +401,6 @@ function onFeatureUnselect(feature) {
 }
 
 function toggle_insert() {
-  if (globals.delete_mode) {
-    toggle_delete();
-  }
   if (globals.insert_mode) {
     $("#insert_button").removeClass("success");
     $("#map").removeClass("crosshair");
@@ -403,25 +410,6 @@ function toggle_insert() {
     $("#insert_button").addClass("success");
     $("#map").addClass("crosshair");
     globals.insert_mode = true;
-    if (globals.selectedFeature) {
-      globals.selectControl.unselect(globals.selectedFeature);
-    }
-  }
-}
-
-function toggle_delete() {
-  if (globals.insert_mode) {
-    toggle_insert();
-  }
-  if (globals.delete_mode) {
-    $("#delete_button").removeClass("success");
-    $("#map").removeClass("crosshair");
-    globals.delete_mode = false;
-  }
-  else {
-    $("#delete_button").addClass("success");
-    $("#map").addClass("crosshair");
-    globals.delete_mode = true;
     if (globals.selectedFeature) {
       globals.selectControl.unselect(globals.selectedFeature);
     }

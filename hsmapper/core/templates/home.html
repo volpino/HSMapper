@@ -23,7 +23,6 @@
     var globals = {};
     var map;
     globals.insert_mode = false;
-    globals.delete_mode = false;
     globals.server_ip = "{{ server_ip }}";
     globals.geoserver_port = "{{ geoserver_port }}";
     globals.srid = "{{ srid }}";
@@ -47,7 +46,6 @@
     $(document).ready(function() {
       $("#tabs").tabs();
       $("#insert_button").click(toggle_insert);
-      $("#delete_button").click(toggle_delete);
       init();
       $("#tabs").height("100%");
       $(".list-container").width("49%");
@@ -75,7 +73,6 @@
       <div class="buttons">
         {% if user.is_authenticated %}
           <button class="btn" id="insert_button">{% trans "Insert point" %}</button>
-          <button class="btn" id="delete_button">{% trans "Delete point" %}</button>
         {% endif %}
       </div>
       <div>
